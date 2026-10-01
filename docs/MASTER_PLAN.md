@@ -451,16 +451,18 @@ Claude Code (Opus/Sonnet models) writes and reviews code in parallel lanes under
 
 # SECTION 4 — Deep Implementation Blueprint (Hackathon Execution)
 
-## 4.1 Team Lanes (3 developers + non-dev teammates; each developer drives 1–2 Claude Code sessions)
+## 4.1 Team Lanes (3 developers + non-dev teammates)
 
-| Lane | Owner | Owns | Claude Code worktree |
-|---|---|---|---|
-| **Dev 1 — Science & Engine** (old lanes A + B) | _TBD_ | `pipeline/`, `packages/engine`, `packages/contracts`, validation, `docs/science/` | `wt-engine` |
-| **Dev 2 — Scene & Lab UI** (old lanes C + D) | _TBD_ | `apps/web/scene`, shaders, LOD, panels, timeline, state, Evidence charts | `wt-ui` |
-| **Dev 3 — Platform, Story & Analyst** (old lanes E-code + F) | _TBD_ | repo/CI/deploy, URL state sync, Story engine, Mission Analyst, sonification, exports, e2e tests, merges | `wt-platform` |
-| **Non-dev teammates** (old lane E, non-code) | _TBD_ | Story copy, fact-checking against citations, slides, demo video, AI/NASA-data disclosure text, hallway tests | docs only |
+Full detail, interfaces, tickets and calendar per person: [TEAM_WORK_SPLIT.md](TEAM_WORK_SPLIT.md) (D-013). Dev 1 has Claude Code; Dev 2 and Dev 3 use Antigravity, so Dev 1 takes the sensitive core.
 
-**Load balancing:** Dev 1 carries the heaviest early load (data + physics). Dev 3 starts with repo/CI and the data relay, then helps Dev 1 with pipeline tasks in weeks 1–2. Dev 1 and Dev 3 write `packages/contracts` together on day 1 so all three lanes can build against mocks immediately.
+| Lane | Owner | Owns |
+|---|---|---|
+| **Dev 1 — Core** (Claude Code) | You | `packages/contracts`, `packages/engine` (except `windows/`), `pipeline/`, validation, workers, Analyst server route, CI, deploy, merges |
+| **Dev 2 — Scene** (Antigravity) | _TBD_ | `packages/scene`: terrain, LOD, shaders, sky, pins, fisheye, camera, Hero |
+| **Dev 3 — Product UI & Story** (Antigravity) | _TBD_ | `apps/web` pages, components, state, Evidence view, Story/tour, Analyst chat UI, exports, e2e, and `packages/engine/src/windows/` |
+| **Non-dev teammates** | _TBD_ | Story copy, fact-checking, slides, 30 s and 240 s videos, disclosure text, hallway tests, BD registration |
+
+**Load balancing:** Dev 1 carries the heaviest early load; the mock engine and frozen contracts (Oct 3) let Dev 2 and Dev 3 work in parallel from day 1. Tasks that are pure logic with their own tests (`windows/`) are delegated to Dev 3.
 
 **Integration cadence:** open a pull request per task and merge to `main` at least daily. Integration builds must stay green. Never merge a red CI.
 
@@ -480,7 +482,7 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 
 **Risks specific to this calendar:** (1) the statement may change scope on Oct 28, so keep the engine body-agnostic and keep slack in W4–W5; (2) three developers means a single illness can move a gate, so every gate has a "minimum viable" version listed in REMAINING.md; (3) the deadline is still hard, so cut features before cutting validation, and protect W6 for hardening.
 
-## Milestone M0 — Setup & Contracts (Dev 3 + Dev 1 · Oct 1 → Oct 3)
+## Milestone M0 — Setup & Contracts (Dev 1 · Oct 1 → Oct 3)
 
 **Goal:** all three developers can start in parallel without blocking each other.
 
@@ -522,7 +524,7 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 
 **Acceptance:** real tiles for 85–90°S plus 5 m tiles at ≥ 3 sites are published, and the ephemeris covers 2026–2032.
 
-## Milestone M2 — Core Simulation & Mathematical Modeling (Dev 1 · Oct 1 → Oct 28)
+## Milestone M2 — Core Simulation & Mathematical Modeling (Dev 1, `windows/` by Dev 3 · Oct 1 → Oct 28)
 
 **Modules in `packages/engine/src`:**
 
@@ -563,7 +565,7 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 
 - **Acceptance:** 60 FPS in the Lab on target hardware. Shadow edges match the engine's lit/unlit result at 20 random probes (automated test: render-to-texture readback vs engine).
 
-## Milestone M4 — Command Center UI & State Management (Dev 2 · Oct 8 → Nov 4)
+## Milestone M4 — Command Center UI & State Management (Dev 3 · Oct 8 → Nov 4)
 
 - **Stores (Zustand slices):** `timeStore` (epoch, rate, range, playing), `siteStore` (presets, custom pins, selection ≤ 4), `profileStore` (mast, battery, DTE min, DSN mask, disk min), `layerStore`, `analysisStore` (results cache keyed by hash(site, profile, range, dataVersion)), `uiStore` (mode, panels), `storyStore`.
 
@@ -577,7 +579,7 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 
 - **Acceptance:** the full Lab flow works by keyboard only; Playwright e2e covers select site → set profile → find windows → export CSV.
 
-## Milestone M5 — Storytelling, Analyst & Presentation Polish (Dev 3 + non-dev teammates · Oct 22 → Nov 5)
+## Milestone M5 — Storytelling, Analyst & Presentation Polish (Dev 3, Analyst server side by Dev 1, copy by non-dev teammates · Oct 22 → Nov 5)
 
 - **Story engine:** steps are JSON (`camera`, `epoch`, `sites`, `profile`, `layers`, `caption`, `durationMs`) and are interpolated with the app's own stores. Ship the "Light & Signal" chapter (7 steps, ≤ 90 s). Add optional chapters only if time permits.
 
@@ -593,7 +595,7 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 
 - **Acceptance:** a first-time user completes the tour without help (hallway test with 2 people outside the team); Lighthouse a11y ≥ 95.
 
-## Milestone M6 — Deployment, Verification & Judge Deliverables (Dev 3 + non-dev teammates · Nov 5 → Nov 13)
+## Milestone M6 — Deployment, Verification & Judge Deliverables (Dev 1 + non-dev teammates · Nov 5 → Nov 13)
 
 ### Deployment
 

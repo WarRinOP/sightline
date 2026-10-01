@@ -40,9 +40,9 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Lane | Member | Skills | Laptop toolchain verified |
 |---|---|---|---|
-| Dev 1 — Science & Engine | _TBD_ | | ☐ |
-| Dev 2 — Scene & Lab UI | _TBD_ | | ☐ |
-| Dev 3 — Platform, Story & Analyst | _TBD_ | | ☐ |
+| Dev 1 — Core (Claude Code): contracts, engine, pipeline, validation, Analyst server, CI/deploy, merges | Team lead | | ☐ |
+| Dev 2 — Scene (Antigravity): `packages/scene` | _TBD_ | | ☐ |
+| Dev 3 — Product UI & Story (Antigravity): app UI, state, Evidence, Story, `windows/` | _TBD_ | | ☐ |
 | Non-dev teammates (story, video, slides, fact-check) | _TBD_ | | n/a |
 
 ---
@@ -74,6 +74,32 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 005 — 2026-10-01 — Work split (Claude Code)
+
+**Phase / tasks:** P0 (team setup), D-013
+
+**Done:**
+
+- Wrote `docs/TEAM_WORK_SPLIT.md`: folder ownership, five interfaces between lanes, per-person briefs and first tickets, task assignment for M0–M6, a calendar per person, working agreements, a load check and a cut list.
+
+- Dev 1 (team lead, Claude Code) takes contracts, engine, pipeline, validation, Analyst server side, CI/deploy and merges. Dev 2 (Antigravity) takes `packages/scene`; Dev 3 (Antigravity) takes the app UI, state, Evidence, Story and the delegated `windows/` module.
+
+- Updated MASTER_PLAN §4.1, CLAUDE.md §5–§6 (scene is now `packages/scene`, props-only), REMAINING headings and new tasks P0-16 … P0-20, DECISIONS D-013.
+
+**Verified by:** documentation only; no commands to run. **NOT VERIFIED:** whether Antigravity reads `AGENTS.md` automatically (P0-17).
+
+**Decisions logged:** D-013
+
+**Blockers / risks:** Dev 1 is the bottleneck for contracts and mocks (Oct 1–3) and for merges. The two other developers' GitHub usernames are still needed.
+
+**Next 3 tasks:**
+
+1. P0-14 Register the team on the Bangladesh site (closes Oct 7).
+
+2. P0-16 / P0-17 Invite Dev 2 and Dev 3; write `AGENTS.md`.
+
+3. M0 Contracts, mocks and CI (Dev 1), once the early start is confirmed.
 
 ### Session 004 — 2026-10-01 — Bangladesh site review (Claude Code)
 

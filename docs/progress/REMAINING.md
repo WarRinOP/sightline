@@ -38,6 +38,16 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 - [ ] **P0-15** Register every member on spaceappschallenge.org and join the **same Local Event** (the BD site says registration there happens on-site on Nov 13, but global judging needs everyone in the same Local Event, so do it early). Create the team on the NASA site.
 
+- [ ] **P0-16** Dev 2 and Dev 3 send their GitHub usernames; invite with Write access; fill in `CODEOWNERS` (see `docs/TEAM_WORK_SPLIT.md` §10).
+
+- [ ] **P0-17** Write `AGENTS.md` for Antigravity (short version of CLAUDE.md §6–§7 plus the folder rules). Check whether Antigravity reads `AGENTS.md` automatically; if not, paste it into Antigravity's workspace rules.
+
+- [ ] **P0-18** Turn the tasks into GitHub Issues with labels `owner:dev1|dev2|dev3`, `blocker`, `contract-change`; each with goal, files, inputs/outputs, acceptance test, "do not touch".
+
+- [ ] **P0-19** Give Dev 3 deputy access to Vercel and Admin on the repo (bus factor).
+
+- [ ] **P0-20** Set the daily 15-minute sync time.
+
 - [~] **P0-13** GitHub setup (D-011). *Done 2026-10-01:* private repo `WarRinOP/sightline` with Apache-2.0, `.gitignore`, PR template, CODEOWNERS stub and the docs-only first commit. *Still open:* invite the other developers (needs their GitHub usernames), create the organization (web only) and transfer the repo, fill in `CODEOWNERS` usernames. Original scope: invite the 2 other developers with Write access and the non-dev teammates as needed; enable two-factor authentication; add `.gitignore`, `CODEOWNERS`, a PR template; make the first commit (docs only).
 
 ---
@@ -70,9 +80,9 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 ---
 
-## P2 — Build (Oct 1 → Nov 5 feature-complete; Nov 5 → Nov 11 hardening) — calendar in MASTER_PLAN §4.2
+## P2 — Build (Oct 1 → Nov 5 feature-complete; Nov 5 → Nov 11 hardening) — calendar in MASTER_PLAN §4.2; owner per task in `docs/TEAM_WORK_SPLIT.md` §5
 
-### M0 — Kickoff & Contracts (Oct 1–3 · Dev 3 + Dev 1)
+### M0 — Kickoff & Contracts (Oct 1–3 · Dev 1)
 
 - [ ] **M0-01** Re-read the CLPS challenge summary and the Oct 28 statement when released (gap analysis P1-01).
 
@@ -116,7 +126,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 **Acceptance:** real tiles for 85–90°S + 5 m tiles at ≥ 3 sites published; ephemeris 2026–2032 published; golden fixtures committed.
 
-### M2 — Core Simulation & Math (Oct 1–28 · Dev 1)
+### M2 — Core Simulation & Math (Oct 1–28 · Dev 1; M2-09 `windows/` delegated to Dev 3)
 
 - [ ] **M2-01** `time/`: UTC ↔ ET with the leap-second table; tests vs SPICE epochs.
 
@@ -170,7 +180,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 - [ ] **M3-11** Perf pass: 60 FPS Lab, ≥ 45 FPS Hero on target hardware.
 
-### M4 — Command Center UI & State (Oct 8–Nov 4 · Dev 2)
+### M4 — Command Center UI & State (Oct 8–Nov 4 · Dev 3)
 
 - [ ] **M4-01** Tokens in `globals.css`; fonts (IBM Plex Sans/Condensed/Mono, Instrument Serif); GlassPanel, HudReadout primitives.
 
@@ -194,7 +204,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 - [ ] **M4-11** Playwright e2e: select site → profile → windows → export CSV.
 
-### M5 — Story, Analyst & Polish (Oct 22–Nov 5 · Dev 3 + non-dev)
+### M5 — Story, Analyst & Polish (Oct 22–Nov 5 · Dev 3; M5-04 server side Dev 1; copy non-dev)
 
 - [ ] **M5-01** Story engine (JSON steps driving real stores).
 
@@ -218,7 +228,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 **Feature freeze: Nov 5.**
 
-### M6 — Deploy, Verify, Deliverables (Nov 5–13 · Dev 3 + non-dev; both videos due Nov 13–14)
+### M6 — Deploy, Verify, Deliverables (Nov 5–13 · Dev 1 + non-dev; both videos due Nov 13–14)
 
 - [ ] **M6-01** Production deploy (Vercel) + R2 data with immutable caching + CORS; env vars set.
 

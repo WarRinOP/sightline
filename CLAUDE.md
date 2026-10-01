@@ -127,11 +127,11 @@ uv run --project pipeline sightline publish --target r2           # upload versi
 ├── apps/web/                Next.js App Router
 │   ├── app/                 / (hero) · /lab · /evidence · /story/[slug] · /api/analyst/route.ts
 │   ├── components/          hud/ panels/ timeline/ sky/ charts/ story/ analyst/
-│   ├── scene/               Terrain, LOD, Sky, SunEarth, Pins, shaders/
 │   ├── state/               zustand slices + url-sync
-│   ├── workers/             horizon.worker.ts · timeline.worker.ts
+│   ├── workers/             horizon.worker.ts · timeline.worker.ts (Dev 1)
 │   └── lib/                 data loaders, formatting, audio
 ├── packages/
+│   ├── scene/               R3F scene (Dev 2): Terrain, LOD, Sky, SunEarth, Pins, Fisheye, shaders/
 │   ├── contracts/           zod schemas + TS types + JSON Schema export (single source of truth)
 │   └── engine/              pure TS physics: time, frames, ephemeris, dem, horizon,
 │                            illumination, comms, timeline, windows, uncertainty
@@ -140,7 +140,7 @@ uv run --project pipeline sightline publish --target r2           # upload versi
 └── data/                    gitignored: raw/, interim/, processed/
 ```
 
-**Lane ownership** (to avoid merge conflicts): Dev 1 = `pipeline/`, `packages/`, `docs/science/` · Dev 2 = `apps/web/scene/`, `apps/web/{components,state,app}` (except story and analyst) · Dev 3 = CI, deploy, `apps/web/components/{story,analyst}/`, `apps/web/app/api/`, merges · non-dev teammates = `docs/submission/`, story copy. To change another lane's files, coordinate through the owner or a DECISIONS entry.
+**Folder ownership** (full table and interfaces in `docs/TEAM_WORK_SPLIT.md`): Dev 1 (Claude Code) = `packages/contracts`, `packages/engine` (except `windows/`), `pipeline/`, `fixtures/`, `docs/science/`, `apps/web/workers/`, `apps/web/app/api/`, CI, deploy, root configs, lockfile, merges · Dev 2 (Antigravity) = `packages/scene/` · Dev 3 (Antigravity) = `apps/web/{app,components,state,lib}` (except `app/api/`, `workers/`) and `packages/engine/src/windows/` · non-dev teammates = `docs/submission/`, story copy. `packages/contracts` is frozen after Oct 3; changes go through an issue labelled `contract-change`. To change another owner's files, ask the owner or add a DECISIONS entry.
 
 ---
 
@@ -178,7 +178,7 @@ uv run --project pipeline sightline publish --target r2           # upload versi
 
 - URL ↔ state sync for site, time, profile and layers. Every view must be reproducible from its URL.
 
-- The R3F scene reads stores via `useFrame` + `getState()` for per-frame values. No React state updates per frame.
+- `packages/scene` never imports the stores. The app passes props plus one mutable `inputs` ref (time, selected site, layers) that the scene reads inside `useFrame`. No React state updates per frame.
 
 ### Styling
 

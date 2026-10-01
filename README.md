@@ -9,6 +9,7 @@ Our entry for NASA Space Apps Challenge 2026, **Bangladesh local event** ([nasas
 | File | Purpose |
 |---|---|
 | [docs/WHAT_WE_ARE_BUILDING.md](docs/WHAT_WE_ARE_BUILDING.md) | Plain-language overview for teammates (no tech background needed) |
+| [docs/TEAM_WORK_SPLIT.md](docs/TEAM_WORK_SPLIT.md) | Who builds what: folders, interfaces, tickets and calendar per developer |
 | [docs/MASTER_PLAN.md](docs/MASTER_PLAN.md) | Full blueprint: concept, data, design, architecture, milestones, pitch |
 | [CLAUDE.md](CLAUDE.md) | Rules for every Claude Code session (compliance, commands, conventions, safety) |
 | [docs/progress/PROGRESS.md](docs/progress/PROGRESS.md) | Status dashboard + session log (what's been done) |
