@@ -10,11 +10,14 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 |---|---|
 | Current phase | **P0 — Setup** (building starts now; D-010) |
 | Challenge | CLPS Lunar Mission Browser (backup: Interplanetary Survival Guide: Martian Map) — not locked until P1-02 |
-| Local Event | Space Apps Bangladesh (name and exact closing time, UTC+6: _TBD, P0-01_) |
+| Local Event | Space Apps Bangladesh (region _TBD_, P0-14). Program: Fri Nov 13 07:00 → Sat Nov 14 (BD, UTC+6) |
 | Days to full statement (Oct 28) | 27 (as of 2026-10-01) |
 | Feature freeze | Nov 5 |
-| Days to official hackathon / submission deadline (Nov 14–15) | 44 (as of 2026-10-01) |
-| Early-start waiver (D-010) | Reported by the team; **written confirmation pending (P0-02)** |
+| **BD team registration closes** | **Oct 7** (P0-14, urgent) |
+| 240-second video due | Nov 13, 18:30–19:00 BD (Google Drive) |
+| NASA page + 30-second video due | Nov 14, 09:00–10:00 BD |
+| Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
+| Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (private; move to an org later, D-011) |
 
@@ -71,6 +74,40 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 004 — 2026-10-01 — Bangladesh site review (Claude Code)
+
+**Phase / tasks:** P0, plan revision (D-012)
+
+**Done:**
+
+- Read https://www.nasaspaceappsbd.com (home, program schedule, FAQ, registration, important documents, contact, judges). Recorded the real local deadlines and the two-stage judging (local first, about 27 teams advance) in MASTER_PLAN §0, §4.2 and §M6, in REMAINING (new P0-14, P0-15, M6-11, M6-12), and as D-012.
+
+- Added the **240-second presentation** outline to MASTER_PLAN. Moved the release candidate to Nov 11 and the submission target to Nov 14 at 09:00 BD.
+
+- Amended D-010: the BD site says nothing about starting early. Updated CLAUDE.md §2 accordingly.
+
+**Verified by:**
+
+- Rendered pages in a headless browser and read the text: registration countdown ("closes October 7, 2026"), program schedule Day 1 and Day 2, FAQ answers (expanded each question), registration form fields.
+
+- **NOT VERIFIED:** the "Important Documents" PDFs (no link found), the Judges page ("content will be updated soon"), the 240-second video format, and which region we attend.
+
+**Decisions logged:** D-012; D-010 amended
+
+**Blockers / risks:**
+
+- The BD registration deadline is **Oct 7**, six days away.
+
+- D-010 is still unconfirmed in writing.
+
+**Next 3 tasks:**
+
+1. P0-14 Register the team on the BD site (needs region, member details and a group photo).
+
+2. P0-02 Ask the Local Lead for the early-start confirmation, the exact deadline and the 240-second video format.
+
+3. P0-13 Invite the developers to the repo; M0 once D-010 is confirmed.
 
 ### Session 003 — 2026-10-01 — Planning update (Claude Code)
 

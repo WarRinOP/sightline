@@ -2,7 +2,7 @@
 
 > **Know when the Sun shines and Earth listens — anywhere on the lunar south pole.**
 
-NASA International Space Apps Challenge 2026 (Bangladesh) · Theme: *The Next Frontier*
+NASA International Space Apps Challenge 2026 · **Bangladesh local event** ([nasaspaceappsbd.com](https://www.nasaspaceappsbd.com)) · Theme: *The Next Frontier*
 
 Challenge: **CLPS Lunar Mission Browser** (Advanced / Intermediate)
 
@@ -20,10 +20,14 @@ Everything in this plan is built around these facts (verified from the official 
 |---|---|---|
 | Aug 26 | Registration opened | Register all members **in the same Local Event** (required for global judging) |
 | Sep 17 | Challenge **summaries** published (14 challenges) | Shortlist done (see Appendix A) |
+| **Oct 7** | **Bangladesh team registration closes** (nasaspaceappsbd.com/registration; form asks team name, leader, region, members, group photo) | Register the team on the BD site by this date, and on the NASA site in the same Local Event |
 | **Oct 28** | Full **challenge statements** published (requirements, resources) | Re-validate this plan against the real statement within 24 h |
 | Nov 2 | Space Apps Connect opens | Final team confirmation |
 | Nov 13 | Project Submission Guide + Judging & Awards Guide published | Update Milestone 6 deliverables to match exactly |
-| **Nov 14–15** | **Official hackathon dates.** Submit by your Local Event's end time | Our build starts earlier (D-010); these days are for final checks and submission |
+| **Nov 13 (Fri) 07:00 BD** | **Bangladesh on-site program starts** (36-hour format, mentor rounds). 18:30–19:00: upload the **240-second video** to the Google Drive folder from the Local Lead | The product must already be finished; Nov 13 is for packaging and the pitch |
+| **Nov 14 (Sat) 09:00–10:00 BD** | **Final upload of the 30-second video + NASA project page** | **Our real hard deadline** unless the Local Lead says otherwise (the global FAQ says 11:59 PM local on Nov 15) |
+| Nov 14 11:00–13:30 BD | **Local judging, "240 Seconds of Glory"** | About 27 teams advanced to global judging in 2024 (26 in 2025), so the local round is the gate |
+| Nov 14–15 | Official global hackathon dates | |
 | Dec 2026 | Nominees / Finalists / Honorable Mentions announced | |
 | Jan 2027 | Global Winners announced | |
 
@@ -31,9 +35,9 @@ Everything in this plan is built around these facts (verified from the official 
 
 The global Participant FAQ (2026-09-23) says teams may not begin working on challenges before the hackathon. We were told that this restriction does not apply to our Local Event (Space Apps Bangladesh), so **we start building now.**
 
-- **Status: reported, not yet confirmed in writing.** Action P0-02: get written confirmation from the Local Lead or organizers (email or screenshot) and file it under D-010. If it cannot be confirmed, stop and re-plan: the downside is disqualification.
+- **Status: reported by the team, but not stated on the Bangladesh site.** nasaspaceappsbd.com (checked 2026-10-01) says nothing about pre-work either way; its program starts Fri Nov 13, 07:00 BD, and the global FAQ rule still stands. Action P0-02: get written confirmation from the Local Lead (list on the BD site, Dhaka lead Mohammad Mahdee Uz Zaman) or info@nasaspaceappsbd.com and file it under D-010. If it cannot be confirmed, stop and re-plan: the downside is disqualification.
 
-- **What does not change:** the submission deadline is still the close of the hackathon on Nov 15 (use our Local Event's exact closing time; Bangladesh is UTC+6). Full challenge statements arrive Oct 28, and the Submission and Judging guides arrive Nov 13. Teams have at most 6 members, work on one challenge, and must all be registered in the same Local Event.
+- **What does not change:** the Bangladesh program ends our NASA-site upload at **Nov 14, 10:00 BD (UTC+6)**; the global FAQ says 11:59 PM local on Nov 15, but we plan against the earlier time. Full challenge statements arrive Oct 28, and the Submission and Judging guides arrive Nov 13. Teams have at most 6 members, work on one challenge, and must all be registered in the same Local Event. **Local judging comes first**: roughly 27 Bangladeshi teams go on to global judging.
 
 - **Consequence:** we have about 6 weeks to build instead of 48 hours, but only **3 developers**. The schedule in §4.2 is rebuilt around weekly gates. The challenge statement arrives only on Oct 28, so the engine and data pipeline (needed for both CLPS and the Mars backup) come first, and everything is reconciled with the real statement on Oct 28.
 
@@ -43,10 +47,10 @@ The global Participant FAQ (2026-09-23) says teams may not begin working on chal
 
 | Phase | Window (2026) | Goal | Exit criteria |
 |---|---|---|---|
-| **P0 — Setup** | Oct 1 → Oct 7 | GitHub org + repo + CI, 3 lanes assigned, written waiver, network/data relay | CI green on an empty skeleton; waiver filed; essential data bundle mirrored |
+| **P0 — Setup** | Oct 1 → Oct 7 | **Register on the BD site by Oct 7**, register on the NASA site (same Local Event), GitHub repo + CI, 3 lanes assigned, written waiver, data relay | Registered on both sites; CI green on an empty skeleton; waiver filed; essential data bundle mirrored |
 | **P1 — Lock-in checkpoint** | Oct 28 → Oct 30 | Read the full CLPS statement, gap analysis, final challenge decision | Gap analysis written; plan v1.2; D-002 recorded |
-| **P2 — Build** | Oct 1 → Nov 5 (feature-complete) · Nov 5 → Nov 13 (hardening + deliverables) | Execute milestones M0–M6 on the weekly calendar in §4.2 | Release candidate deployed by Nov 12; deliverables ready |
-| **P3 — Submit & judging** | Nov 13 → Jan 2027 | Read the Submission Guide (Nov 13); submit early; freeze; keep the demo alive | Submitted at least 2 h before the local deadline; tag `v1.0-submitted`; uptime monitored |
+| **P2 — Build** | Oct 1 → Nov 5 (feature-complete) · Nov 5 → Nov 11 (hardening + deliverables) | Execute milestones M0–M6 on the weekly calendar in §4.2 | Release candidate deployed by Nov 11; both videos and the deck ready |
+| **P3 — Submit & judging** | Nov 11 → Jan 2027 | Nov 13: 240-second video to Drive by 19:00 BD; Nov 14: NASA page + 30-second video by 10:00 BD; local judging; then global judging | Submitted by 09:00 BD on Nov 14; tag `v1.0-submitted`; uptime monitored |
 
 Detailed checklists are in [progress/REMAINING.md](progress/REMAINING.md). Session history is in [progress/PROGRESS.md](progress/PROGRESS.md).
 
@@ -471,8 +475,8 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 | **W3** | Oct 15 → Oct 21 | M2 `illumination`, `comms`, `timeline`, Horizons validation. M3 sky dome, fisheye, overlays. M4 site list, profile form, scrubber | **G3 (Oct 21):** Lab works on 3 real sites; validation report v1 |
 | **W4** | Oct 22 → Oct 28 | M2 `windows`, uncertainty from PGDA clones. M4 Window Finder, Evidence view. Start M5 Story engine. **Oct 28: full challenge statement released → gap analysis** | **G4 (Oct 28–30):** gap analysis done; plan v1.2; D-002 (challenge lock) |
 | **W5** | Oct 29 → Nov 4 | M5 Story Mode chapter, Mission Analyst, sonification, exports. M3 perf pass. M4 a11y + keyboard | **Feature freeze (Nov 5)** |
-| **W6** | Nov 5 → Nov 11 | **M6** deploy, cross-browser test, Lighthouse, hallway test, slides, 30 s video, disclosures | **Release candidate (Nov 12)** |
-| **Submit** | Nov 12 → Nov 15 | Read the Submission Guide (Nov 13). Submit as soon as the portal opens; final submission at least 2 h before the local deadline | Tag `v1.0-submitted` |
+| **W6** | Nov 5 → Nov 10 | **M6** deploy, cross-browser test, Lighthouse, hallway test, slides, 30 s video, 240 s video, disclosures | **Release candidate (Nov 11)** |
+| **Submit** | Nov 11 → Nov 14 | Nov 11–12: buffer and rehearsals. **Nov 13:** on-site at the Local Event, read the Submission Guide, upload the 240-second video by 19:00 BD. **Nov 14:** NASA project page and 30-second video uploaded by 09:00 BD (window closes 10:00), then local judging at 11:00 | Tag `v1.0-submitted` |
 
 **Risks specific to this calendar:** (1) the statement may change scope on Oct 28, so keep the engine body-agnostic and keep slack in W4–W5; (2) three developers means a single illness can move a gate, so every gate has a "minimum viable" version listed in REMAINING.md; (3) the deadline is still hard, so cut features before cutting validation, and protect W6 for hardening.
 
@@ -631,6 +635,21 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 | 6 | **Impact** | Users (CLPS/Artemis planners, educators, public); what changes for them; how it extends (any body, relays, rovers) |
 | 7 | **Built honestly** | NASA data list, AI disclosure summary, open-source repo QR, live URL |
 
+### 240-second local-judging presentation ("240 Seconds of Glory")
+
+The Bangladesh schedule asks for a **240-second video**, uploaded to the Local Lead's Google Drive folder on Nov 13 (18:30–19:00 BD), and local judging on Nov 14 is built around it. It is a separate deliverable from the 7-slide deck and the 30-second NASA video. Hard cap: 240 s. Confirm with the Local Lead whether a live Q&A follows, and the accepted file format and size.
+
+| Time | Content |
+|---|---|
+| 0:00–0:25 | **Hook:** the Hero fly-in, "the Sun never rises above about 1.5° at the Moon's south pole", Earth bobbing on the horizon |
+| 0:25–0:55 | **Problem and who it is for:** nights that kill landers, Artemis and CLPS site selection, tools too hard for quick decisions |
+| 0:55–1:40 | **Live demo 1:** click anywhere, horizon and Lander's Eye, mission barcode for 4 sites |
+| 1:40–2:20 | **Live demo 2:** raise the mast from 2 m to 10 m (the longest night shrinks), then the Window Finder |
+| 2:20–3:00 | **The science and the proof:** LOLA terrain + SPICE geometry, validation against JPL Horizons, uncertainty from NASA's own DEM clones |
+| 3:00–3:25 | **Impact and what comes next:** any body, relay satellites, rovers |
+| 3:25–3:45 | **Honest AI and data credit:** the grounded Mission Analyst, the NASA datasets used |
+| 3:45–4:00 | **Close:** team, live URL, tagline |
+
 ### 30-second demo video script
 
 | Time | Visual | Voice-over (≈ 75 words) |
@@ -695,6 +714,7 @@ Each challenge is scored 1–5 on five criteria: **Cin**ematic 3D potential · *
 | R9 | Fatigue errors late in the event | High | Med | Shift sleep; feature freeze on Nov 5; checklists |
 | R10 | The pre-work waiver (D-010) is wrong or not confirmed in writing | Low–Med | **Fatal** | Get written confirmation from the Local Lead now (P0-02); stop and re-plan if refused |
 | R11 | Site coordinates or mission facts wrong | Med | Med | Every fact has a `source_url`; the Story Mode fact sheet is checked by the science lead |
+| R12 | Bangladesh team registration closes **Oct 7**; the NASA-site upload window is Nov 14, 09:00–10:00 BD | High if missed | **Fatal** | Register this week (P0-14); plan against Nov 14 09:00; keep Nov 12 as buffer |
 
 # Appendix C — Key References (verify DOIs in M6)
 

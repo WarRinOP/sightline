@@ -139,19 +139,21 @@ We're aiming for the **"Best Use of Science"** award, with **"Best Use of Techno
 
 ## Important: the timeline
 
-We are starting now, about six weeks before the deadline. Here are the key dates:
+We are part of **NASA Space Apps Bangladesh** ([nasaspaceappsbd.com](https://www.nasaspaceappsbd.com)). There are two rounds: a **local round in Bangladesh first**, then **global judging** for the roughly 27 Bangladeshi teams that advance. The key dates are in Bangladesh time:
 
 | Date | What happens |
 |---|---|
-| **Now → Oct 7** | Set up: GitHub, accounts, roles, first data downloads |
+| **By Oct 7** | 🚨 **Register our team on the Bangladesh site.** It asks for the team name, leader, region, members and a team photo |
+| **Now → Nov 5** | We build the website |
 | **Oct 28** | NASA releases the full challenge details. We double-check that our plan fits |
 | **Nov 5** | **Feature freeze:** no new features after this day, only fixes and polish |
-| **Nov 12** | A finished version of the website is online |
-| **Nov 13** | NASA releases the submission and judging guides |
-| **Nov 14–15** | Official event dates. We submit early, and the final deadline is the end of our local event on Nov 15 |
-| **Dec 2026 – Jan 2027** | Judging and winners announced |
+| **Nov 11** | A finished version of the website is online |
+| **Fri Nov 13** | The Bangladesh program starts at 07:00. We upload our **240-second video** to the organizers' Google Drive between 18:30 and 19:00 |
+| **Sat Nov 14, 09:00–10:00** | **Final upload of our 30-second video and our NASA project page** |
+| **Sat Nov 14, 11:00** | Local judging: "240 Seconds of Glory" |
+| **Dec 2026 – Jan 2027** | Global judging and winners announced |
 
-> ⚠️ **One thing to confirm:** the official NASA rules say teams must not start before Nov 14, but we were told our Bangladesh local event has lifted that. We still need that **in writing** from the local event organizers. Until we have it, treat it as "probably fine, not yet proven".
+> ⚠️ **One thing to confirm:** the official NASA rules say teams must not start before the hackathon, and the Bangladesh website does not say we can. We were told our local event allows it, but we still need that **in writing** from the organizers. Until we have it, treat it as "probably fine, not yet proven".
 
 ---
 
@@ -174,7 +176,7 @@ We have **3 developers**, and the other teammates cover the non-coding work. You
 
 2. **A 30-second video** showing it in action.
 
-3. **A 7-slide presentation.**
+3. **A 7-slide presentation,** and a **240-second video** for local judging.
 
 4. **A short statement** on how we used AI and which NASA data we used. NASA requires both.
 
@@ -182,12 +184,14 @@ We have **3 developers**, and the other teammates cover the non-coding work. You
 
 ## What I need from you right now
 
-1. **Register** on the NASA Space Apps website. We must all join the **same local event** (Bangladesh).
+1. **Register the team on the Bangladesh site** (nasaspaceappsbd.com/registration) **by Oct 7**. Send me your name, email, mobile number and region, plus a team photo, if you are on the team.
 
-2. **Developers:** send me your GitHub username so I can invite you to the project.
+2. **Register** on the NASA Space Apps website (spaceappschallenge.org). We must all join the **same local event** (Bangladesh).
 
-3. **Everyone:** tell me which role you'd like, or what you're good at.
+3. **Developers:** send me your GitHub username so I can invite you to the project.
 
-4. **Save the dates:** feature freeze on Nov 5, and the submission deadline on Nov 15.
+4. **Everyone:** tell me which role you'd like, or what you're good at.
+
+5. **Save the dates:** feature freeze on Nov 5, program start on Nov 13, and the final upload on Nov 14 by 10:00.
 
 Questions? Ask anytime. If something in here doesn't make sense, that's a sign we should explain it better to the judges too.

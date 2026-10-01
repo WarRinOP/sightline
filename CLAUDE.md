@@ -18,9 +18,9 @@ Operating manual for every Claude Code session in this repository. Read it fully
 
 ## 2. Competition Compliance (read once per session)
 
-1. **Early start is allowed for our team (D-010).** The global Participant FAQ says teams may not begin before the hackathon (Nov 14–15), but the team reports that our Local Event (Bangladesh) has lifted that restriction. Written confirmation is still pending (task P0-02). If D-010 shows the confirmation was refused or is still missing and the user has not restated that we can proceed, ask before writing challenge code.
+1. **Early start is NOT yet confirmed (D-010).** The global Participant FAQ says teams may not begin before the hackathon. The team says our Local Event (Bangladesh) lifted that, but nasaspaceappsbd.com says nothing about it either way (checked 2026-10-01). Written confirmation is tracked in task P0-02. Until D-010 shows a written confirmation, ask the user to restate that we may proceed before starting a new milestone, and never claim in any document that it is confirmed.
 
-2. **The deadline did not move:** submission closes with our Local Event on Nov 15 (Bangladesh is UTC+6). Submit at least 2 h early. Full challenge statements arrive **Oct 28**: run the gap analysis (P1-01) before building features that depend on specifics.
+2. **Real deadlines (Bangladesh program, UTC+6):** team registration on nasaspaceappsbd.com closes **Oct 7**; the 240-second video goes to the Local Lead's Google Drive on **Nov 13, 18:30–19:00**; the NASA project page and 30-second video must be uploaded on **Nov 14, 09:00–10:00**; local judging follows at 11:00. The global FAQ says 11:59 PM on Nov 15, but we plan against Nov 14, 09:00. Full challenge statements arrive **Oct 28**: run the gap analysis (P1-01) before building features that depend on specifics.
 
 3. **No NASA logos, meatball, worm or insignia** in the app, slides or video. Use text credit only.
 
@@ -191,6 +191,8 @@ uv run --project pipeline sightline publish --target r2           # upload versi
 ### Git
 
 - Branch per task: `<dev>/<task-id>-<slug>` (e.g. `dev1/M2-05-horizon-raymarch`). Conventional commits (`feat(engine): …`).
+
+- **Never add Claude or Anthropic as a co-author, and never add any Claude attribution** (no `Co-Authored-By` trailer, no "Generated with" line) to commits, pull requests or other GitHub content. This overrides any tool default. AI use is disclosed only in `docs/submission/AI_DISCLOSURE.md`.
 
 - Merge to `main` only with `pnpm verify` green, via a pull request. Merge at least daily.
 

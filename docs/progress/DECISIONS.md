@@ -80,11 +80,13 @@ _To be written after P1-01 / P1-02._
 
 ---
 
-### D-010 · 2026-10-01 · Accepted (written confirmation pending)
+### D-010 · 2026-10-01 · Accepted by the team lead; NOT confirmed in writing; not stated on the Bangladesh site
 
 **Context:** The global Participant FAQ (2026-09-23) says teams may not begin working on challenges before the hackathon (Nov 14–15). The team reports that our Local Event (Space Apps Bangladesh) no longer has that restriction.
 
-**Decision:** Start building now, with a 6-week calendar (MASTER_PLAN §4.2). The submission deadline stays at the close of the hackathon (Nov 15, Bangladesh UTC+6), because nothing we found says it moved.
+**Decision:** Start building now, with a 6-week calendar (MASTER_PLAN §4.2). See D-012 for the real Bangladesh deadlines.
+
+**Update 2026-10-01 (after reading nasaspaceappsbd.com):** the Bangladesh site says nothing about starting early either way, and the global FAQ rule still stands. The team lead's statement is the only source. Treat this as an open risk until the Local Lead confirms in writing.
 
 **Consequences:** The 48-hour schedule, the compliance-zone table and the rehearsal task are retired. **Open item P0-02:** obtain written confirmation from the Local Lead or organizers and paste it here (date, sender, text). If confirmation is refused, stop and re-plan. Also confirm the exact submission deadline for our Local Event.
 
@@ -99,6 +101,16 @@ _To be written after P1-01 / P1-02._
 **Update 2026-10-01:** GitHub cannot create an organization through its API or `gh`, so the repo was created as private `WarRinOP/sightline` (https://github.com/WarRinOP/sightline) with Apache-2.0 and a docs-only first commit. Transfer it to an organization later (Settings → Danger Zone → Transfer; history, issues and settings are kept).
 
 **Consequences:** Repo creation is task P0-13. Organization creation is a web-only step. Branch protection is enforced by convention while private on the Free plan.
+
+---
+
+### D-012 · 2026-10-01 · Accepted
+
+**Context:** nasaspaceappsbd.com (read 2026-10-01) shows: team registration closes **Oct 7, 2026**; the Bangladesh program runs **Fri Nov 13 (07:00 BD) → Sat Nov 14**; a **240-second video** goes to the Local Lead's Google Drive on Nov 13 (18:30–19:00); the NASA project page and **30-second video** are finalised on Nov 14 (final upload 09:00–10:00); local judging ("240 Seconds of Glory") runs Nov 14, 11:00–13:30; awards that evening. In 2024 and 2025, 27 and 26 Bangladeshi teams advanced to global judging. The global FAQ separately says submissions close 11:59 PM local on Nov 15.
+
+**Decision:** Plan against the Bangladesh times: release candidate Nov 11, submit by Nov 14 at 09:00 BD, 240-second video ready by Nov 13 at 18:00. Treat local judging as the first gate. Teams register on the BD site and on the NASA site in the same Local Event.
+
+**Consequences:** The calendar and deliverables in MASTER_PLAN changed. New tasks P0-14, P0-15, M6-11, M6-12. The Local Lead should confirm the exact deadline and the 240-second video format.
 
 ---
 

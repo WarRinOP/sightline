@@ -34,6 +34,10 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 - [ ] **P0-12** Network plan (D-009): create a Cloudflare R2 bucket (and a US-region cloud VM or CI runner if available). Run a throughput test from the team's usual network to NAIF, PDS, PGDA, GitHub, the npm registry and PyPI, and paste the results into PROGRESS.md. **High priority:** measured ~3–35 KB/s to US origins from the current network.
 
+- [ ] **P0-14** 🚨 **URGENT, by Oct 7:** register the team on https://www.nasaspaceappsbd.com/registration (team name, leader name/mobile/email, **region**, up to 6 members with name/email/mobile, **team group photo**). Pick the region where we will attend in person (nine regions; Dhaka's main venue is AIUB). Screenshot the confirmation into PROGRESS.md.
+
+- [ ] **P0-15** Register every member on spaceappschallenge.org and join the **same Local Event** (the BD site says registration there happens on-site on Nov 13, but global judging needs everyone in the same Local Event, so do it early). Create the team on the NASA site.
+
 - [~] **P0-13** GitHub setup (D-011). *Done 2026-10-01:* private repo `WarRinOP/sightline` with Apache-2.0, `.gitignore`, PR template, CODEOWNERS stub and the docs-only first commit. *Still open:* invite the other developers (needs their GitHub usernames), create the organization (web only) and transfer the repo, fill in `CODEOWNERS` usernames. Original scope: invite the 2 other developers with Write access and the non-dev teammates as needed; enable two-factor authentication; add `.gitignore`, `CODEOWNERS`, a PR template; make the first commit (docs only).
 
 ---
@@ -66,7 +70,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 ---
 
-## P2 — Build (Oct 1 → Nov 5 feature-complete; Nov 5 → Nov 13 hardening) — calendar in MASTER_PLAN §4.2
+## P2 — Build (Oct 1 → Nov 5 feature-complete; Nov 5 → Nov 11 hardening) — calendar in MASTER_PLAN §4.2
 
 ### M0 — Kickoff & Contracts (Oct 1–3 · Dev 3 + Dev 1)
 
@@ -214,7 +218,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 **Feature freeze: Nov 5.**
 
-### M6 — Deploy, Verify, Deliverables (Nov 5–13 · Dev 3 + non-dev)
+### M6 — Deploy, Verify, Deliverables (Nov 5–13 · Dev 3 + non-dev; both videos due Nov 13–14)
 
 - [ ] **M6-01** Production deploy (Vercel) + R2 data with immutable caching + CORS; env vars set.
 
@@ -232,7 +236,11 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 - [ ] **M6-08** README: what, how to run, data credits, license, team.
 
-- [ ] **M6-09** Submit on the team project page **≥ 2 h before the deadline**; screenshot the confirmation.
+- [ ] **M6-09** Upload the final 30-second video and complete the NASA project page **by 09:00 BD on Nov 14** (window closes 10:00); screenshot the confirmation.
+
+- [ ] **M6-11** Record the **240-second video** (outline in MASTER_PLAN, "240-second local-judging presentation") and upload it to the Local Lead's Google Drive folder by **Nov 13, 18:30 BD**. Ask the Local Lead for the format, file size and whether a live Q&A follows.
+
+- [ ] **M6-12** Rehearse the local judging ("240 Seconds of Glory", Nov 14, 11:00 BD) with a timer and 2 outside listeners.
 
 - [ ] **M6-10** Tag `v1.0-submitted`; freeze production.
 
