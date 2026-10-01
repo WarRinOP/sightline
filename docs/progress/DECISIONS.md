@@ -98,7 +98,7 @@ _To be written after P1-01 / P1-02._
 
 **Context:** 3 developers plus non-dev teammates need one shared codebase and a simple flow for 6 weeks. GitHub Free organizations only get branch protection and rulesets on **public** repos (check Settings → Branches to confirm for our account).
 
-**Decision:** One monorepo `sightline` under a free GitHub Organization (for example `sightline-spaceapps`), Apache-2.0, **private** until about Nov 10 then public before submission. All three developers get Write; the owner is Admin. Pull request per task, CI required via convention until the repo is public (or protection is enabled if a Pro/Education plan is available). CODEOWNERS for `packages/` and `pipeline/` (science correctness). Secrets live only in Vercel and GitHub Actions secrets.
+**Decision:** One monorepo `sightline` (now `WarRinOP/sightline`; an organization transfer is optional), Apache-2.0, **public since 2026-10-01** (see D-015). All three developers get Write; the owner is Admin. Pull request per task, CI required via convention until the repo is public (or protection is enabled if a Pro/Education plan is available). CODEOWNERS for `packages/` and `pipeline/` (science correctness). Secrets live only in Vercel and GitHub Actions secrets.
 
 **Update 2026-10-01:** GitHub cannot create an organization through its API or `gh`, so the repo was created as private `WarRinOP/sightline` (https://github.com/WarRinOP/sightline) with Apache-2.0 and a docs-only first commit. Transfer it to an organization later (Settings → Danger Zone → Transfer; history, issues and settings are kept).
 
@@ -142,7 +142,9 @@ _To be written after P1-01 / P1-02._
 
 **Decision:** (1) Dev 2 (Aktaruzzaman, `rimonxyg`) and Dev 3 (Fuad Hasan, `fuadhasandipro`) have Write access and push only to `dev2/…` and `dev3/…` branches, with home branches `dev2/integration` and `dev3/integration`. (2) Dev 1 merges every pull request with a merge commit (repo settings allow merge commits only). (3) Enforcement until branch protection is possible: `CODEOWNERS` (`* @WarRinOP`) and a workflow, `main-push-audit`, that fails and notifies when anyone but `WarRinOP` updates `main`. (4) Records: root `AGENTS.md` plus a dedicated `AGENTS.md` per folder; Dev 2 and Dev 3 keep their own append-only logs (`docs/progress/logs/DEV2_LOG.md`, `DEV3_LOG.md`) and never edit PROGRESS, REMAINING or DECISIONS, which Dev 1 updates from the logs.
 
-**Consequences:** Review is enforced by process and an alert, not by a lock, until the repo goes public (Oct 6) or GitHub Pro is available (then enable "require pull request" and "require code owner review"). Separate logs avoid merge conflicts in shared files.
+**Update 2026-10-01 (later):** the team lead asked to make the repo public and to require pull requests. Done: the repo is **public** and `main` is protected (pull request required, 1 code-owner approval, stale approvals dismissed, conversations resolved, no force-push, no deletion, admin bypass for the owner). A pre-flight audit found no secrets in the files or history. Future commits on the team lead's machine use the GitHub no-reply email; the 7 earlier commits still show the team lead's personal email in their metadata (rewriting history now would break the developers' branches).
+
+**Consequences:** Review is now enforced by GitHub, not only by process. No required status checks yet: add them when CI exists (M0). Anything committed from now on is public, including logs and PR text. Separate logs avoid merge conflicts in shared files.
 
 ---
 

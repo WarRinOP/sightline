@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Live URL | — |
-| Repo | https://github.com/WarRinOP/sightline (private; move to an org later, D-011) |
+| Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
 ### Milestone progress
 
@@ -75,6 +75,30 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 008 — 2026-10-01 — Repo public + branch protection (Claude Code)
+
+**Phase / tasks:** S1-13 (partly), D-015 update
+
+**Done:**
+
+- Audited the repo before publishing: 23 tracked files, no secret-like file names, no secret patterns in the full history, only the organizers' published contact email in the files.
+
+- Made `WarRinOP/sightline` **public**. Enabled protection on `main`: pull request required, 1 code-owner approval, stale approvals dismissed, conversations resolved, force-push and deletion blocked, admin bypass for the owner.
+
+- Set this clone's commit email to the GitHub no-reply address for future commits. Updated AGENTS.md §6, TEAM_WORK_SPLIT §8, D-011, D-015.
+
+**Verified by:** `gh repo view` → `PUBLIC`; the protection `PUT` response lists the settings above; `git grep`/`git log -p` scans found no secrets. **NOT VERIFIED:** how protection behaves for the developers' accounts (not testable from the owner's account); the first pull request will show it.
+
+**Blockers / risks:** The 7 earlier commits still show the team lead's personal email in their metadata. No required status checks yet (no CI until M0).
+
+**Next 3 tasks:**
+
+1. S1-01 Scaffold + contracts + mock engine + CI (then add CI as a required check).
+
+2. Fuad accepts the invitation; both developers run the `Rules loaded:` test.
+
+3. S1-00 / P0-14 Ask the organizers; register the team.
 
 ### Session 007 — 2026-10-01 — Developer onboarding (Claude Code)
 

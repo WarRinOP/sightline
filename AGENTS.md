@@ -102,7 +102,7 @@ You do **not** edit `PROGRESS.md`, `REMAINING.md` or `DECISIONS.md`. The team le
 
 - **The team lead merges twice a day** (around midday and in the evening). If you are blocked, label the pull request `blocker`.
 
-- Direct pushes to `main` by anyone but the team lead make an automatic check fail and alert the team lead.
+- `main` is **protected**: GitHub blocks direct pushes, and a pull request needs the team lead's approval (code-owner review). The repo is **public**, so never put anything private in any file, commit message or pull request.
 
 ---
 

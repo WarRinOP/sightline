@@ -38,7 +38,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **S1-12** 240-second video: script (Oct 2), storyboard, screen captures (Oct 5–6), voice-over, edit, upload (Oct 6). *Non-dev + Dev 2 captures.*
 
-- [ ] **S1-13** Repo hygiene: decide on a GitHub no-reply commit email before going public (existing commits show a personal email), no secrets, topics, tag `v0.1-stage1`, switch to **public** on Oct 6 (or follow the organizers' rule). *Dev 1.*
+- [~] **S1-13** Repo hygiene. *Done 2026-10-01:* secrets audit clean, repo switched to **public**, `main` protected, no-reply commit email set for new commits. *Open:* tag `v0.1-stage1`; topics already set; confirm the README renders well. *Dev 1.*
 
 - [ ] **S1-14** Submit the link and video; screenshot the confirmation. *Team lead, Oct 6 night.*
 
