@@ -2,6 +2,8 @@
 
 Who builds what, so three developers can work in parallel without touching each other's files. Decision D-013.
 
+**Team:** Dev 1 = team lead (GitHub `WarRinOP`, Claude Code). Dev 2 = **Aktaruzzaman** (GitHub `rimonxyg`, Antigravity). Dev 3 = **Fuad Hasan** (GitHub `fuadhasandipro`, Antigravity).
+
 **Tools:** Dev 1 (you) has Claude Code. Dev 2 and Dev 3 have Antigravity only. That shapes the split: Dev 1 takes everything where one wrong number or one broken contract hurts the whole project. Dev 2 and Dev 3 take work that is visible, testable on its own, and cheap to fix.
 
 ---
@@ -116,7 +118,7 @@ Task IDs come from [REMAINING.md](progress/REMAINING.md).
 
 **Use Claude Code for review too:** run a review on every incoming pull request from Dev 2 and Dev 3, so your time goes to the decisions, not to reading every line.
 
-### Dev 2 — Scene (Antigravity)
+### Dev 2 — Scene (Aktaruzzaman, Antigravity)
 
 **You own:** `packages/scene/`. Everything you see in 3D, plus the Lander's-Eye fisheye sky.
 
@@ -141,7 +143,7 @@ Task IDs come from [REMAINING.md](progress/REMAINING.md).
 
 **Done means:** 60 FPS in the Lab on a laptop; 20 random probe points agree with `probeLit` (test written by you); no console errors; screenshots in each pull request.
 
-### Dev 3 — Product UI & Story (Antigravity)
+### Dev 3 — Product UI & Story (Fuad Hasan, Antigravity)
 
 **You own:** the app pages, all panels, state, charts, the guided tour, and the delegated `windows/` engine module.
 
@@ -206,12 +208,15 @@ The calendar above applies **after** Stage 1. For the first week, the day-by-day
 
 ## 8. Working agreements
 
-**Git flow**
+**Git flow** (agent rules: root `AGENTS.md` §6)
 
-- Branch names: `dev1/…`, `dev2/…`, `dev3/…` followed by the task ID, for example `dev2/M3-04-shadow-raymarch`.
-- One pull request per ticket, small enough to review in 15 minutes. Use the pull-request template: it asks for the task ID and the exact verification commands and their results.
-- Rebase on `main` every morning. If your pull request touches a file outside your folder, stop and ask.
+- **Nobody but Dev 1 updates `main`.** Dev 2 and Dev 3 push only to their own branches and open a pull request into `main`; Dev 1 reviews it and merges with a **merge commit** (history shows every commit, the logs stay traceable, and the branches never drift apart).
+- **Home branches (already created):** `dev2/integration` and `dev3/integration`. Short task branches named `dev2/<task-id>-<slug>` or `dev3/<task-id>-<slug>` are also fine. After each merge, merge `origin/main` back into your branch. No force-push, no `reset --hard`.
+- One pull request per ticket, small enough to review in 15 minutes, using the pull-request template (task ID, how it was verified, screenshot or clip, AI tool used, log updated).
+- **Enforcement:** GitHub branch protection is not available on a private repo with a free plan (checked on 2026-10-01). Until the repo is public (planned Oct 6) or the owner has GitHub Pro, a workflow (`.github/workflows/main-push-audit.yml`) fails and notifies when anyone other than `WarRinOP` updates `main`. Once branch protection is possible, switch on "require a pull request" and "require review from code owners" (D-015).
 - **Merge windows:** Dev 1 merges twice a day (around midday and in the evening). Urgent unblockers get the `blocker` label.
+
+**Records:** Dev 2 keeps `docs/progress/logs/DEV2_LOG.md` and Dev 3 keeps `docs/progress/logs/DEV3_LOG.md`, updated at the end of every session in the same pull request as the work. They never edit PROGRESS, REMAINING or DECISIONS; Dev 1 folds their logs into those files.
 
 **Review levels**
 
@@ -246,9 +251,9 @@ The calendar above applies **after** Stage 1. For the first week, the day-by-day
 
 ## 10. Setup tasks (to add to REMAINING)
 
-- [ ] **P0-16** Dev 2 and Dev 3 send their GitHub usernames; invite them with Write access; fill in `CODEOWNERS` (`/packages/`, `/pipeline/`, `/apps/web/app/api/` → Dev 1; `/packages/scene/` → Dev 2; `/apps/web/` → Dev 3).
+- [x] **P0-16** *(2026-10-01)* Dev 2 (`rimonxyg`) and Dev 3 (`fuadhasandipro`) have Write access. `CODEOWNERS` makes Dev 1 the reviewer of everything.
 
-- [ ] **P0-17** Write `AGENTS.md` at the repo root for Antigravity (a short version of CLAUDE.md §6–§7 plus the folder rules above). **Check whether Antigravity picks up `AGENTS.md` automatically; if it does not, paste the same text into Antigravity's workspace rules.**
+- [x] **P0-17** *(2026-10-01)* Root `AGENTS.md` plus a dedicated `AGENTS.md` in `packages/scene/`, `apps/web/` and `packages/engine/src/windows/`. Antigravity's docs say it loads `AGENTS.md` files from the edited file's folder up to the root. **Still to test:** each developer asks their agent to start with the line `Rules loaded: …` (the rule requires it); if it doesn't, check the IDE version or paste the text into workspace rules.
 
 - [ ] **P0-18** Turn the tasks in §5 into GitHub Issues with labels `owner:dev1`, `owner:dev2`, `owner:dev3`, `blocker`, `contract-change`; each with goal, files, inputs/outputs, acceptance test and "do not touch".
 

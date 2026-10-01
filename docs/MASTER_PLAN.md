@@ -468,8 +468,8 @@ Full detail, interfaces, tickets and calendar per person: [TEAM_WORK_SPLIT.md](T
 | Lane | Owner | Owns |
 |---|---|---|
 | **Dev 1 — Core** (Claude Code) | You | `packages/contracts`, `packages/engine` (except `windows/`), `pipeline/`, validation, workers, Analyst server route, CI, deploy, merges |
-| **Dev 2 — Scene** (Antigravity) | _TBD_ | `packages/scene`: terrain, LOD, shaders, sky, pins, fisheye, camera, Hero |
-| **Dev 3 — Product UI & Story** (Antigravity) | _TBD_ | `apps/web` pages, components, state, Evidence view, Story/tour, Analyst chat UI, exports, e2e, and `packages/engine/src/windows/` |
+| **Dev 2 — Scene** (Antigravity) | **Aktaruzzaman** (`rimonxyg`) | `packages/scene`: terrain, LOD, shaders, sky, pins, fisheye, camera, Hero |
+| **Dev 3 — Product UI & Story** (Antigravity) | **Fuad Hasan** (`fuadhasandipro`) | `apps/web` pages, components, state, Evidence view, Story/tour, Analyst chat UI, exports, e2e, and `packages/engine/src/windows/` |
 | **Non-dev teammates** | _TBD_ | Story copy, fact-checking, slides, 30 s and 240 s videos, disclosure text, hallway tests, BD registration |
 
 **Load balancing:** Dev 1 carries the heaviest early load; the mock engine and frozen contracts (Oct 3) let Dev 2 and Dev 3 work in parallel from day 1. Tasks that are pure logic with their own tests (`windows/`) are delegated to Dev 3.

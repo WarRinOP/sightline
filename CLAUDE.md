@@ -34,7 +34,7 @@ Operating manual for every Claude Code session in this repository. Read it fully
 
 **At session start:**
 
-1. Read `docs/progress/PROGRESS.md` (status + last session), then `docs/progress/REMAINING.md`.
+1. Read `docs/progress/PROGRESS.md` (status + last session), then `docs/progress/REMAINING.md`, then the two developer logs `docs/progress/logs/DEV2_LOG.md` and `DEV3_LOG.md` (fold new entries into PROGRESS/REMAINING/DECISIONS; Dev 2 and Dev 3 never edit those three files). Review incoming pull requests from `dev2/*` and `dev3/*` before merging with a merge commit.
 
 2. Check today's date against the calendar in `docs/MASTER_PLAN.md` §4.2 and the compliance notes in §2 above.
 

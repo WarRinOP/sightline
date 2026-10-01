@@ -42,8 +42,8 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Lane | Member | Skills | Laptop toolchain verified |
 |---|---|---|---|
 | Dev 1 — Core (Claude Code): contracts, engine, pipeline, validation, Analyst server, CI/deploy, merges | Team lead | | ☐ |
-| Dev 2 — Scene (Antigravity): `packages/scene` | _TBD_ | | ☐ |
-| Dev 3 — Product UI & Story (Antigravity): app UI, state, Evidence, Story, `windows/` | _TBD_ | | ☐ |
+| Dev 2 — Scene (Antigravity): `packages/scene` | **Aktaruzzaman** (`rimonxyg`) | | ☐ |
+| Dev 3 — Product UI & Story (Antigravity): app UI, state, Evidence, Story, `windows/` | **Fuad Hasan** (`fuadhasandipro`) | | ☐ |
 | Non-dev teammates (story, video, slides, fact-check) | _TBD_ | | n/a |
 
 ---
@@ -75,6 +75,38 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 007 — 2026-10-01 — Developer onboarding (Claude Code)
+
+**Phase / tasks:** S1, P0-16, P0-17, D-015
+
+**Done:**
+
+- Dev 2 (Aktaruzzaman, `rimonxyg`) and Dev 3 (Fuad Hasan, `fuadhasandipro`) have Write access. Merge commits are now the only allowed merge type.
+
+- Wrote the root `AGENTS.md` and dedicated `AGENTS.md` files for `packages/scene/`, `apps/web/` and `packages/engine/src/windows/`; folder README stubs; per-developer logs and a logs README; PR template additions; `CODEOWNERS`; the `main-push-audit` workflow.
+
+- Created the home branches `dev2/integration` and `dev3/integration`. Logged D-015.
+
+**Verified by:**
+
+- `gh api users/<login>`: both accounts exist; the public profile `rimonxyg` shows the name "Akhtaruzzaman Rimon" and the email the team lead gave. `GET collaborators`: `rimonxyg` already had access; Fuad's invitation is pending until he accepts.
+
+- Branch protection: `PUT branches/main/protection` returned HTTP 403 (needs GitHub Pro or a public repo). Hence the audit workflow.
+
+- **NOT VERIFIED:** that Antigravity loads the `AGENTS.md` files (needs each developer to test the `Rules loaded: …` line); that the `main-push-audit` workflow runs as intended (first run happens on the next push to `main`).
+
+**Decisions logged:** D-015
+
+**Blockers / risks:** Fuad must accept the invitation. The workspace scaffold (day 1, Dev 1) is still needed before the developers can run `pnpm verify`.
+
+**Next 3 tasks:**
+
+1. S1-01 Scaffold, contracts, mock engine, mock tiles, CI (Dev 1), so Dev 2 and Dev 3 can plug in.
+
+2. Both developers: first tickets (S1-06 and S1-08) on their branches.
+
+3. S1-00 / P0-14 Ask the organizers and register the team.
 
 ### Session 006 — 2026-10-01 — Stage 1 re-plan (Claude Code)
 

@@ -1,0 +1,22 @@
+name: main-push-audit
+
+# Branch protection is not available on a private repo with a free plan, so this check
+# enforces "only the team lead updates main" by failing (and notifying) otherwise.
+# Merging a pull request counts as an update to main by whoever clicks Merge.
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Only the team lead may update main
+        if: github.actor != 'WarRinOP'
+        run: |
+          echo "::error::${{ github.actor }} updated main. Every change must go through a pull request that the team lead reviews and merges."
+          exit 1
+      - name: OK
+        if: github.actor == 'WarRinOP'
+        run: echo "main updated by the team lead."

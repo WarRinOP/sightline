@@ -1,4 +1,3 @@
-# Add real GitHub usernames once teammates are invited (an unknown user makes this file invalid).
-# Science correctness paths should need review from Dev 1:
-# /packages/  @dev1-username
-# /pipeline/  @dev1-username
+# The team lead (Dev 1) reviews every change. Folder owners (who writes what) are listed in
+# AGENTS.md and docs/TEAM_WORK_SPLIT.md. Direct pushes to main by anyone else fail an audit check.
+* @WarRinOP

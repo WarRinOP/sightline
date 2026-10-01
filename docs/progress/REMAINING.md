@@ -74,9 +74,9 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **P0-15** Register every member on spaceappschallenge.org and join the **same Local Event** (the BD site says registration there happens on-site on Nov 13, but global judging needs everyone in the same Local Event, so do it early). Create the team on the NASA site.
 
-- [ ] **P0-16** Dev 2 and Dev 3 send their GitHub usernames; invite with Write access; fill in `CODEOWNERS` (see `docs/TEAM_WORK_SPLIT.md` §10).
+- [x] **P0-16** *(2026-10-01)* Dev 2 (`rimonxyg`, Aktaruzzaman) and Dev 3 (`fuadhasandipro`, Fuad Hasan) have Write access; `CODEOWNERS` makes Dev 1 the reviewer of everything.
 
-- [ ] **P0-17** Write `AGENTS.md` for Antigravity (short version of CLAUDE.md §6–§7 plus the folder rules). Check whether Antigravity reads `AGENTS.md` automatically; if not, paste it into Antigravity's workspace rules.
+- [~] **P0-17** Root `AGENTS.md` + dedicated `AGENTS.md` in `packages/scene/`, `apps/web/`, `packages/engine/src/windows/` written *(2026-10-01)*. **Open:** each developer confirms their agent starts with the `Rules loaded: …` line.
 
 - [ ] **P0-18** Turn the tasks into GitHub Issues with labels `owner:dev1|dev2|dev3`, `blocker`, `contract-change`; each with goal, files, inputs/outputs, acceptance test, "do not touch".
 

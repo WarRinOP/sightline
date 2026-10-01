@@ -136,6 +136,16 @@ _To be written after P1-01 / P1-02._
 
 ---
 
+### D-015 · 2026-10-01 · Accepted
+
+**Context:** The two Antigravity developers must work in their own folders on their own branches, every push must be reviewed by Dev 1 before it reaches `main`, and their agents must keep the same written records as ours. GitHub branch protection returned HTTP 403 ("Upgrade to GitHub Pro or make this repository public") on the private repo.
+
+**Decision:** (1) Dev 2 (Aktaruzzaman, `rimonxyg`) and Dev 3 (Fuad Hasan, `fuadhasandipro`) have Write access and push only to `dev2/…` and `dev3/…` branches, with home branches `dev2/integration` and `dev3/integration`. (2) Dev 1 merges every pull request with a merge commit (repo settings allow merge commits only). (3) Enforcement until branch protection is possible: `CODEOWNERS` (`* @WarRinOP`) and a workflow, `main-push-audit`, that fails and notifies when anyone but `WarRinOP` updates `main`. (4) Records: root `AGENTS.md` plus a dedicated `AGENTS.md` per folder; Dev 2 and Dev 3 keep their own append-only logs (`docs/progress/logs/DEV2_LOG.md`, `DEV3_LOG.md`) and never edit PROGRESS, REMAINING or DECISIONS, which Dev 1 updates from the logs.
+
+**Consequences:** Review is enforced by process and an alert, not by a lock, until the repo goes public (Oct 6) or GitHub Pro is available (then enable "require pull request" and "require code owner review"). Separate logs avoid merge conflicts in shared files.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._

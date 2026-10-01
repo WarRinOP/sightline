@@ -165,8 +165,8 @@ We have **3 developers**, and the other teammates cover the non-coding work. You
 | Role | Who | In plain words |
 |---|---|---|
 | **Developer 1: the core** | Team lead | The calculator that works out sunlight and signal, the NASA data, the proof that the numbers are right, the AI assistant's safety checks, and putting everything together |
-| **Developer 2: the 3D Moon** | _TBD_ | Makes the Moon look stunning: terrain, shadows, the sky, and the round "lander's eye" view |
-| **Developer 3: screens and tour** | _TBD_ | Builds the buttons, sliders, timeline, charts and the guided tour |
+| **Developer 2: the 3D Moon** | Aktaruzzaman | Makes the Moon look stunning: terrain, shadows, the sky, and the round "lander's eye" view |
+| **Developer 3: screens and tour** | Fuad Hasan | Builds the buttons, sliders, timeline, charts and the guided tour |
 | **Everyone else** | _TBD_ | Writes the tour story, checks every fact against NASA sources, makes the 30-second video and the slides, tries the site as a first-time user |
 
 ---
