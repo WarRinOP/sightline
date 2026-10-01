@@ -90,11 +90,13 @@ _To be written after P1-01 / P1-02._
 
 ---
 
-### D-011 · 2026-10-01 · Proposed
+### D-011 · 2026-10-01 · Accepted (org transfer pending)
 
 **Context:** 3 developers plus non-dev teammates need one shared codebase and a simple flow for 6 weeks. GitHub Free organizations only get branch protection and rulesets on **public** repos (check Settings → Branches to confirm for our account).
 
 **Decision:** One monorepo `sightline` under a free GitHub Organization (for example `sightline-spaceapps`), Apache-2.0, **private** until about Nov 10 then public before submission. All three developers get Write; the owner is Admin. Pull request per task, CI required via convention until the repo is public (or protection is enabled if a Pro/Education plan is available). CODEOWNERS for `packages/` and `pipeline/` (science correctness). Secrets live only in Vercel and GitHub Actions secrets.
+
+**Update 2026-10-01:** GitHub cannot create an organization through its API or `gh`, so the repo was created as private `WarRinOP/sightline` (https://github.com/WarRinOP/sightline) with Apache-2.0 and a docs-only first commit. Transfer it to an organization later (Settings → Danger Zone → Transfer; history, issues and settings are kept).
 
 **Consequences:** Repo creation is task P0-13. Organization creation is a web-only step. Branch protection is enforced by convention while private on the Free plan.
 

@@ -16,7 +16,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to official hackathon / submission deadline (Nov 14–15) | 44 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Reported by the team; **written confirmation pending (P0-02)** |
 | Live URL | — |
-| Repo | — (private `sightline` under a GitHub org; P0-13, D-011) |
+| Repo | https://github.com/WarRinOP/sightline (private; move to an org later, D-011) |
 
 ### Milestone progress
 
@@ -92,6 +92,8 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 - `gh auth status`: logged in as `WarRinOP` (scopes: repo, workflow, read:org). Creating the organization is a web-only step.
 
+- Created private repo `WarRinOP/sightline`; first commit `9aaf26a` (docs only) pushed to `main`; `gh repo view` confirms PRIVATE, default branch `main`.
+
 **Decisions logged:** D-010 (accepted, confirmation pending), D-011 (proposed)
 
 **Blockers / risks:**
@@ -104,7 +106,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 1. P0-02 Get the waiver and the exact deadline in writing.
 
-2. P0-13 Create the GitHub org and the private `sightline` repo; invite the developers.
+2. P0-13 Invite the other developers to `WarRinOP/sightline`; create the org (web only) and transfer the repo.
 
 3. M0-02 Start the essential data downloads overnight (D-009).
 

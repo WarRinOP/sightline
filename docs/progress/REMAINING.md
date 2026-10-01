@@ -34,7 +34,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 - [ ] **P0-12** Network plan (D-009): create a Cloudflare R2 bucket (and a US-region cloud VM or CI runner if available). Run a throughput test from the team's usual network to NAIF, PDS, PGDA, GitHub, the npm registry and PyPI, and paste the results into PROGRESS.md. **High priority:** measured ~3–35 KB/s to US origins from the current network.
 
-- [ ] **P0-13** GitHub setup (D-011): create the organization (web only) and the private `sightline` repo; invite the 2 other developers with Write access and the non-dev teammates as needed; enable two-factor authentication; add `.gitignore`, `CODEOWNERS`, a PR template; make the first commit (docs only).
+- [~] **P0-13** GitHub setup (D-011). *Done 2026-10-01:* private repo `WarRinOP/sightline` with Apache-2.0, `.gitignore`, PR template, CODEOWNERS stub and the docs-only first commit. *Still open:* invite the other developers (needs their GitHub usernames), create the organization (web only) and transfer the repo, fill in `CODEOWNERS` usernames. Original scope: invite the 2 other developers with Write access and the non-dev teammates as needed; enable two-factor authentication; add `.gitignore`, `CODEOWNERS`, a PR template; make the first commit (docs only).
 
 ---
 
