@@ -8,12 +8,12 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Field | Value |
 |---|---|
-| Current phase | **P0 — Setup** (building starts now; D-010) |
+| Current phase | **S1 — Stage 1 sprint, Oct 1–7** (D-014) |
 | Challenge | CLPS Lunar Mission Browser (backup: Interplanetary Survival Guide: Martian Map) — not locked until P1-02 |
 | Local Event | Space Apps Bangladesh (region _TBD_, P0-14). Program: Fri Nov 13 07:00 → Sat Nov 14 (BD, UTC+6) |
 | Days to full statement (Oct 28) | 27 (as of 2026-10-01) |
 | Feature freeze | Nov 5 |
-| **BD team registration closes** | **Oct 7** (P0-14, urgent) |
+| **Stage 1 due** | **Oct 7:** public GitHub link + 240-second video (and BD team registration closes). Target: submit **Oct 6 night** |
 | 240-second video due | Nov 13, 18:30–19:00 BD (Google Drive) |
 | NASA page + 30-second video due | Nov 14, 09:00–10:00 BD |
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
@@ -25,7 +25,8 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| P0 Setup | In progress | 5% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 5% |
+| P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | Not started | 0% |
 | M1 Data Pipeline | Not started | 0% |
@@ -74,6 +75,36 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 006 — 2026-10-01 — Stage 1 re-plan (Claude Code)
+
+**Phase / tasks:** S1, D-014
+
+**Done:**
+
+- The team lead reported that Bangladesh teams must submit a **public GitHub link and a 240-second video by Oct 7**, and that selected teams are eligible for Nov 13–14. Re-planned around it.
+
+- Added the Stage 1 sprint (MASTER_PLAN §4.3: scope, day-by-day plan per person, definition of done, video outline, cut rule), new tasks S1-00 … S1-14 in REMAINING, D-014, and updated D-010, CLAUDE.md §2 and the calendar.
+
+**Verified by:** documentation only. **NOT VERIFIED:** the Stage 1 deadline time, video format, repo rules and selection criteria. They are not on nasaspaceappsbd.com, so they need confirming with the organizers (S1-00).
+
+**Decisions logged:** D-014; D-010 updated
+
+**Blockers / risks:**
+
+- 6 days to build a credible vertical slice and a video with 3 developers.
+
+- The repo must become public (or follow the organizers' rule); the commit history currently shows a personal email address.
+
+- The developers' GitHub usernames and the Antigravity rules file are still outstanding.
+
+**Next 3 tasks:**
+
+1. S1-00 Ask the organizers the Stage 1 questions; P0-14 register the team.
+
+2. S1-01 / S1-02 Scaffold, contracts, mock engine; start the overnight downloads.
+
+3. P0-16 / P0-17 Invite Dev 2 and Dev 3; write `AGENTS.md`.
 
 ### Session 005 — 2026-10-01 — Work split (Claude Code)
 

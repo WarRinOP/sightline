@@ -2,7 +2,7 @@
 
 *Know when the Sun shines and Earth listens — anywhere on the lunar south pole.*
 
-Our entry for NASA Space Apps Challenge 2026, **Bangladesh local event** ([nasaspaceappsbd.com](https://www.nasaspaceappsbd.com)), for the challenge **CLPS Lunar Mission Browser**. Bangladesh program: Fri Nov 13 → Sat Nov 14 (BD time). **Team registration closes Oct 7.** The NASA-site upload is due Nov 14 by 10:00 BD and the 240-second video on Nov 13 by 19:00.
+Our entry for NASA Space Apps Challenge 2026, **Bangladesh local event** ([nasaspaceappsbd.com](https://www.nasaspaceappsbd.com)), for the challenge **CLPS Lunar Mission Browser**. Bangladesh program: Fri Nov 13 → Sat Nov 14 (BD time). **Stage 1 is due Oct 7: a public GitHub link and a 240-second video, plus team registration.** Selected teams attend Nov 13–14. The NASA-site upload is due Nov 14 by 10:00 BD and the 240-second video on Nov 13 by 19:00.
 
 > Early start: the team says our Local Event allows it, but the Bangladesh site does not state it. Written confirmation is tracked in `docs/progress/DECISIONS.md` (D-010).
 

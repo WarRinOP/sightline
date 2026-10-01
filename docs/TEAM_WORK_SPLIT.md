@@ -190,6 +190,20 @@ Task IDs come from [REMAINING.md](progress/REMAINING.md).
 
 ---
 
+## 7b. Stage 1 sprint (Oct 1–7): who does what
+
+The calendar above applies **after** Stage 1. For the first week, the day-by-day plan in MASTER_PLAN §4.3 applies. In short:
+
+- **Dev 1:** scaffold, contracts, mock engine and CI by Oct 2 (this unblocks the others); real Sun/Earth geometry for 3 sites and the Horizons check by Oct 5; horizon v0 on one real site if the data arrives; repo clean-up and going public on Oct 6.
+
+- **Dev 2:** a synthetic-terrain scene on day 1 (no dependencies), then mock tiles, the Sun light driven by the engine, the Hero capture, and the real tile if it arrives.
+
+- **Dev 3:** tokens, app shell and Lab layout on day 1 (no dependencies), then the barcode, readouts, Evidence table, and wiring to the engine client.
+
+- **Non-dev teammates:** BD registration, the video script, storyboard, voice-over and edit, README writing, and the Oct 6 submission with the team lead.
+
+**Freeze Oct 6 at noon.** After that only bug fixes and the submission.
+
 ## 8. Working agreements
 
 **Git flow**

@@ -8,6 +8,42 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 ---
 
+## S1 — Stage 1 sprint (Oct 1 → Oct 7): GitHub link + 240-second video
+
+Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day schedule: MASTER_PLAN §4.3 and TEAM_WORK_SPLIT §7b. **Target: submit by Oct 6 night.**
+
+- [ ] **S1-00** Ask the organizers (info@nasaspaceappsbd.com or the Local Lead): the exact Stage 1 deadline time; where and how to submit the link and video; video format and size; must the repo be public (or add them as collaborators); what the selectors judge and how many teams are chosen; whether teams that are not selected can still take part (for example the Universal Event). *Owner: team lead.*
+
+- [ ] **S1-01** Scaffold, contracts, mock engine, mock tiles, CI. *Dev 1, Oct 1–2.*
+
+- [ ] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.*
+
+- [ ] **S1-03** Real ephemeris for 3 sites, engine `time`/`frames`/`getSunEarth`. *Dev 1, Oct 2–4.*
+
+- [ ] **S1-04** Horizons check: 3 sites × 50 epochs; residuals saved as JSON. *Dev 1, Oct 4–5.*
+
+- [ ] **S1-05** Horizon v0 on one real site. *Dev 1, Oct 4–6 (stretch).*
+
+- [ ] **S1-06** Terrain scene, sun light from `getSunEarth`, pin, orbit camera, 20 s Hero capture. *Dev 2, Oct 1–5.*
+
+- [ ] **S1-07** Lander's Eye fisheye. *Dev 2, Oct 4–6 (stretch).*
+
+- [ ] **S1-08** App shell, tokens, landing page, Lab page: 3 sites, scrubber, readouts. *Dev 3, Oct 1–5.*
+
+- [ ] **S1-09** Mission barcode from the timeline. *Dev 3, Oct 3–6.*
+
+- [ ] **S1-10** Evidence page v0: validation table from Dev 1's JSON. *Dev 3, Oct 5–6.*
+
+- [ ] **S1-11** README: problem, concept, architecture, verified data sources, roadmap, team, "Use of AI" statement, data credits. *Non-dev + Dev 1 review, Oct 4–6.*
+
+- [ ] **S1-12** 240-second video: script (Oct 2), storyboard, screen captures (Oct 5–6), voice-over, edit, upload (Oct 6). *Non-dev + Dev 2 captures.*
+
+- [ ] **S1-13** Repo hygiene: decide on a GitHub no-reply commit email before going public (existing commits show a personal email), no secrets, topics, tag `v0.1-stage1`, switch to **public** on Oct 6 (or follow the organizers' rule). *Dev 1.*
+
+- [ ] **S1-14** Submit the link and video; screenshot the confirmation. *Team lead, Oct 6 night.*
+
+---
+
 ## P0 — Setup (Oct 1 → Oct 7)
 
 - [ ] **P0-01** Every member registers at spaceappschallenge.org in the **same Local Event** (Bangladesh). Record the event name and its **exact start/end times (UTC+6)** in PROGRESS.md.
@@ -34,7 +70,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 - [ ] **P0-12** Network plan (D-009): create a Cloudflare R2 bucket (and a US-region cloud VM or CI runner if available). Run a throughput test from the team's usual network to NAIF, PDS, PGDA, GitHub, the npm registry and PyPI, and paste the results into PROGRESS.md. **High priority:** measured ~3–35 KB/s to US origins from the current network.
 
-- [ ] **P0-14** 🚨 **URGENT, by Oct 7:** register the team on https://www.nasaspaceappsbd.com/registration (team name, leader name/mobile/email, **region**, up to 6 members with name/email/mobile, **team group photo**). Pick the region where we will attend in person (nine regions; Dhaka's main venue is AIUB). Screenshot the confirmation into PROGRESS.md.
+- [ ] **P0-14** 🚨 **URGENT, by Oct 7 (same day as the Stage 1 submission):** register the team on https://www.nasaspaceappsbd.com/registration (team name, leader name/mobile/email, **region**, up to 6 members with name/email/mobile, **team group photo**). Pick the region where we will attend in person (nine regions; Dhaka's main venue is AIUB). Screenshot the confirmation into PROGRESS.md.
 
 - [ ] **P0-15** Register every member on spaceappschallenge.org and join the **same Local Event** (the BD site says registration there happens on-site on Nov 13, but global judging needs everyone in the same Local Event, so do it early). Create the team on the NASA site.
 
@@ -80,7 +116,7 @@ Update this file at the end of every session (see `CLAUDE.md` §3).
 
 ---
 
-## P2 — Build (Oct 1 → Nov 5 feature-complete; Nov 5 → Nov 11 hardening) — calendar in MASTER_PLAN §4.2; owner per task in `docs/TEAM_WORK_SPLIT.md` §5
+## P2 — Build (starts Oct 1; after Oct 7 only if selected; Oct 1 → Nov 5 feature-complete; Nov 5 → Nov 11 hardening) — calendar in MASTER_PLAN §4.2; owner per task in `docs/TEAM_WORK_SPLIT.md` §5
 
 ### M0 — Kickoff & Contracts (Oct 1–3 · Dev 1)
 

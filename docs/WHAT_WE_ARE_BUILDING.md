@@ -139,12 +139,13 @@ We're aiming for the **"Best Use of Science"** award, with **"Best Use of Techno
 
 ## Important: the timeline
 
-We are part of **NASA Space Apps Bangladesh** ([nasaspaceappsbd.com](https://www.nasaspaceappsbd.com)). There are two rounds: a **local round in Bangladesh first**, then **global judging** for the roughly 27 Bangladeshi teams that advance. The key dates are in Bangladesh time:
+We are part of **NASA Space Apps Bangladesh** ([nasaspaceappsbd.com](https://www.nasaspaceappsbd.com)). There are three steps: **Stage 1 (due Oct 7)** decides which teams attend the on-site event, the **local round on Nov 13–14** picks about 27 teams, and those go on to **global judging**. The key dates are in Bangladesh time:
 
 | Date | What happens |
 |---|---|
-| **By Oct 7** | 🚨 **Register our team on the Bangladesh site.** It asks for the team name, leader, region, members and a team photo |
-| **Now → Nov 5** | We build the website |
+| **By Oct 7** | 🚨 **Stage 1: we submit our GitHub link and a 240-second video.** We also register our team on the Bangladesh site. If we are selected, we can attend the on-site event on Nov 13–14. Our goal is to submit on the night of **Oct 6** |
+| **Now → Oct 6** | **Stage 1 sprint:** a working first version, a public GitHub page, and the video |
+| **Oct 8 → Nov 5** | If selected: we build the full website |
 | **Oct 28** | NASA releases the full challenge details. We double-check that our plan fits |
 | **Nov 5** | **Feature freeze:** no new features after this day, only fixes and polish |
 | **Nov 11** | A finished version of the website is online |

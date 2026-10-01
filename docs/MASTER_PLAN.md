@@ -20,7 +20,7 @@ Everything in this plan is built around these facts (verified from the official 
 |---|---|---|
 | Aug 26 | Registration opened | Register all members **in the same Local Event** (required for global judging) |
 | Sep 17 | Challenge **summaries** published (14 challenges) | Shortlist done (see Appendix A) |
-| **Oct 7** | **Bangladesh team registration closes** (nasaspaceappsbd.com/registration; form asks team name, leader, region, members, group photo) | Register the team on the BD site by this date, and on the NASA site in the same Local Event |
+| **Oct 7** | **Bangladesh Stage 1 deadline** (reported by the team lead; not on the public site): submit a **public GitHub link + a 240-second video**. Team registration on nasaspaceappsbd.com also closes. Selected teams are eligible for the on-site program on **Nov 13–14** | Everything for Stage 1 is done by Oct 6 night. Exact time, video format and repo rules still to confirm (P0-02) |
 | **Oct 28** | Full **challenge statements** published (requirements, resources) | Re-validate this plan against the real statement within 24 h |
 | Nov 2 | Space Apps Connect opens | Final team confirmation |
 | Nov 13 | Project Submission Guide + Judging & Awards Guide published | Update Milestone 6 deliverables to match exactly |
@@ -35,7 +35,7 @@ Everything in this plan is built around these facts (verified from the official 
 
 The global Participant FAQ (2026-09-23) says teams may not begin working on challenges before the hackathon. We were told that this restriction does not apply to our Local Event (Space Apps Bangladesh), so **we start building now.**
 
-- **Status: reported by the team, but not stated on the Bangladesh site.** nasaspaceappsbd.com (checked 2026-10-01) says nothing about pre-work either way; its program starts Fri Nov 13, 07:00 BD, and the global FAQ rule still stands. Action P0-02: get written confirmation from the Local Lead (list on the BD site, Dhaka lead Mohammad Mahdee Uz Zaman) or info@nasaspaceappsbd.com and file it under D-010. If it cannot be confirmed, stop and re-plan: the downside is disqualification.
+- **Status: reported by the team, but not stated on the Bangladesh site.** nasaspaceappsbd.com (checked 2026-10-01) says nothing about pre-work either way; its program starts Fri Nov 13, 07:00 BD, and the global FAQ rule still stands. Action P0-02: get written confirmation from the Local Lead (list on the BD site, Dhaka lead Mohammad Mahdee Uz Zaman) or info@nasaspaceappsbd.com and file it under D-010. Because Stage 1 requires a GitHub link by Oct 7, work before Nov 13 is clearly expected, which supports the team's statement; still get it in writing. If it cannot be confirmed, stop and re-plan: the downside is disqualification.
 
 - **What does not change:** the Bangladesh program ends our NASA-site upload at **Nov 14, 10:00 BD (UTC+6)**; the global FAQ says 11:59 PM local on Nov 15, but we plan against the earlier time. Full challenge statements arrive Oct 28, and the Submission and Judging guides arrive Nov 13. Teams have at most 6 members, work on one challenge, and must all be registered in the same Local Event. **Local judging comes first**: roughly 27 Bangladeshi teams go on to global judging.
 
@@ -43,13 +43,23 @@ The global Participant FAQ (2026-09-23) says teams may not begin working on chal
 
 ---
 
+### Two stages (D-014)
+
+| Stage | When (Bangladesh time) | What decides it |
+|---|---|---|
+| **Stage 1: selection** | Submit by **Oct 7** | **Public GitHub link + 240-second video.** Passing makes the team eligible for the on-site program |
+| **Stage 2: on-site + local judging** | Nov 13–14 | 240-second video again, NASA project page, 30-second video; about 27 teams advance |
+| **Stage 3: global judging** | Dec 2026 – Jan 2027 | The NASA submission |
+
+Stage 1 is a **6-day sprint** with a hard cut-off. The plan below treats Oct 1–7 as its own phase (S1, §4.3) and everything after Oct 7 as conditional on being selected.
+
 ## Phase Overview
 
 | Phase | Window (2026) | Goal | Exit criteria |
 |---|---|---|---|
-| **P0 — Setup** | Oct 1 → Oct 7 | **Register on the BD site by Oct 7**, register on the NASA site (same Local Event), GitHub repo + CI, 3 lanes assigned, written waiver, data relay | Registered on both sites; CI green on an empty skeleton; waiver filed; essential data bundle mirrored |
+| **S1 — Stage 1 sprint** | Oct 1 → Oct 7 | Public GitHub repo, a working vertical slice and a 240-second video, plus team registration, repo setup and the data downloads | Submitted by **Oct 6 night**; selected for Nov 13–14 |
 | **P1 — Lock-in checkpoint** | Oct 28 → Oct 30 | Read the full CLPS statement, gap analysis, final challenge decision | Gap analysis written; plan v1.2; D-002 recorded |
-| **P2 — Build** | Oct 1 → Nov 5 (feature-complete) · Nov 5 → Nov 11 (hardening + deliverables) | Execute milestones M0–M6 on the weekly calendar in §4.2 | Release candidate deployed by Nov 11; both videos and the deck ready |
+| **P2 — Build** | Oct 8 → Nov 5 (feature-complete) · Nov 5 → Nov 11 (hardening + deliverables). **Only if selected** | Execute milestones M0–M6 on the weekly calendar in §4.2 | Release candidate deployed by Nov 11; both videos and the deck ready |
 | **P3 — Submit & judging** | Nov 11 → Jan 2027 | Nov 13: 240-second video to Drive by 19:00 BD; Nov 14: NASA page + 30-second video by 10:00 BD; local judging; then global judging | Submitted by 09:00 BD on Nov 14; tag `v1.0-submitted`; uptime monitored |
 
 Detailed checklists are in [progress/REMAINING.md](progress/REMAINING.md). Session history is in [progress/PROGRESS.md](progress/PROGRESS.md).
@@ -472,7 +482,7 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 
 | Week | Dates | Focus | Gate at end of week |
 |---|---|---|---|
-| **W1** | Oct 1 → Oct 7 | **M0** repo, CI, contracts, mocks. **M1** essential data mirrored (relay) and `fetch`/`dem`/`tiles` started. **M2** `time`, `frames`, `ephemeris`. **M3** terrain from the mock DEM. Design tokens | **G1 (Oct 7):** CI green; real tiles for one site rendered; Sun az/el from real SPICE kernels |
+| **W1 = Stage 1 sprint** | Oct 1 → Oct 7 | See §4.3 for the day-by-day plan: scaffold, contracts, mocks, real Sun/Earth geometry for a few sites, one real terrain tile, Lab page, Horizons validation, README, 240-second video | **G1 (Oct 6 night): Stage 1 submitted** |
 | **W2** | Oct 8 → Oct 14 | M1 tiles + ephemeris published. M2 `horizon` + parity tests. M3 LOD + shadows. M4 Lab shell and stores | **G2 (Oct 14):** one site end-to-end (horizon → timeline → barcode), within 0.05° RMS of the Python reference |
 | **W3** | Oct 15 → Oct 21 | M2 `illumination`, `comms`, `timeline`, Horizons validation. M3 sky dome, fisheye, overlays. M4 site list, profile form, scrubber | **G3 (Oct 21):** Lab works on 3 real sites; validation report v1 |
 | **W4** | Oct 22 → Oct 28 | M2 `windows`, uncertainty from PGDA clones. M4 Window Finder, Evidence view. Start M5 Story engine. **Oct 28: full challenge statement released → gap analysis** | **G4 (Oct 28–30):** gap analysis done; plan v1.2; D-002 (challenge lock) |
@@ -481,6 +491,56 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 | **Submit** | Nov 11 → Nov 14 | Nov 11–12: buffer and rehearsals. **Nov 13:** on-site at the Local Event, read the Submission Guide, upload the 240-second video by 19:00 BD. **Nov 14:** NASA project page and 30-second video uploaded by 09:00 BD (window closes 10:00), then local judging at 11:00 | Tag `v1.0-submitted` |
 
 **Risks specific to this calendar:** (1) the statement may change scope on Oct 28, so keep the engine body-agnostic and keep slack in W4–W5; (2) three developers means a single illness can move a gate, so every gate has a "minimum viable" version listed in REMAINING.md; (3) the deadline is still hard, so cut features before cutting validation, and protect W6 for hardening.
+
+## 4.3 Stage 1 sprint (Oct 1 → Oct 7)
+
+**Goal:** a repo and a video that convince the selectors this team can deliver. Be **honest and specific**: show what is real, label what is simulated, and show a clear roadmap.
+
+### Scope: a thin vertical slice, not the whole product
+
+| In (must) | Out (roadmap only) |
+|---|---|
+| Public repo with a strong README, architecture, verified data sources, roadmap, team, AI disclosure | Mission Analyst, Story Mode, exports, sonification |
+| `pnpm dev` runs: Hero scene + Lab page with 3 preset sites | Uncertainty bands, Window Finder, Evidence charts beyond one table |
+| **Real** Sun and Earth az/el at the sites from NASA/JPL SPICE data, checked against Horizons (the residual is shown) | Full illumination %, comms %, DSN, eclipses |
+| Terrain: one real LOLA tile if the download arrives in time, otherwise a clearly labelled `SIMULATED` terrain | Full LOD terrain, shadows on real tiles for all sites |
+| Mission barcode and time scrubber (real Sun/Earth where available, mock otherwise, labelled) | Lander's Eye fisheye (stretch) |
+
+### Day by day
+
+| Day | Dev 1 (you, Claude Code) | Dev 2 (Scene) | Dev 3 (UI) | Non-dev |
+|---|---|---|---|---|
+| **Wed Oct 1** | Scaffold, start downloads (SPICE kernels first); ask the organizers the Stage 1 questions | Set up; synthetic terrain in R3F | Set up; tokens, fonts, app shell | Register on the BD site; video script outline |
+| **Thu Oct 2** | Contracts + mock engine + mock tiles, CI | Orbit camera, sun light, site pin | Lab layout, site list, scrubber (fake data) | Script v1 |
+| **Fri Oct 3** | Real ephemeris for 3 sites; `time`, `frames`, `getSunEarth` | Scene reads mock tiles; Sun light from `getSunEarth` | Barcode, readouts, landing page | Storyboard; README outline |
+| **Sat Oct 4** | Horizons check (3 sites × 50 epochs); tiles for one real site | Hero 20 s sequence | Lab wired to the engine client | README draft; collect assets |
+| **Sun Oct 5** | Horizon v0 on one real site (stretch); validation numbers to JSON | Real tile in the scene (if available); polish | Evidence table (validation numbers); polish | Record screen captures; voice-over draft |
+| **Mon Oct 6** | **Freeze at noon.** README review, license, repo clean-up, make it public | Final captures; bug fixes | Bug fixes | Record voice-over, edit video, upload; submit by night |
+| **Tue Oct 7** | Buffer: only fix a failed submission | Buffer | Buffer | Buffer |
+
+### Definition of done for Stage 1
+
+- [ ] Public repo (visibility switched on Oct 6) with README, license, and no secrets or personal data.
+
+- [ ] A fresh clone runs with the commands in the README.
+
+- [ ] At least one real number on screen from the engine and one validation result against JPL Horizons.
+
+- [ ] Everything simulated carries the `SIMULATED` badge, and the video says so aloud.
+
+- [ ] 240-second video, at most 240 s, uploaded as the organizers require.
+
+- [ ] GitHub link and video submitted, confirmation screenshotted.
+
+- [ ] No NASA logos, no AI-generated imagery presented as real, and the "Use of AI" statement in the README.
+
+### Stage 1 video (240 s, prototype-stage version of the local-judging outline)
+
+Use the outline in "240-second local-judging presentation", with these changes: spend more time on the **problem, the plan and the proof** (0:00–1:10), show **only what is real** in the demo (1:10–2:40), then the **roadmap and why this team can deliver** (2:40–3:45), then the close. Never show a mock as if it were real.
+
+### Cut rule
+
+Cut in this order: Lander's Eye, real terrain tile (fall back to labelled `SIMULATED`), horizon v0. **Never cut:** the README, the real Sun/Earth numbers with the Horizons check, the video, the submission itself.
 
 ## Milestone M0 — Setup & Contracts (Dev 1 · Oct 1 → Oct 3)
 
@@ -639,7 +699,7 @@ Heavy downloads and checks run overnight. Hour-based "H+" labels from the origin
 
 ### 240-second local-judging presentation ("240 Seconds of Glory")
 
-The Bangladesh schedule asks for a **240-second video**, uploaded to the Local Lead's Google Drive folder on Nov 13 (18:30–19:00 BD), and local judging on Nov 14 is built around it. It is a separate deliverable from the 7-slide deck and the 30-second NASA video. Hard cap: 240 s. Confirm with the Local Lead whether a live Q&A follows, and the accepted file format and size.
+The Bangladesh schedule asks for a **240-second video**, uploaded to the Local Lead's Google Drive folder on Nov 13 (18:30–19:00 BD), and local judging on Nov 14 is built around it. It is a separate deliverable from the 7-slide deck and the 30-second NASA video. Hard cap: 240 s. The same format is also the **Stage 1 submission due Oct 7**; that earlier cut shows the prototype honestly and presents the rest as roadmap (§4.3). Confirm with the Local Lead whether a live Q&A follows, and the accepted file format and size.
 
 | Time | Content |
 |---|---|

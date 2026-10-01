@@ -88,6 +88,8 @@ _To be written after P1-01 / P1-02._
 
 **Update 2026-10-01 (after reading nasaspaceappsbd.com):** the Bangladesh site says nothing about starting early either way, and the global FAQ rule still stands. The team lead's statement is the only source. Treat this as an open risk until the Local Lead confirms in writing.
 
+**Update (later 2026-10-01):** the team lead reports that Stage 1 requires a public GitHub link by Oct 7 (see D-014). That means work before Nov 13 is expected, which strongly supports the early start. Still ask for the written confirmation.
+
 **Consequences:** The 48-hour schedule, the compliance-zone table and the rehearsal task are retired. **Open item P0-02:** obtain written confirmation from the Local Lead or organizers and paste it here (date, sender, text). If confirmation is refused, stop and re-plan. Also confirm the exact submission deadline for our Local Event.
 
 ---
@@ -121,6 +123,16 @@ _To be written after P1-01 / P1-02._
 **Decision:** Dev 1 (Claude Code) owns contracts, engine, pipeline, validation, workers, Analyst server side, CI/deploy and merges. Dev 2 owns `packages/scene` (3D). Dev 3 owns the app UI, state, Evidence, Story and the delegated `windows/` module. Lanes meet only at five frozen seams (EngineClient, TileSource, Scene API, app state/story steps, Analyst stream). The scene moves from `apps/web/scene` to its own package `packages/scene` so folders do not overlap. Full detail: `docs/TEAM_WORK_SPLIT.md`.
 
 **Consequences:** Dev 1 is the bottleneck for the first 3 days (contracts and mocks) and for merges; mitigated by the mock engine, a delegated module, fixed merge windows and a cut list. Antigravity does not read CLAUDE.md, so an `AGENTS.md` is needed (P0-17). Supersedes the old lane split in MASTER_PLAN §4.1.
+
+---
+
+### D-014 · 2026-10-01 · Accepted (details to confirm with the organizers)
+
+**Context:** The team lead reports that Bangladesh teams must submit a **GitHub link and a 240-second video by Oct 7, 2026**, and that selected teams become eligible for the on-site program on Nov 13–14. This is not stated on nasaspaceappsbd.com (checked 2026-10-01), so the details (time, format, repo rules, criteria) need confirming.
+
+**Decision:** Add a **Stage 1 sprint** (Oct 1–7) before the main build. Stage 1 delivers a thin, honest vertical slice, a public repo and a prototype-stage 240-second video, submitted by **Oct 6 night**. All later work (Oct 8 onwards) is conditional on selection. Real vs simulated is labelled everywhere.
+
+**Consequences:** The calendar, REMAINING (new S1 tasks), the work split and the video plan changed. The repo goes **public** around Oct 6 (or as the organizers require), so commit emails, secrets and personal notes must be checked first. The Oct 28 challenge statement arrives after Stage 1, so the Stage 1 pitch is built on the challenge summary only.
 
 ---
 
