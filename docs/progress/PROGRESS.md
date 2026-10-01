@@ -93,6 +93,8 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 - **NOT VERIFIED:** the "Important Documents" PDFs (no link found), the Judges page ("content will be updated soon"), the 240-second video format, and which region we attend.
 
+- Rewrote the git history to remove the `Co-Authored-By: Claude` trailer from all three commits and force-pushed `main` (commit IDs changed: now `c18370d`, `37ed20f`, `65d40be`). Verified through the GitHub API that no commit has the trailer and that the only listed contributor is `WarRinOP`. Updated the repo description and topics.
+
 **Decisions logged:** D-012; D-010 amended
 
 **Blockers / risks:**
