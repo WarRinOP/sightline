@@ -18,6 +18,8 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | NASA page + 30-second video due | Nov 14, 09:00–10:00 BD |
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
+| Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
+| Open before work joins up | Scaffold + contracts + mock engine (S1-01); GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17) |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -75,6 +77,30 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 009 — 2026-10-01 — Readiness check and group message (Claude Code)
+
+**Phase / tasks:** S1, P0-17, P0-18
+
+**Done:**
+
+- Checked readiness. Ready: public repo, protected `main`, both developers' branches and folders, `AGENTS.md` rules, logs, PR template, `CODEOWNERS`. **Not ready:** scaffold, contracts and mock engine (S1-01); GitHub Issues (P0-18); Fuad's invitation is still pending; the organizers' answers (S1-00) and BD team registration (P0-14) are open.
+
+- Drafted the message for the team group chat (what each person does, how to start, the short rules, first tasks, the non-dev asks). Added the open items to the dashboard.
+
+**Verified by:** `git log` shows all 8 earlier sessions pushed; `gh api …/collaborators` and `…/invitations` earlier showed `rimonxyg` active and `fuadhasandipro` pending. **NOT VERIFIED:** that the developers have started or that their agents load `AGENTS.md`.
+
+**Decisions logged:** none
+
+**Blockers / risks:** the scaffold is the critical path for the developers; the daily check-in time is not set (P0-20).
+
+**Next 3 tasks:**
+
+1. S1-01 Scaffold, contracts, mock engine, mock tiles, CI (Dev 1).
+
+2. P0-18 Create GitHub Issues for the first tickets.
+
+3. S1-00 / P0-14 Ask the organizers; register the team.
 
 ### Session 008 — 2026-10-01 — Repo public + branch protection (Claude Code)
 
