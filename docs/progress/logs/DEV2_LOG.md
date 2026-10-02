@@ -36,6 +36,40 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 5 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** M3-03 (Lunar photometric shading)
+
+**What I did:**
+- Implemented Lommel-Seeliger / Hapke-lite photometric shading on the terrain quadtree.
+- Added an `onBeforeCompile` shader injection to `MeshStandardMaterial` inside `TerrainQuadtree.tsx`.
+- The shader computes the incidence angle (`cosI`) against the incoming `sunDirection` uniform, and the emission angle (`cosE`) from the view vector.
+- Blends standard irradiance with the `I / (I + E)` Lommel-Seeliger model in the fragment shader to give the terrain a characteristic flat, dusty lunar look.
+- Plumbed `sunDirection` all the way from `MoonScene.tsx` down to the `TerrainNode` shader material.
+
+**Files changed:**
+- `packages/scene/src/TerrainQuadtree.tsx`
+- `packages/scene/src/MoonScene.tsx`
+
+**How I verified it:** 
+- `pnpm typecheck` passed.
+- The `vite` dev server preview shows flattened lunar-style shading at grazing sun angles.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) wrote the WebGL shader snippet and plumbing.
+
+**Proposed decisions:** 
+- Modified the Three.js Standard material directly at the `#include <dithering_fragment>` step to preserve existing shadow maps while replacing the final color output.
+
+**Blockers / questions:**
+- We still need the real `SunEarthState` data for dynamic lighting (M2-08) to drive the `sunDirection` in real time.
+
+**Next 3 tasks:**
+1. M3-04: Near-field heightfield shadow ray-march + far-field horizon-angle texture.
+2. M3-05: Overlay layers (illum %, max-dark, DTE %, slope, PSR) + legends.
+3. M3-06: Deep space sky (J2000, Sun sprite, Earth).
+
+---
+
 ### Session 4 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** M3-02 (Quadtree LOD terrain)
