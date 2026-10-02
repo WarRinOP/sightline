@@ -4,6 +4,7 @@ import { MoonScene } from "./MoonScene";
 import { FisheyeSky } from "./FisheyeSky";
 import type { SceneInputs } from "./types";
 import type { Site } from "@sightline/contracts";
+import { createMockTileSource } from "@sightline/engine";
 
 function DevApp() {
   const inputsRef = useRef<SceneInputs>({
@@ -25,43 +26,9 @@ function DevApp() {
     },
   ];
 
-  const mockTileSource: import("@sightline/contracts").TileSource = useMemo(() => {
-    return {
-      getManifest: async () => ({
-        schema_version: 1 as const,
-        data_version: "mock",
-        projection: "polar_stereographic_south" as const,
-        moon_radius_m: 1737400 as const,
-        bounds_m: { x_min_m: -1000, y_min_m: -1000, x_max_m: 1000, y_max_m: 1000 },
-        tile_size_px: 64,
-        border_px: 1,
-        level_count: 1,
-        height_encoding: "uint16_offset" as const,
-        height_scale_m: 0.1,
-        simulated: true,
-        provenance: { 
-          source: "mock", 
-          simulated: true, 
-          data_sources: [], 
-          spice_kernels: [], 
-          dem_citation: null, 
-          pipeline_version: null, 
-          data_version: null 
-        }
-      }),
-      getTile: async (coord: any) => {
-        const size = 64;
-        const heights = new Uint16Array(size * size);
-        return {
-          coord,
-          size_px: size,
-          offset_m: 0,
-          scale_m: 0.1,
-          heights,
-          simulated: true,
-        };
-      }
-    };
+  // Load the real mock tile source from the engine package
+  const mockTileSource = useMemo(() => {
+    return createMockTileSource();
   }, []);
 
   return (

@@ -4,6 +4,7 @@ import { OrbitControls, Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { MoonSceneProps, CameraHandle } from "./types";
 import { locationToScenePosition } from "./math";
+import { TerrainQuadtree } from "./TerrainQuadtree";
 
 function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" | "onReady" | "onPickLocation">) {
   const [sunDirection, setSunDirection] = useState(new THREE.Vector3(1, 0.5, 0));
@@ -53,13 +54,9 @@ function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" 
       {/* We will just center our camera at the first site for now */}
       
       {/* Real Terrain mesh will go here */}
-      <mesh receiveShadow castShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 1737400, 0]}>
-        <planeGeometry args={[20000, 20000, 64, 64]} />
-        <meshStandardMaterial color="#888888" wireframe={false} />
-      </mesh>
-      <Text position={[0, 1737410, -5000]} fontSize={500} color="#C77DFF">
-        SIMULATED terrain
-      </Text>
+      <group position={[0, 1737400, 0]}>
+        <TerrainQuadtree tileSource={tileSource} />
+      </group>
 
       {/* Site pin */}
       <group ref={pinGroupRef}>
