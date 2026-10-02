@@ -14,6 +14,7 @@ export interface CameraHandle {
 }
 
 export interface MoonSceneProps {
+  sites: import("@sightline/contracts").Site[];
   tileSource: TileSource;
   inputs: MutableRefObject<SceneInputs>;
   ref?: Ref<CameraHandle>;

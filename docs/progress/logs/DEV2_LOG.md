@@ -36,6 +36,47 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 2 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** S1-06 (part 2: Contracts Integration)
+
+**What I did:**
+- Read `@sightline/contracts` (Location, Site, Ephemeris interfaces).
+- Updated `MoonSceneProps` and `types.ts` to use contract types (`Location`, `Site`).
+- Created `math.ts` to convert `lat_rad`, `lon_rad`, `elev_m` to a 3D scene position using `MOON_REFERENCE_RADIUS_M` (1737.4 km).
+- Wrote a unit test (`math.test.ts`) validating the spherical conversion.
+- Updated `MoonScene.tsx` and `dev.tsx` to handle the `sites` prop and place the pin at the exact real site location via `selected_site_id`.
+- Documented the Public API at the top of `packages/scene/AGENTS.md`.
+
+**Files changed:**
+- `packages/scene/AGENTS.md`
+- `packages/scene/src/types.ts`
+- `packages/scene/src/math.ts`
+- `packages/scene/test/math.test.ts`
+- `packages/scene/src/MoonScene.tsx`
+- `packages/scene/src/dev.tsx`
+- `packages/scene/package.json` (added vitest)
+
+**How I verified it:** 
+- Ran `pnpm test` (vitest) to verify `math.test.ts` passed successfully.
+- Ran `git fetch origin && git merge origin/main` and then `pnpm typecheck` to ensure no contract breaks. All passed.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) generated `math.ts`, tests, and component updates.
+
+**Proposed decisions:** 
+- `MoonScene` maps `selected_site_id` against the `sites` array prop to automatically place the site pin at the correct location.
+- Z axis is mapped to East-West based on standard cartesian conversions.
+
+**Blockers / questions:**
+- **Dev 1:** How should real LOLA terrain data reach the scene? Should I use the `getTile` function directly from `TileSource` or will you provide a unified loader? For now, the terrain remains `SIMULATED_TERRAIN`.
+
+**Next 3 tasks:**
+1. Wait for terrain loader integration details.
+2. Implement Moon shading and sun direction updates in `MoonScene`.
+3. Start work on `FisheyeSky`.
+
+---
+
 ### Session 1 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** S1-06 (part 1)

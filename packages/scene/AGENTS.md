@@ -2,6 +2,11 @@
 
 You own this folder and nothing else. The root `AGENTS.md` rules also apply (read it first). Your log: `docs/progress/logs/DEV2_LOG.md`. Your branch: `dev2/integration`. Every push is reviewed by the team lead before it reaches `main`.
 
+## Public API (for Dev 3)
+- `MoonScene`: `<MoonScene sites={Site[]} tileSource={TileSource} inputs={MutableRefObject<SceneInputs>} ref={Ref<CameraHandle>} onPickLocation={fn} onReady={fn} />`
+- `FisheyeSky`: `<FisheyeSky inputs={MutableRefObject<SceneInputs>} location={Location} onReady={fn} />`
+- Types: `SceneInputs`, `CameraHandle`, `MoonSceneProps`, `FisheyeSkyProps`.
+
 ## What you build
 
 The whole 3D part of SIGHTLINE, as a self-contained React Three Fiber package:
