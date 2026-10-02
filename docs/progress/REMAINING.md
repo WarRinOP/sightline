@@ -20,10 +20,12 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
   - [ ] **S1-01c** Install `three@0.186.x`, `@react-three/fiber`, `@react-three/drei` and `@types/three@0.186.0` for Dev 2 (approved in D-017; versions of the R3F packages still to check). *Dev 1, when Dev 2 asks.*
   - [ ] **S1-01d** Favicon (the browser logs a 404 for it) and self-hosted IBM Plex / Instrument Serif subsets. *Dev 3 (S1-08).*
 
-- [x] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.* *Done 2026-10-02 (D-018): 8 SPICE kernels (65,010,769 B, PR #2) and `pgda78-site04-surf` plus `pgda90-ldem-80s-80m` (230,139,198 B, branch `dev1/S1-02b-dem-downloads`), all size- and type-checked, SHA-256 pinned, strict re-run of all 10 datasets passes. Not downloaded: the other site DEMs, validation maps, the far tier.*
-  - [ ] **S1-02a** Site coordinates for the 3 presets: choose option A or B of D-019; the coordinates in the brief failed the DEM check. Then the `sightline sites` catalog (M1-06). *Team lead decision, then Dev 1.*
+- [x] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.* *Done 2026-10-02 (D-018; PR #2 merged, PR #3 open): 8 SPICE kernels (65,010,769 B, PR #2) and `pgda78-site04-surf` plus `pgda90-ldem-80s-80m` (230,139,198 B, PR #3); `pgda78-site01-surf` and `pgda78-site11-surf` (81,961,616 B) added in S1-03, all size- and type-checked, SHA-256 pinned, strict re-run of all 10 datasets passes. Not downloaded: the other site DEMs, validation maps, the far tier.*
+  - [x] **S1-02a** *(2026-10-02)* Option A chosen for D-019: the 3 presets are the centres of their PGDA #78 DEM tiles, heights sampled from the 5 m DEMs; `sightline sites` writes the catalog. *Dev 1.*
 
-- [ ] **S1-03** Real ephemeris for 3 sites, engine `time`/`frames`/`getSunEarth`. *Dev 1, Oct 2–4.*
+- [x] **S1-03** Real ephemeris for 3 sites, engine `time`/`frames`/`getSunEarth`. *Dev 1, Oct 2–4.* *Done 2026-10-02 (audit passed; PR #4; D-020), built on `dev1/S1-03-real-ephemeris`: `sightline sites`, `ephem`, `golden`; engine `time`, `frames`, `ephemeris`, `sky` and `SightlineEngineClient`; `pnpm verify` passes, parity with SPICE passes (worst Sun gap 2.1e-8°, Earth 2.7e-5°, DSN 0.189°). Open: merge of PR #4; the horizon is flat ground (terrain is M2-05), so timeline, windows and probe refuse to answer; the web app still uses the mock.*
+  - [ ] **S1-03a** Wire `SightlineEngineClient` into the app: load `ephemeris_2026_3600s.bin` in the worker (Dev 1, `apps/web/workers/`) and let Dev 3 choose the client (real sky for the readout, mock for anything terrain-dependent, with the badge from `provenance`). *Dev 1 + Dev 3.*
+  - [ ] **S1-03b** Extend the ephemeris to 2026–2032 at 10-minute steps and publish it (R2, M1-05, M1-08); decide whether 1-hour steps with Hermite are enough (the parity says yes for Sun and Earth). *Dev 1.*
 
 - [ ] **S1-04** Horizons check: 3 sites × 50 epochs; residuals saved as JSON. *Dev 1, Oct 4–5.*
 
@@ -153,27 +155,27 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **M1-04** `sightline tiles`: polar-stereo pyramid, uint16 + offset (0.1 m), 1 px border, brotli; round-trip error ≤ 0.05 m.
 
-- [ ] **M1-05** `sightline ephem`: Sun, Earth, 3 DSN complexes in MOON_ME, LT+S, 10-min step, 2026–2032 → binary + header.
+- [~] **M1-05** `sightline ephem`: Sun, Earth, 3 DSN complexes in MOON_ME, LT+S, 10-min step, 2026–2032 → binary + header. *Built 2026-10-02 (S1-03, D-020) with 1-hour steps, one year (2026-01-01T00:01:00 to 2027-01-01T00:01:00), 2.1 MB, committed under `packages/engine/src/data/`. The 2032, 10-minute, published file is S1-03b.*
 
-- [ ] **M1-06** `sightline sites`: Artemis III regions + CLPS sites, each with `source_url`.
+- [~] **M1-06** `sightline sites`: Artemis III regions + CLPS sites, each with `source_url`. *Built 2026-10-02 (S1-03, D-019/D-020) for the 3 PGDA tile centres only, with the product-page `source_url`. Artemis III regions and CLPS sites are still open (P1-04b).*
 
-- [ ] **M1-07** `sightline golden`: reference az/el, reference horizons (slow numpy), Horizons API cross-check.
+- [~] **M1-07** `sightline golden`: reference az/el, reference horizons (slow numpy), Horizons API cross-check. *Built 2026-10-02 (S1-03): `time.json` (15 cases) and `sun_earth.json` (144 cases) from SPICE. Reference horizons and the Horizons check (S1-04) are still open.*
 
 - [ ] **M1-08** `sightline publish`: versioned upload to R2 + `manifest.json` (provenance).
 
 - [ ] **M1-09** `sightline mock`: same contracts, `simulated: true`.
 
-- [ ] **M1-10** CI rule: no URL literals outside `sources.yaml` / docs / env. *Note: `pipeline/tests/` uses synthetic `example.invalid` URLs on purpose; exempt it, or the rule fails on the fetch tests.*
+- [ ] **M1-10** CI rule: no URL literals outside `sources.yaml` / docs / env. *Note: `pipeline/tests/` uses synthetic `example.invalid` URLs on purpose; exempt it, or the rule fails on the fetch tests.* *Also exempt the generated data files (`packages/engine/src/data/sites.json` holds the PGDA product URL as the catalog's `source_url`, by design).*
 
 **Acceptance:** real tiles for 85–90°S + 5 m tiles at ≥ 3 sites published; ephemeris 2026–2032 published; golden fixtures committed.
 
 ### M2 — Core Simulation & Math (Oct 1–28 · Dev 1; M2-09 `windows/` delegated to Dev 3)
 
-- [ ] **M2-01** `time/`: UTC ↔ ET with the leap-second table; tests vs SPICE epochs.
+- [~] **M2-01** `time/`: UTC ↔ ET with the leap-second table; tests vs SPICE epochs. *Built 2026-10-02 (S1-03): 15 SPICE cases agree to 1 µs including three leap seconds. Tick when merged.*
 
-- [ ] **M2-02** `frames/`: geodetic ↔ ME, ENU, az/el; pole convention test.
+- [~] **M2-02** `frames/`: geodetic ↔ ME, ENU, az/el; pole convention test. *Built 2026-10-02 (S1-03): ENU basis, az/el, geodetic round trip, pole convention test. Tick when merged.*
 
-- [ ] **M2-03** `ephemeris/`: binary loader + Hermite interpolation (< 1e-4° error).
+- [~] **M2-03** `ephemeris/`: binary loader + Hermite interpolation (< 1e-4° error). *Built 2026-10-02 (S1-03): worst Sun gap 2.1e-8°, Earth 2.7e-5° over 144 cases. Tick when merged.*
 
 - [ ] **M2-04** `dem/`: tile LRU cache, bilinear sampling, multi-res level selection.
 

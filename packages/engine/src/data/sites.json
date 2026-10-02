@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "generated_by": "sightline sites 0.1.0",
+  "sites": [
+    {
+      "id": "shackleton-rim",
+      "name": "Shackleton Rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "description": "Centre of the PGDA site DEM Site04 (PGDA name: 'Shackleton rim'), a 16 km tile. This is a tile centre, not a landing or rim point. Height sampled from the 5 m DEM above the 1737.4 km reference sphere. Barker, M.K., et al. (2021) Planetary and Space Science 203:105119, doi:10.1016/j.pss.2020.105119.",
+      "simulated": false,
+      "source_url": "https://pgda.gsfc.nasa.gov/products/78"
+    },
+    {
+      "id": "connecting-ridge",
+      "name": "Connecting Ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "description": "Centre of the PGDA site DEM Site01 (PGDA name: 'Connecting ridge'), a 16 km tile. This is a tile centre, not a landing or rim point. Height sampled from the 5 m DEM above the 1737.4 km reference sphere. Barker, M.K., et al. (2021) Planetary and Space Science 203:105119, doi:10.1016/j.pss.2020.105119.",
+      "simulated": false,
+      "source_url": "https://pgda.gsfc.nasa.gov/products/78"
+    },
+    {
+      "id": "de-gerlache-rim",
+      "name": "de Gerlache Rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "description": "Centre of the PGDA site DEM Site11 (PGDA name: 'de Gerlache rim'), a 16 km tile. This is a tile centre, not a landing or rim point. Height sampled from the 5 m DEM above the 1737.4 km reference sphere. Barker, M.K., et al. (2021) Planetary and Space Science 203:105119, doi:10.1016/j.pss.2020.105119.",
+      "simulated": false,
+      "source_url": "https://pgda.gsfc.nasa.gov/products/78"
+    }
+  ]
+}

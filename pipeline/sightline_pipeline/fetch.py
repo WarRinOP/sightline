@@ -75,7 +75,7 @@ def _digests(path: Path) -> tuple[str, str]:
     return sha.hexdigest(), md5.hexdigest()
 
 
-def _verify(path: Path, ds: Dataset) -> str:
+def verify_file(path: Path, ds: Dataset) -> str:
     """Check size and hashes of a complete file; return its SHA-256."""
     size = path.stat().st_size
     if size != ds.expected_bytes:
@@ -107,7 +107,7 @@ def fetch_dataset(
 
     if final.exists():
         try:
-            sha = _verify(final, ds)
+            sha = verify_file(final, ds)
             return FetchResult(
                 ds.id, final, "cached", final.stat().st_size, sha, ds.sha256 is not None, 0.0, 0
             )
@@ -171,7 +171,7 @@ def fetch_dataset(
 
     seconds = time.monotonic() - started
     try:
-        sha = _verify(part, ds)
+        sha = verify_file(part, ds)
     except FetchError:
         part.unlink(missing_ok=True)
         raise

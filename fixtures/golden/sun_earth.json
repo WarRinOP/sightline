@@ -1,0 +1,2610 @@
+{
+  "schema_version": 1,
+  "generated_by": "sightline golden 0.1.0",
+  "kernels": [
+    "naif0012.tls",
+    "de440s.bsp",
+    "moon_pa_de440_200625.bpc",
+    "pck00011.tpc",
+    "moon_de440_250416.tf",
+    "earth_2026_260806_2126_predict.bpc",
+    "earth_topo_260814.tf",
+    "earthstns_itrf93_260814.bsp"
+  ],
+  "moon_radius_km": 1737.4,
+  "sun_radius_km": 695700.0,
+  "cases": [
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 820905525.183948,
+      "sun_azimuth_rad": 2.5683839048957373,
+      "sun_elevation_rad": 0.018648953634535562,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 3.109380272378683,
+      "earth_elevation_rad": 0.038520623813364616,
+      "dsn_elevation_rad": {
+        "goldstone": -0.08651669894448853,
+        "canberra": 0.6013146803230504,
+        "madrid": -0.37420346450068104
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 821774325.1839454,
+      "sun_azimuth_rad": 0.43480654570781413,
+      "sun_elevation_rad": 0.02330992917809019,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.9773805647083793,
+      "earth_elevation_rad": -0.12315699674582006,
+      "dsn_elevation_rad": {
+        "goldstone": 0.40540428441960363,
+        "canberra": 0.4430536395768967,
+        "madrid": -0.8439581920879149
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 822643125.1839428,
+      "sun_azimuth_rad": 4.57985511353959,
+      "sun_elevation_rad": 0.015133234560017398,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.926841354187753,
+      "earth_elevation_rad": 0.08283953925664257,
+      "dsn_elevation_rad": {
+        "goldstone": 0.27957330224596355,
+        "canberra": -1.2158770416497333,
+        "madrid": 0.8999416128571724
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 823511925.1839402,
+      "sun_azimuth_rad": 2.4497112361868396,
+      "sun_elevation_rad": 0.007347855159579968,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 3.0986431644735344,
+      "earth_elevation_rad": -0.037914924963693544,
+      "dsn_elevation_rad": {
+        "goldstone": -0.8923832921055025,
+        "canberra": 0.25237689347664183,
+        "madrid": 0.08842201226959978
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 824380725.1839375,
+      "sun_azimuth_rad": 0.31440601769897497,
+      "sun_elevation_rad": 0.010587241927778181,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.928045754896277,
+      "earth_elevation_rad": -0.09034859272758729,
+      "dsn_elevation_rad": {
+        "goldstone": 0.010447421985255584,
+        "canberra": 1.1386865047962664,
+        "madrid": -1.3002020724592194
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 825249525.1839349,
+      "sun_azimuth_rad": 4.458185813726265,
+      "sun_elevation_rad": 0.0006013123055269882,
+      "sun_disk_fraction": 0.7770495997005498,
+      "earth_azimuth_rad": 3.0004694156708487,
+      "earth_elevation_rad": 0.1096632498869618,
+      "dsn_elevation_rad": {
+        "goldstone": 1.0506608697393534,
+        "canberra": -0.7936889122050661,
+        "madrid": 0.4185396535998419
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 826118325.1839323,
+      "sun_azimuth_rad": 2.3259219752095444,
+      "sun_elevation_rad": -0.0071319746027853305,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.057999911765458,
+      "earth_elevation_rad": -0.0997997544882218,
+      "dsn_elevation_rad": {
+        "goldstone": -0.832127232248657,
+        "canberra": -0.35863966678066694,
+        "madrid": 0.5079975280621882
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 826987125.1839297,
+      "sun_azimuth_rad": 0.18777734670881804,
+      "sun_elevation_rad": -0.003931295723164503,
+      "sun_disk_fraction": 0.18709682374872433,
+      "earth_azimuth_rad": 2.8985234462613687,
+      "earth_elevation_rad": -0.023482230809890856,
+      "dsn_elevation_rad": {
+        "goldstone": -0.5985557896544196,
+        "canberra": 0.9449019108910816,
+        "madrid": -0.5981946371911254
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 827855925.183927,
+      "sun_azimuth_rad": 4.329414435572878,
+      "sun_elevation_rad": -0.014347462874270881,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.0705259485339758,
+      "earth_elevation_rad": 0.07350197899843242,
+      "dsn_elevation_rad": {
+        "goldstone": 1.3215692545401334,
+        "canberra": -0.17780336403720018,
+        "madrid": -0.12413062983557419
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 828724725.1839244,
+      "sun_azimuth_rad": 2.194225380830767,
+      "sun_elevation_rad": -0.02016424884522031,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.003005992185309,
+      "earth_elevation_rad": -0.12549296440100144,
+      "dsn_elevation_rad": {
+        "goldstone": -0.17652126799901888,
+        "canberra": -0.5113201581083164,
+        "madrid": 0.29803533791783715
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 829593525.1839218,
+      "sun_azimuth_rad": 0.05278897824288409,
+      "sun_elevation_rad": -0.01582943274275203,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.9045958793670237,
+      "earth_elevation_rad": 0.05262200348401293,
+      "dsn_elevation_rad": {
+        "goldstone": -0.856951410965778,
+        "canberra": -0.0052478101486190774,
+        "madrid": 0.3381432624298075
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 830462325.1839192,
+      "sun_azimuth_rad": 4.192130673924425,
+      "sun_elevation_rad": -0.025436250718959174,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.1064705370953782,
+      "earth_elevation_rad": -0.0024355367582037488,
+      "dsn_elevation_rad": {
+        "goldstone": 0.49687726075220867,
+        "canberra": 0.593510383569457,
+        "madrid": -0.6944207004649071
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 831331125.1839166,
+      "sun_azimuth_rad": 2.0540528174140507,
+      "sun_elevation_rad": -0.02788473456580619,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.9460264187853493,
+      "earth_elevation_rad": -0.1073487565682534,
+      "dsn_elevation_rad": {
+        "goldstone": 0.33886696217199624,
+        "canberra": -0.16206802462844547,
+        "madrid": -0.2198280499165374
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 832199925.183914,
+      "sun_azimuth_rad": 6.192732062365717,
+      "sun_elevation_rad": -0.02182468861063625,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.953262820589752,
+      "earth_elevation_rad": 0.10099396957210324,
+      "dsn_elevation_rad": {
+        "goldstone": -0.2828098335317427,
+        "canberra": -0.8807399316296105,
+        "madrid": 1.1579554839861101
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 833068725.1839113,
+      "sun_azimuth_rad": 4.047105588930499,
+      "sun_elevation_rad": -0.029797311673781662,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.10313182553435,
+      "earth_elevation_rad": -0.07731975171487747,
+      "dsn_elevation_rad": {
+        "goldstone": -0.4801622542792857,
+        "canberra": 0.9448102154978865,
+        "madrid": -0.6147778614129985
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 833937525.1839087,
+      "sun_azimuth_rad": 1.906874232489584,
+      "sun_elevation_rad": -0.028219838763620997,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.899357008277753,
+      "earth_elevation_rad": -0.05083591535093786,
+      "dsn_elevation_rad": {
+        "goldstone": 0.538493409507424,
+        "canberra": 0.4208005085867163,
+        "madrid": -0.8075806135977244
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 834806325.1839061,
+      "sun_azimuth_rad": 6.04327844499492,
+      "sun_elevation_rad": -0.020513683504526765,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.0252207010392875,
+      "earth_elevation_rad": 0.09115260074550612,
+      "dsn_elevation_rad": {
+        "goldstone": 0.3163693333264854,
+        "canberra": -1.4358255178827335,
+        "madrid": 1.1107006312295633
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 835675125.1839035,
+      "sun_azimuth_rad": 3.8968717608072128,
+      "sun_elevation_rad": -0.02655574338937132,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.0704420174399396,
+      "earth_elevation_rad": -0.1204045173561403,
+      "dsn_elevation_rad": {
+        "goldstone": -1.3172703070413445,
+        "canberra": 0.34536980499309194,
+        "madrid": -0.05791323809275218
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 836543925.1839008,
+      "sun_azimuth_rad": 1.7556973241069416,
+      "sun_elevation_rad": -0.02117316363806797,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.879116424285432,
+      "earth_elevation_rad": 0.025533859659087853,
+      "dsn_elevation_rad": {
+        "goldstone": 0.12471462742239947,
+        "canberra": 0.9425420111647335,
+        "madrid": -0.9156433613795767
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 837412725.1838982,
+      "sun_azimuth_rad": 5.891030378445547,
+      "sun_elevation_rad": -0.01245659649222929,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.0830269168894446,
+      "earth_elevation_rad": 0.02754302669374042,
+      "dsn_elevation_rad": {
+        "goldstone": 0.8888777579134414,
+        "canberra": -0.804305005009081,
+        "madrid": 0.40464781355321044
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 838281525.1838956,
+      "sun_azimuth_rad": 3.7451328334862923,
+      "sun_elevation_rad": -0.01680474903828625,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 3.019900646224712,
+      "earth_elevation_rad": -0.11908296211357179,
+      "dsn_elevation_rad": {
+        "goldstone": -0.8931753839726665,
+        "canberra": -0.22204041014567505,
+        "madrid": 0.30834726237322263
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 839150325.183893,
+      "sun_azimuth_rad": 1.604436897419966,
+      "sun_elevation_rad": -0.008603421290813597,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.900734916058608,
+      "earth_elevation_rad": 0.09051264115663962,
+      "dsn_elevation_rad": {
+        "goldstone": -0.4162596111352258,
+        "canberra": 0.48205659828850866,
+        "madrid": -0.16780565388852875
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 840019125.1838903,
+      "sun_azimuth_rad": 5.740083937719362,
+      "sun_elevation_rad": 0.0001233434235010734,
+      "sun_disk_fraction": 0.5170635334290609,
+      "earth_azimuth_rad": 3.104437314119508,
+      "earth_elevation_rad": -0.05234783241275306,
+      "dsn_elevation_rad": {
+        "goldstone": 0.9212111441311702,
+        "canberra": 0.12041418715593974,
+        "madrid": -0.47777223323386747
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 840887925.1838878,
+      "sun_azimuth_rad": 3.5960496926098062,
+      "sun_elevation_rad": -0.003242431345856297,
+      "sun_disk_fraction": 0.2664830827242465,
+      "earth_azimuth_rad": 2.9633409417482985,
+      "earth_elevation_rad": -0.07625026654451929,
+      "dsn_elevation_rad": {
+        "goldstone": -0.15378472843509178,
+        "canberra": -0.5417242449560427,
+        "madrid": 0.3238021948845559
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 841756725.1838852,
+      "sun_azimuth_rad": 1.4571476443041753,
+      "sun_elevation_rad": 0.0062624356874242774,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.963090271334874,
+      "earth_elevation_rad": 0.10856259851377502,
+      "dsn_elevation_rad": {
+        "goldstone": -0.5047084084706938,
+        "canberra": -0.22968048960818974,
+        "madrid": 0.5754340662537079
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 842625525.1838826,
+      "sun_azimuth_rad": 5.594386242631861,
+      "sun_elevation_rad": 0.013831840465642679,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 3.090209650011177,
+      "earth_elevation_rad": -0.10977396826983357,
+      "dsn_elevation_rad": {
+        "goldstone": 0.08245806569163959,
+        "canberra": 1.06225350652253,
+        "madrid": -1.1307906086481496
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 843494325.18388,
+      "sun_azimuth_rad": 3.453351157902148,
+      "sun_elevation_rad": 0.010382247620091123,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.9166358919275535,
+      "earth_elevation_rad": -0.006803558358461702,
+      "dsn_elevation_rad": {
+        "goldstone": 0.6250774139499995,
+        "canberra": -0.3159296979103186,
+        "madrid": -0.09050468939696726
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 844363125.1838773,
+      "sun_azimuth_rad": 1.317093590752904,
+      "sun_elevation_rad": 0.01949849702421229,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 3.038612044474399,
+      "earth_elevation_rad": 0.06470698719243684,
+      "dsn_elevation_rad": {
+        "goldstone": -0.3105018939101514,
+        "canberra": -0.8079027624432008,
+        "madrid": 1.1251679372123153
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 845231925.1838747,
+      "sun_azimuth_rad": 5.4567747729727785,
+      "sun_elevation_rad": 0.024776417704952227,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 3.0491933715819535,
+      "earth_elevation_rad": -0.12434581269047527,
+      "dsn_elevation_rad": {
+        "goldstone": -0.7606364706747403,
+        "canberra": 1.0641893997302119,
+        "madrid": -0.7108099229592002
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 846100725.1838721,
+      "sun_azimuth_rad": 3.319314214094211,
+      "sun_elevation_rad": 0.02005700182644173,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.898858787868362,
+      "earth_elevation_rad": 0.06400992883455865,
+      "dsn_elevation_rad": {
+        "goldstone": 0.8461604352610143,
+        "canberra": 0.28991203665837517,
+        "madrid": -0.5874120377633142
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 846969525.1838695,
+      "sun_azimuth_rad": 1.1857796075187772,
+      "sun_elevation_rad": 0.0273702860003299,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 3.0943603467419036,
+      "earth_elevation_rad": -0.016627430843667673,
+      "dsn_elevation_rad": {
+        "goldstone": 0.13157613728903197,
+        "canberra": -1.1471820730293387,
+        "madrid": 0.910779339260462
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 847838325.1838669,
+      "sun_azimuth_rad": 5.328048466344692,
+      "sun_elevation_rad": 0.029512382004799817,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.991533602554113,
+      "earth_elevation_rad": -0.09443728278614219,
+      "dsn_elevation_rad": {
+        "goldstone": -1.4243880844818155,
+        "canberra": 0.3452475388474411,
+        "madrid": -0.08259841888714137
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 848707125.1838642,
+      "sun_azimuth_rad": 3.193898844622573,
+      "sun_elevation_rad": 0.022602613823141923,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.9220920791853473,
+      "earth_elevation_rad": 0.10376798411374218,
+      "dsn_elevation_rad": {
+        "goldstone": 0.2841656073910434,
+        "canberra": 0.5556836182573206,
+        "madrid": -0.48359962658883965
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 849575925.1838616,
+      "sun_azimuth_rad": 1.0622932420493376,
+      "sun_elevation_rad": 0.02744453231090944,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 3.1161105542797243,
+      "earth_elevation_rad": -0.0907847739293464,
+      "dsn_elevation_rad": {
+        "goldstone": 0.6453856952873045,
+        "canberra": -0.43199415466102925,
+        "madrid": 0.02625306862100688
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 850444725.183859,
+      "sun_azimuth_rad": 5.206474412507882,
+      "sun_elevation_rad": 0.026199999297588317,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.9313664100671133,
+      "earth_elevation_rad": -0.03191780672006344,
+      "dsn_elevation_rad": {
+        "goldstone": -0.7485571859558158,
+        "canberra": -0.40190929346000087,
+        "madrid": 0.4920466994352959
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "lat_deg": -89.766811,
+      "lon_deg": -171.869898,
+      "elev_m": 769.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 851313525.1838564,
+      "sun_azimuth_rad": 3.0745090908801327,
+      "sun_elevation_rad": 0.016889174018388697,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.976980691114335,
+      "earth_elevation_rad": 0.08709248923719898,
+      "dsn_elevation_rad": {
+        "goldstone": -0.2083700081452825,
+        "canberra": 0.31730104013116656,
+        "madrid": -0.041121636042294844
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 820905525.183948,
+      "sun_azimuth_rad": 1.9684638162771828,
+      "sun_elevation_rad": 0.018440488039999443,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.5095649809711666,
+      "earth_elevation_rad": 0.03502565344457596,
+      "dsn_elevation_rad": {
+        "goldstone": -0.08650511479694031,
+        "canberra": 0.6013310553945356,
+        "madrid": -0.37422443972700303
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 821774325.1839454,
+      "sun_azimuth_rad": 6.117867414995698,
+      "sun_elevation_rad": 0.02886053390896949,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.376637900204616,
+      "earth_elevation_rad": -0.1259050859123025,
+      "dsn_elevation_rad": {
+        "goldstone": 0.40540814530367125,
+        "canberra": 0.4430331336244064,
+        "madrid": -0.8439383223437289
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 822643125.1839428,
+      "sun_azimuth_rad": 3.9797796586660525,
+      "sun_elevation_rad": 0.009404723375077952,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.3273163517223012,
+      "earth_elevation_rad": 0.08038266116611481,
+      "dsn_elevation_rad": {
+        "goldstone": 0.27955340765519515,
+        "canberra": -1.215888827808757,
+        "madrid": 0.8999646490924101
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 823511925.1839402,
+      "sun_azimuth_rad": 1.849720746867235,
+      "sun_elevation_rad": 0.007902553865720693,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.498412433402622,
+      "earth_elevation_rad": -0.04134919892208893,
+      "dsn_elevation_rad": {
+        "goldstone": -0.892386058351847,
+        "canberra": 0.2524015376464498,
+        "madrid": 0.08839822019449992
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 824380725.1839375,
+      "sun_azimuth_rad": 5.997500566574452,
+      "sun_elevation_rad": 0.015706676368974146,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.327486400646409,
+      "earth_elevation_rad": -0.09280745734724391,
+      "dsn_elevation_rad": {
+        "goldstone": 0.010469183779146159,
+        "canberra": 1.1386626479370419,
+        "madrid": -1.3002010632515169
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 825249525.1839349,
+      "sun_azimuth_rad": 3.858151694882828,
+      "sun_elevation_rad": -0.005440597814285019,
+      "sun_disk_fraction": 0.039066796249818625,
+      "earth_azimuth_rad": 2.4010821301463787,
+      "earth_elevation_rad": 0.106774438989171,
+      "dsn_elevation_rad": {
+        "goldstone": 1.0506352878230236,
+        "canberra": -0.7937131596042885,
+        "madrid": 0.4185621570748272
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 826118325.1839323,
+      "sun_azimuth_rad": 1.7258419357326367,
+      "sun_elevation_rad": -0.005789640575389562,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.457417310092426,
+      "earth_elevation_rad": -0.10300811982072361,
+      "dsn_elevation_rad": {
+        "goldstone": -0.832150646969499,
+        "canberra": -0.35861715530546967,
+        "madrid": 0.5079801694318553
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 826987125.1839297,
+      "sun_azimuth_rad": 5.870930544430026,
+      "sun_elevation_rad": 0.0006548969527208913,
+      "sun_disk_fraction": 0.7841224276260474,
+      "earth_azimuth_rad": 2.2983631907544386,
+      "earth_elevation_rad": -0.025766511337836806,
+      "dsn_elevation_rad": {
+        "goldstone": -0.598530214652215,
+        "canberra": 0.9449156030694178,
+        "madrid": -0.5982101710218936
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 827855925.183927,
+      "sun_azimuth_rad": 3.7293998091789557,
+      "sun_elevation_rad": -0.020623734909370115,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.4709108334988343,
+      "earth_elevation_rad": 0.07021860423159672,
+      "dsn_elevation_rad": {
+        "goldstone": 1.321577962409242,
+        "canberra": -0.17781867651938066,
+        "madrid": -0.12412082517309161
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 828724725.1839244,
+      "sun_azimuth_rad": 1.5940702769044737,
+      "sun_elevation_rad": -0.018006876369957226,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.4022579550141065,
+      "earth_elevation_rad": -0.12838913246132014,
+      "dsn_elevation_rad": {
+        "goldstone": -0.17654415220909392,
+        "canberra": -0.5113151518415279,
+        "madrid": 0.2980395167702091
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 829593525.1839218,
+      "sun_azimuth_rad": 5.7360053317427635,
+      "sun_elevation_rad": -0.0118922902911513,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.3048939483530906,
+      "earth_elevation_rad": 0.050298923931331146,
+      "dsn_elevation_rad": {
+        "goldstone": -0.8569435431428204,
+        "canberra": -0.005229396986520304,
+        "madrid": 0.33812720777992744
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 830462325.1839192,
+      "sun_azimuth_rad": 3.592106922760588,
+      "sun_elevation_rad": -0.031847879069897014,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.506432966122281,
+      "earth_elevation_rad": -0.005913394421068625,
+      "dsn_elevation_rad": {
+        "goldstone": 0.496889325754709,
+        "canberra": 0.5935079200930358,
+        "madrid": -0.6944290272924667
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 831331125.1839166,
+      "sun_azimuth_rad": 1.4538629113321964,
+      "sun_elevation_rad": -0.02490139056772692,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.345368721577984,
+      "earth_elevation_rad": -0.10991358670337573,
+      "dsn_elevation_rad": {
+        "goldstone": 0.33885515894208895,
+        "canberra": -0.1620844704620335,
+        "madrid": -0.21980878167485476
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 832199925.183914,
+      "sun_azimuth_rad": 5.592805900845609,
+      "sun_elevation_rad": -0.018654365324393025,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.353840325125345,
+      "earth_elevation_rad": 0.09838003808128969,
+      "dsn_elevation_rad": {
+        "goldstone": -0.2828255829788361,
+        "canberra": -0.8807167847379362,
+        "madrid": 1.1579420890397314
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 833068725.1839113,
+      "sun_azimuth_rad": 3.447053454762902,
+      "sun_elevation_rad": -0.03622085562191969,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.502686298233044,
+      "earth_elevation_rad": -0.080777171216641,
+      "dsn_elevation_rad": {
+        "goldstone": -0.4801509212796509,
+        "canberra": 0.9448313930747959,
+        "madrid": -0.6148001023385461
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 833937525.1839087,
+      "sun_azimuth_rad": 1.3066978445741726,
+      "sun_elevation_rad": -0.024432644914481803,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.2990308377802617,
+      "earth_elevation_rad": -0.05312431528265783,
+      "dsn_elevation_rad": {
+        "goldstone": 0.5385069988718625,
+        "canberra": 0.42077594843265825,
+        "madrid": -0.807557729227107
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 834806325.1839061,
+      "sun_azimuth_rad": 5.443355301865111,
+      "sun_elevation_rad": -0.018212501390665242,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.4257194560695012,
+      "earth_elevation_rad": 0.0881226603158027,
+      "dsn_elevation_rad": {
+        "goldstone": 0.31634338149134467,
+        "canberra": -1.435822670515934,
+        "madrid": 1.1107204865487004
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 835675125.1839035,
+      "sun_azimuth_rad": 3.2967924704711207,
+      "sun_elevation_rad": -0.032849412522573125,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.4697472433295884,
+      "earth_elevation_rad": -0.12368138752256311,
+      "dsn_elevation_rad": {
+        "goldstone": -1.3172696558899943,
+        "canberra": 0.3453935295641943,
+        "madrid": -0.05793486308030057
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 836543925.1839008,
+      "sun_azimuth_rad": 1.1555714416840877,
+      "sun_elevation_rad": -0.01664576616439568,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.2792522710516727,
+      "earth_elevation_rad": 0.023365437761374955,
+      "dsn_elevation_rad": {
+        "goldstone": 0.12474020236022842,
+        "canberra": 0.9425248832578341,
+        "madrid": -0.9156422079633463
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 837412725.1838982,
+      "sun_azimuth_rad": 5.291064912092583,
+      "sun_elevation_rad": -0.011093571493714713,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.4831559012405253,
+      "earth_elevation_rad": 0.024191981545252456,
+      "dsn_elevation_rad": {
+        "goldstone": 0.8888516422355842,
+        "canberra": -0.8043198662529478,
+        "madrid": 0.40466158361934457
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 838281525.1838956,
+      "sun_azimuth_rad": 3.145048279141553,
+      "sun_elevation_rad": -0.022823340882478355,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.4191954569625653,
+      "earth_elevation_rad": -0.12207595669526108,
+      "dsn_elevation_rad": {
+        "goldstone": -0.8931985809326063,
+        "canberra": -0.22202275758623113,
+        "madrid": 0.30833730125547015
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 839150325.183893,
+      "sun_azimuth_rad": 1.0043743762527497,
+      "sun_elevation_rad": -0.0034387646013992706,
+      "sun_disk_fraction": 0.24092606166671626,
+      "earth_azimuth_rad": 2.301261846548247,
+      "earth_elevation_rad": 0.08821177206017965,
+      "dsn_elevation_rad": {
+        "goldstone": -0.41623720244542506,
+        "canberra": 0.48206758548663675,
+        "madrid": -0.16782017406633506
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 840019125.1838903,
+      "sun_azimuth_rad": 5.140042330572903,
+      "sun_elevation_rad": 0.0005249197995395541,
+      "sun_disk_fraction": 0.5724691270717361,
+      "earth_azimuth_rad": 2.504129324738312,
+      "earth_elevation_rad": -0.055813197410772446,
+      "dsn_elevation_rad": {
+        "goldstone": 0.9212085713372992,
+        "canberra": 0.12040293127896727,
+        "madrid": -0.47776523145628336
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 840887925.1838878,
+      "sun_azimuth_rad": 2.9959912463113425,
+      "sun_elevation_rad": -0.008856055583673325,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 2.3628716338919533,
+      "earth_elevation_rad": -0.07891779300906433,
+      "dsn_elevation_rad": {
+        "goldstone": -0.1538038533548295,
+        "canberra": -0.5417278559339949,
+        "madrid": 0.32381488749997567
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 841756725.1838852,
+      "sun_azimuth_rad": 0.8571358820588405,
+      "sun_elevation_rad": 0.011934453967539446,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.363708811887664,
+      "earth_elevation_rad": 0.10589088934243394,
+      "dsn_elevation_rad": {
+        "goldstone": -0.504708044998757,
+        "canberra": -0.22965742099590863,
+        "madrid": 0.5754107643360277
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 842625525.1838826,
+      "sun_azimuth_rad": 4.994259728256224,
+      "sun_elevation_rad": 0.013296453640418331,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.4895821372876474,
+      "earth_elevation_rad": -0.1131600091676579,
+      "dsn_elevation_rad": {
+        "goldstone": 0.08246958510380002,
+        "canberra": 1.0622462797497256,
+        "madrid": -1.1308028403353672
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 843494325.18388,
+      "sun_azimuth_rad": 2.853342375058386,
+      "sun_elevation_rad": 0.00527297746624331,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.3165752450298993,
+      "earth_elevation_rad": -0.009196844185364319,
+      "dsn_elevation_rad": {
+        "goldstone": 0.6250708826230528,
+        "canberra": -0.31595259900699013,
+        "madrid": -0.09048078690494446
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 844363125.1838773,
+      "sun_azimuth_rad": 0.717104117394953,
+      "sun_elevation_rad": 0.02553923454855001,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.4389556782724395,
+      "earth_elevation_rad": 0.061602212091148814,
+      "dsn_elevation_rad": {
+        "goldstone": -0.3105225976178786,
+        "canberra": -0.8078765717821684,
+        "madrid": 1.1251440224769467
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 845231925.1838747,
+      "sun_azimuth_rad": 4.856584084229475,
+      "sun_elevation_rad": 0.023366207726623747,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.448468582985307,
+      "earth_elevation_rad": -0.1275041907534339,
+      "dsn_elevation_rad": {
+        "goldstone": -0.7606177902639696,
+        "canberra": 1.0642136180418225,
+        "madrid": -0.7108327072585808
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 846100725.1838721,
+      "sun_azimuth_rad": 2.719355926700531,
+      "sun_elevation_rad": 0.015516246975418025,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.2992258266004693,
+      "earth_elevation_rad": 0.06172108883627932,
+      "dsn_elevation_rad": {
+        "goldstone": 0.8461833197245099,
+        "canberra": 0.2898867194339097,
+        "madrid": -0.5873913014059109
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 846969525.1838695,
+      "sun_azimuth_rad": 0.5857831374700598,
+      "sun_elevation_rad": 0.03364942089769939,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.494245937470626,
+      "earth_elevation_rad": -0.020039065999182253,
+      "dsn_elevation_rad": {
+        "goldstone": 0.13155140610629285,
+        "canberra": -1.147170322536187,
+        "madrid": 0.9107828053099382
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 847838325.1838669,
+      "sun_azimuth_rad": 4.727837140769891,
+      "sun_elevation_rad": 0.027307784232352035,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.3909633295038466,
+      "earth_elevation_rad": -0.09726825842079681,
+      "dsn_elevation_rad": {
+        "goldstone": -1.4243822466581548,
+        "canberra": 0.3452696655369314,
+        "madrid": -0.08261652023171032
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 848707125.1838642,
+      "sun_azimuth_rad": 2.5939645396935322,
+      "sun_elevation_rad": 0.018667823642385204,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.322694677918613,
+      "earth_elevation_rad": 0.10133868718453634,
+      "dsn_elevation_rad": {
+        "goldstone": 0.2841923244810172,
+        "canberra": 0.5556743176589353,
+        "madrid": -0.4836019568305065
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 849575925.1838616,
+      "sun_azimuth_rad": 0.4622729145845503,
+      "sun_elevation_rad": 0.033849260881866045,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.5155956360857523,
+      "earth_elevation_rad": -0.09431195838432331,
+      "dsn_elevation_rad": {
+        "goldstone": 0.6453650334048823,
+        "canberra": -0.4320021992336204,
+        "madrid": 0.026262744571046555
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 0.0,
+      "epoch_et": 850444725.183859,
+      "sun_azimuth_rad": 4.6062930169436465,
+      "sun_elevation_rad": 0.02327857909559949,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.331155526976433,
+      "earth_elevation_rad": -0.034398021288234146,
+      "dsn_elevation_rad": {
+        "goldstone": -0.7485764220214612,
+        "canberra": -0.401897132931948,
+        "madrid": 0.49204447943677915
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "lat_deg": -89.463163,
+      "lon_deg": -137.489553,
+      "elev_m": 1944.8,
+      "mast_height_m": 2.0,
+      "epoch_et": 851313525.1838564,
+      "sun_azimuth_rad": 2.474553896326218,
+      "sun_elevation_rad": 0.013588924217301027,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 2.3774696785144616,
+      "earth_elevation_rad": 0.08434013646401023,
+      "dsn_elevation_rad": {
+        "goldstone": -0.20835379433928145,
+        "canberra": 0.3173181011457063,
+        "madrid": -0.041142775764686154
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 820905525.183948,
+      "sun_azimuth_rad": 0.7547615874154705,
+      "sun_elevation_rad": 0.03881090649855915,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.2964326555684582,
+      "earth_elevation_rad": 0.04882608693924535,
+      "dsn_elevation_rad": {
+        "goldstone": -0.08645882364775952,
+        "canberra": 0.6013661501246723,
+        "madrid": -0.3742803430919345
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 821774325.1839454,
+      "sun_azimuth_rad": 4.903406005049786,
+      "sun_elevation_rad": 0.023987088545571487,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.161066290573441,
+      "earth_elevation_rad": -0.1100213522315789,
+      "dsn_elevation_rad": {
+        "goldstone": 0.40541297778843804,
+        "canberra": 0.4429820780613689,
+        "madrid": -0.843891371778697
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 822643125.1839428,
+      "sun_azimuth_rad": 2.7659026253709875,
+      "sun_elevation_rad": -0.005705057627683626,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.1147034969494012,
+      "earth_elevation_rad": 0.0969608849086667,
+      "dsn_elevation_rad": {
+        "goldstone": 0.279519457124045,
+        "canberra": -1.2159309497102797,
+        "madrid": 0.9000252188283239
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 823511925.1839402,
+      "sun_azimuth_rad": 0.6359006327247492,
+      "sun_elevation_rad": 0.02897118616500968,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.2840165049050314,
+      "earth_elevation_rad": -0.02735918053839965,
+      "dsn_elevation_rad": {
+        "goldstone": -0.892389233910554,
+        "canberra": 0.2524724081714071,
+        "madrid": 0.0883266706674281
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 824380725.1839375,
+      "sun_azimuth_rad": 4.783350697043253,
+      "sun_elevation_rad": 0.008348110305013118,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.1124727986807261,
+      "earth_elevation_rad": -0.07622804624056032,
+      "dsn_elevation_rad": {
+        "goldstone": 0.01051783227525777,
+        "canberra": 1.1386067928894323,
+        "madrid": -1.3001997086739003
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 825249525.1839349,
+      "sun_azimuth_rad": 2.64404066953193,
+      "sun_elevation_rad": -0.018568538659299392,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.188973128586301,
+      "earth_elevation_rad": 0.12228729758741103,
+      "dsn_elevation_rad": {
+        "goldstone": 1.0505794082465834,
+        "canberra": -0.7937834734890387,
+        "madrid": 0.41862874833134534
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 826118325.1839323,
+      "sun_azimuth_rad": 0.5119461548743838,
+      "sun_elevation_rad": 0.015690715051929247,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.242062213960847,
+      "earth_elevation_rad": -0.08835326522109252,
+      "dsn_elevation_rad": {
+        "goldstone": -0.8322184473354708,
+        "canberra": -0.35855447076958247,
+        "madrid": 0.5079288847473865
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 826987125.1839297,
+      "sun_azimuth_rad": 4.657106629017655,
+      "sun_elevation_rad": -0.00920165031505864,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.0842879921672892,
+      "earth_elevation_rad": -0.008793811159856842,
+      "dsn_elevation_rad": {
+        "goldstone": -0.598473428136024,
+        "canberra": 0.9449394374042335,
+        "madrid": -0.5982408383830816
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 827855925.183927,
+      "sun_azimuth_rad": 2.515008303145131,
+      "sun_elevation_rad": -0.03144235162312417,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.2583246372022279,
+      "earth_elevation_rad": 0.08464771686404804,
+      "dsn_elevation_rad": {
+        "goldstone": 1.3216193550906257,
+        "canberra": -0.17787771473110264,
+        "madrid": -0.12407834556054366
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 828724725.1839244,
+      "sun_azimuth_rad": 0.38017064620147817,
+      "sun_elevation_rad": 0.003549870075486143,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.1865997439358345,
+      "earth_elevation_rad": -0.11288368768107274,
+      "dsn_elevation_rad": {
+        "goldstone": -0.17660690611756152,
+        "canberra": -0.511299920129642,
+        "madrid": 0.2980454239582106
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 829593525.1839218,
+      "sun_azimuth_rad": 4.522419071920224,
+      "sun_elevation_rad": -0.0242385349696448,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.0918418719206429,
+      "earth_elevation_rad": 0.06718346132032786,
+      "dsn_elevation_rad": {
+        "goldstone": -0.856914343593848,
+        "canberra": -0.005201925039473644,
+        "madrid": 0.3381022312127202
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 830462325.1839192,
+      "sun_azimuth_rad": 2.377483620214992,
+      "sun_elevation_rad": -0.04000787520868004,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.2926188366434914,
+      "earth_elevation_rad": 0.00794189688812537,
+      "dsn_elevation_rad": {
+        "goldstone": 0.49693309606905783,
+        "canberra": 0.5934886316512542,
+        "madrid": -0.6944458267418749
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 831331125.1839166,
+      "sun_azimuth_rad": 0.24001210362775183,
+      "sun_elevation_rad": -0.003673577305368897,
+      "sun_disk_fraction": 0.0527427404962435,
+      "earth_azimuth_rad": 1.1300853309132446,
+      "earth_elevation_rad": -0.09358258785890398,
+      "dsn_elevation_rad": {
+        "goldstone": 0.33882357495130505,
+        "canberra": -0.1621237860524693,
+        "madrid": -0.21976547676456912
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 832199925.183914,
+      "sun_azimuth_rad": 4.379310012773251,
+      "sun_elevation_rad": -0.033398232611154106,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.1415272970733445,
+      "earth_elevation_rad": 0.11458546892166412,
+      "dsn_elevation_rad": {
+        "goldstone": -0.2828471119868355,
+        "canberra": -0.8806761820042416,
+        "madrid": 1.1579285477736256
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 833068725.1839113,
+      "sun_azimuth_rad": 2.232334769730224,
+      "sun_elevation_rad": -0.041407443657530824,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.2876347949400417,
+      "earth_elevation_rad": -0.06685441412431338,
+      "dsn_elevation_rad": {
+        "goldstone": -0.4801163305704088,
+        "canberra": 0.9448935539713602,
+        "madrid": -0.6148682874801559
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 833937525.1839087,
+      "sun_azimuth_rad": 0.09289037987617085,
+      "sun_elevation_rad": -0.003997841392977832,
+      "sun_disk_fraction": 0.17262616522272822,
+      "earth_azimuth_rad": 1.0845880363685594,
+      "earth_elevation_rad": -0.036160040685993676,
+      "dsn_elevation_rad": {
+        "goldstone": 0.5385382558836983,
+        "canberra": 0.42071926885859867,
+        "madrid": -0.807506859745497
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 834806325.1839061,
+      "sun_azimuth_rad": 4.229806393626261,
+      "sun_elevation_rad": -0.035137253575503104,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.2133649108684246,
+      "earth_elevation_rad": 0.10326187878474238,
+      "dsn_elevation_rad": {
+        "goldstone": 0.31628196172370543,
+        "canberra": -1.4358354694686708,
+        "madrid": 1.1107858347849455
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 835675125.1839035,
+      "sun_azimuth_rad": 2.0821596598709022,
+      "sun_elevation_rad": -0.034843668574717816,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.2540388123159132,
+      "earth_elevation_rad": -0.109221068969258,
+      "dsn_elevation_rad": {
+        "goldstone": -1.3172708437435023,
+        "canberra": 0.3454613127473716,
+        "madrid": -0.05800027492144429
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 836543925.1839008,
+      "sun_azimuth_rad": 6.224920981360232,
+      "sun_elevation_rad": 0.0025149393025408993,
+      "sun_disk_fraction": 0.8317955074242556,
+      "earth_azimuth_rad": 1.0658204114882517,
+      "earth_elevation_rad": 0.040589099907152516,
+      "dsn_elevation_rad": {
+        "goldstone": 0.12479610232076474,
+        "canberra": 0.9424798139894516,
+        "madrid": -0.9156305625918258
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 837412725.1838982,
+      "sun_azimuth_rad": 4.077377248946204,
+      "sun_elevation_rad": -0.029852529651299833,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.2698354494103392,
+      "earth_elevation_rad": 0.03842648410785609,
+      "dsn_elevation_rad": {
+        "goldstone": 0.8887781154215446,
+        "canberra": -0.8043752611909166,
+        "madrid": 0.40471148671452
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 838281525.1838956,
+      "sun_azimuth_rad": 1.9306649245742298,
+      "sun_elevation_rad": -0.021550155033097467,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.2036021339700522,
+      "earth_elevation_rad": -0.10682658010992002,
+      "dsn_elevation_rad": {
+        "goldstone": -0.893262617419874,
+        "canberra": -0.2219748807989017,
+        "madrid": 0.3083064384723681
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 839150325.183893,
+      "sun_azimuth_rad": 6.073586778117412,
+      "sun_elevation_rad": 0.014009397700771677,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.088715443615509,
+      "earth_elevation_rad": 0.10514444697157338,
+      "dsn_elevation_rad": {
+        "goldstone": -0.4161806428035996,
+        "canberra": 0.4820734070882924,
+        "madrid": -0.1678381105692996
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 840019125.1838903,
+      "sun_azimuth_rad": 3.9262101641428933,
+      "sun_elevation_rad": -0.019623892442711757,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.289492998116391,
+      "earth_elevation_rad": -0.041916254652641004,
+      "dsn_elevation_rad": {
+        "goldstone": 0.9212045844161263,
+        "canberra": 0.12036257462869858,
+        "madrid": -0.47774101109309847
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 840887925.1838878,
+      "sun_azimuth_rad": 1.7819458496662415,
+      "sun_elevation_rad": -0.004402287165607984,
+      "sun_disk_fraction": 0.12801050088131477,
+      "earth_azimuth_rad": 1.1480077787790628,
+      "earth_elevation_rad": -0.06283669463967345,
+      "dsn_elevation_rad": {
+        "goldstone": -0.15385164479910896,
+        "canberra": -0.5417390619722898,
+        "madrid": 0.3238454534013995
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 841756725.1838852,
+      "sun_azimuth_rad": 5.926118584355365,
+      "sun_elevation_rad": 0.027330823232653147,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.1515200711784201,
+      "earth_elevation_rad": 0.12195422364389054,
+      "dsn_elevation_rad": {
+        "goldstone": -0.5046884751221375,
+        "canberra": -0.22961670975552018,
+        "madrid": 0.5753661061721504
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 842625525.1838826,
+      "sun_azimuth_rad": 3.780340960544881,
+      "sun_elevation_rad": -0.007758647791259361,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 1.2740148321002873,
+      "earth_elevation_rad": -0.09902050698280095,
+      "dsn_elevation_rad": {
+        "goldstone": 0.0825007815980771,
+        "canberra": 1.0622253709306508,
+        "madrid": -1.1308413943923445
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 843494325.18388,
+      "sun_azimuth_rad": 1.639618795793669,
+      "sun_elevation_rad": 0.012679231256082146,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.1027188770771257,
+      "earth_elevation_rad": 0.007530332592882484,
+      "dsn_elevation_rad": {
+        "goldstone": 0.6250622528633498,
+        "canberra": -0.3160093911594701,
+        "madrid": -0.09042514451115823
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 844363125.1838773,
+      "sun_azimuth_rad": 5.785833837698135,
+      "sun_elevation_rad": 0.03867356561475911,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.2262005606449389,
+      "earth_elevation_rad": 0.07653748848964713,
+      "dsn_elevation_rad": {
+        "goldstone": -0.3105689697449326,
+        "canberra": -0.8078110762355288,
+        "madrid": 1.1250876720606229
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 845231925.1838747,
+      "sun_azimuth_rad": 3.6426560910200854,
+      "sun_elevation_rad": 0.001865402400747472,
+      "sun_disk_fraction": 0.7473052075591383,
+      "earth_azimuth_rad": 1.2327376078032415,
+      "earth_elevation_rad": -0.11270692097805675,
+      "dsn_elevation_rad": {
+        "goldstone": -0.7605685527905078,
+        "canberra": 1.0642815557867962,
+        "madrid": -0.7108989190815944
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 846100725.1838721,
+      "sun_azimuth_rad": 1.5058426460743086,
+      "sun_elevation_rad": 0.025560896101415095,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.086319926757666,
+      "earth_elevation_rad": 0.07868133161004577,
+      "dsn_elevation_rad": {
+        "goldstone": 0.8462401575424384,
+        "canberra": 0.2898245122221964,
+        "madrid": -0.5873384504282979
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 846969525.1838695,
+      "sun_azimuth_rad": 5.654332582632031,
+      "sun_elevation_rad": 0.04442796525497039,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.2802026267106206,
+      "earth_elevation_rad": -0.005982303958200644,
+      "dsn_elevation_rad": {
+        "goldstone": 0.13147775287225336,
+        "canberra": -1.1471439347612071,
+        "madrid": 0.9108007293654086
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 847838325.1838669,
+      "sun_azimuth_rad": 3.5139481437524487,
+      "sun_elevation_rad": 0.005758268630494832,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.1757924835322406,
+      "earth_elevation_rad": -0.08159607214428054,
+      "dsn_elevation_rad": {
+        "goldstone": -1.4243679798037219,
+        "canberra": 0.3453252960438012,
+        "madrid": -0.0826649284046533
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 848707125.1838642,
+      "sun_azimuth_rad": 1.3804985629333324,
+      "sun_elevation_rad": 0.03102093987272039,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.1103677526321027,
+      "earth_elevation_rad": 0.11798046652146621,
+      "dsn_elevation_rad": {
+        "goldstone": 0.2842571641726373,
+        "canberra": 0.5556335866507509,
+        "madrid": -0.48358925339922126
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 849575925.1838616,
+      "sun_azimuth_rad": 5.5307957891033785,
+      "sun_elevation_rad": 0.04224313857455409,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.300304546120776,
+      "earth_elevation_rad": -0.0806018858592583,
+      "dsn_elevation_rad": {
+        "goldstone": 0.6452999746355246,
+        "canberra": -0.4320293384945364,
+        "madrid": 0.026291481400293498
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 0.0,
+      "epoch_et": 850444725.183859,
+      "sun_azimuth_rad": 3.3924330665664795,
+      "sun_elevation_rad": 0.0020103618592880648,
+      "sun_disk_fraction": 0.7620851667009596,
+      "earth_azimuth_rad": 1.116947091766747,
+      "earth_elevation_rad": -0.017870624364146135,
+      "dsn_elevation_rad": {
+        "goldstone": -0.7486188365346897,
+        "canberra": -0.4018747745182936,
+        "madrid": 0.49204305396779136
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "lat_deg": -88.683418,
+      "lon_deg": -67.9321,
+      "elev_m": 1793.7,
+      "mast_height_m": 2.0,
+      "epoch_et": 851313525.1838564,
+      "sun_azimuth_rad": 1.2609826848395962,
+      "sun_elevation_rad": 0.027961840665151786,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 1.1649891999596362,
+      "earth_elevation_rad": 0.10020436317502239,
+      "dsn_elevation_rad": {
+        "goldstone": -0.20830082473442427,
+        "canberra": 0.3173416874744508,
+        "madrid": -0.04118284509063685
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 820905525.183948,
+      "sun_azimuth_rad": 5.851828636706728,
+      "sun_elevation_rad": 0.022068312675366485,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 0.10967873489357188,
+      "earth_elevation_rad": 0.04259126622453921,
+      "dsn_elevation_rad": {
+        "goldstone": -0.08651503598507194,
+        "canberra": 0.6013116267274831,
+        "madrid": -0.37420143759055635
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 821774325.1839454,
+      "sun_azimuth_rad": 3.7182594249105807,
+      "sun_elevation_rad": 0.01961868454787641,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.2609483650896145,
+      "earth_elevation_rad": -0.11914200161801396,
+      "dsn_elevation_rad": {
+        "goldstone": 0.40540326615392724,
+        "canberra": 0.44305593809741306,
+        "madrid": -0.8439608211024205
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 822643125.1839428,
+      "sun_azimuth_rad": 1.5802216967153366,
+      "sun_elevation_rad": 0.015670939121657085,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.2102532330692455,
+      "earth_elevation_rad": 0.0868195615460013,
+      "dsn_elevation_rad": {
+        "goldstone": 0.2795783619044145,
+        "canberra": -1.2158779211105022,
+        "madrid": 0.8999395350602822
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 823511925.1839402,
+      "sun_azimuth_rad": 5.733177758843966,
+      "sun_elevation_rad": 0.01048185907690774,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 0.09895304362598396,
+      "earth_elevation_rad": -0.03384742402849374,
+      "dsn_elevation_rad": {
+        "goldstone": -0.8923821403658262,
+        "canberra": 0.2523754754112305,
+        "madrid": 0.0884228870373127
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 824380725.1839375,
+      "sun_azimuth_rad": 3.5978848150093383,
+      "sun_elevation_rad": 0.006716829862251059,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.211608047012826,
+      "earth_elevation_rad": -0.08637069511571656,
+      "dsn_elevation_rad": {
+        "goldstone": 0.01044407403519389,
+        "canberra": 1.138689804625635,
+        "madrid": -1.300202164323073
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 825249525.1839349,
+      "sun_azimuth_rad": 1.4584946392504414,
+      "sun_elevation_rad": 0.0016247891930931213,
+      "sun_disk_fraction": 0.891528756395706,
+      "earth_azimuth_rad": 0.0007068898656188921,
+      "earth_elevation_rad": 0.11369686331940085,
+      "dsn_elevation_rad": {
+        "goldstone": 1.0506652777621825,
+        "canberra": -0.7936877368575923,
+        "madrid": 0.41853882617347327
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 826118325.1839323,
+      "sun_azimuth_rad": 5.609428645901625,
+      "sun_elevation_rad": -0.0043425028280204515,
+      "sun_disk_fraction": 0.011387570283835025,
+      "earth_azimuth_rad": 0.058336138638117666,
+      "earth_elevation_rad": -0.09574384836097537,
+      "dsn_elevation_rad": {
+        "goldstone": -0.8321259584923382,
+        "canberra": -0.35864133850745944,
+        "madrid": 0.5079984261208078
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 826987125.1839297,
+      "sun_azimuth_rad": 3.4712715455853975,
+      "sun_elevation_rad": -0.007929661873782847,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 6.1820297612208925,
+      "earth_elevation_rad": -0.019530318647905866,
+      "dsn_elevation_rad": {
+        "goldstone": -0.5985598583567038,
+        "canberra": 0.944898420998802,
+        "madrid": -0.5981913106420256
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 827855925.183927,
+      "sun_azimuth_rad": 1.3296675797017865,
+      "sun_elevation_rad": -0.012826508471978795,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 0.07080712482185678,
+      "earth_elevation_rad": 0.07756508878649983,
+      "dsn_elevation_rad": {
+        "goldstone": 1.3215716405970281,
+        "canberra": -0.17780511835144383,
+        "madrid": -0.12412865014119662
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 828724725.1839244,
+      "sun_azimuth_rad": 5.477777753425773,
+      "sun_elevation_rad": -0.017788029805952885,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 0.0033777150165891006,
+      "earth_elevation_rad": -0.12146229549546071,
+      "dsn_elevation_rad": {
+        "goldstone": -0.17651942693902595,
+        "canberra": -0.5113205097911685,
+        "madrid": 0.29803432685991066
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 829593525.1839218,
+      "sun_azimuth_rad": 3.336282513962179,
+      "sun_elevation_rad": -0.019893672743348023,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 6.188028836059425,
+      "earth_elevation_rad": 0.05658123123777238,
+      "dsn_elevation_rad": {
+        "goldstone": -0.8569505618115213,
+        "canberra": -0.005253161110943504,
+        "madrid": 0.3381478000935009
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 830462325.1839192,
+      "sun_azimuth_rad": 1.1923488407037277,
+      "sun_elevation_rad": -0.023412919228182352,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 0.106774343467454,
+      "earth_elevation_rad": 0.0016338633269713783,
+      "dsn_elevation_rad": {
+        "goldstone": 0.4968782577536576,
+        "canberra": 0.593508313959461,
+        "madrid": -0.6944188630934969
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 831331125.1839166,
+      "sun_azimuth_rad": 5.3376395836743615,
+      "sun_elevation_rad": -0.025993404809200402,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 6.22959632282523,
+      "earth_elevation_rad": -0.1033563018465162,
+      "dsn_elevation_rad": {
+        "goldstone": 0.33886819188775025,
+        "canberra": -0.16206597702679787,
+        "madrid": -0.219830946275672
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 832199925.183914,
+      "sun_azimuth_rad": 3.193027690679689,
+      "sun_elevation_rad": -0.025877958413109803,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 6.23667004061303,
+      "earth_elevation_rad": 0.10499601234229254,
+      "dsn_elevation_rad": {
+        "goldstone": -0.282804889184068,
+        "canberra": -0.8807455900358432,
+        "madrid": 1.1579605122659025
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 833068725.1839113,
+      "sun_azimuth_rad": 1.04731861099578,
+      "sun_elevation_rad": -0.0272848727461959,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 0.1034473336624443,
+      "earth_elevation_rad": -0.07325224845435342,
+      "dsn_elevation_rad": {
+        "goldstone": -0.4801623679015558,
+        "canberra": 0.9448091294565514,
+        "madrid": -0.6147772385226551
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 833937525.1839087,
+      "sun_azimuth_rad": 5.1904697636196895,
+      "sun_elevation_rad": -0.026877423979999898,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 6.182890189123444,
+      "earth_elevation_rad": -0.04688371677484686,
+      "dsn_elevation_rad": {
+        "goldstone": 0.5384915712404055,
+        "canberra": 0.4208040643331116,
+        "madrid": -0.8075842117103122
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 834806325.1839061,
+      "sun_azimuth_rad": 3.0435610966333435,
+      "sun_elevation_rad": -0.02446702109064257,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 0.025478620565573436,
+      "earth_elevation_rad": 0.09519895116170676,
+      "dsn_elevation_rad": {
+        "goldstone": 0.3163730331928546,
+        "canberra": -1.4358293255525159,
+        "madrid": 1.110701026523658
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 835675125.1839035,
+      "sun_azimuth_rad": 0.8971062213333612,
+      "sun_elevation_rad": -0.02359241439027574,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 0.07077956086185205,
+      "earth_elevation_rad": -0.11634506471938545,
+      "dsn_elevation_rad": {
+        "goldstone": -1.3172706299196635,
+        "canberra": 0.34536837265084674,
+        "madrid": -0.05791247579772001
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 836543925.1839008,
+      "sun_azimuth_rad": 5.039270199009268,
+      "sun_elevation_rad": -0.020424740548460735,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 6.162572353920268,
+      "earth_elevation_rad": 0.029466827091255615,
+      "dsn_elevation_rad": {
+        "goldstone": 0.12471041282449863,
+        "canberra": 0.9425434730437555,
+        "madrid": -0.9156418532993864
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 837412725.1838982,
+      "sun_azimuth_rad": 2.891312488388338,
+      "sun_elevation_rad": -0.016217533117823292,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 0.08332312674093564,
+      "earth_elevation_rad": 0.03160864882487023,
+      "dsn_elevation_rad": {
+        "goldstone": 0.8888795325634185,
+        "canberra": -0.8043064161996336,
+        "madrid": 0.4046489189623885
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 838281525.1838956,
+      "sun_azimuth_rad": 0.7454023054177696,
+      "sun_elevation_rad": -0.013453812786035127,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 0.02026099905348707,
+      "earth_elevation_rad": -0.1150432676171537,
+      "dsn_elevation_rad": {
+        "goldstone": -0.893173607822064,
+        "canberra": -0.22204200805460805,
+        "madrid": 0.30834765114542406
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 839150325.183893,
+      "sun_azimuth_rad": 4.887961270588866,
+      "sun_elevation_rad": -0.00846645706500266,
+      "sun_disk_fraction": 0.0,
+      "earth_azimuth_rad": 6.184130066558206,
+      "earth_elevation_rad": 0.0944687357061979,
+      "dsn_elevation_rad": {
+        "goldstone": -0.41626201437080207,
+        "canberra": 0.4820515838452073,
+        "madrid": -0.16780077596932166
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 840019125.1838903,
+      "sun_azimuth_rad": 2.740384951817978,
+      "sun_elevation_rad": -0.003360944926586465,
+      "sun_disk_fraction": 0.08051736114669467,
+      "earth_azimuth_rad": 0.10474862335135943,
+      "earth_elevation_rad": -0.04827962819541734,
+      "dsn_elevation_rad": {
+        "goldstone": 0.9212120758661462,
+        "canberra": 0.12041331287442522,
+        "madrid": -0.4777717402810513
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 840887925.1838878,
+      "sun_azimuth_rad": 0.596351581721362,
+      "sun_elevation_rad": 0.0004143942498790586,
+      "sun_disk_fraction": 0.759753276560112,
+      "earth_azimuth_rad": 6.246881179237104,
+      "earth_elevation_rad": -0.07224419288346273,
+      "dsn_elevation_rad": {
+        "goldstone": -0.1537823521928389,
+        "canberra": -0.5417243906971119,
+        "madrid": 0.3238007147987804
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 841756725.1838852,
+      "sun_azimuth_rad": 4.740612909541226,
+      "sun_elevation_rad": 0.005800845202937338,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.24649631815966,
+      "earth_elevation_rad": 0.11257195175694953,
+      "dsn_elevation_rad": {
+        "goldstone": -0.5047051909099294,
+        "canberra": -0.22968608142196917,
+        "madrid": 0.575439138754529
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 842625525.1838826,
+      "sun_azimuth_rad": 2.594722385637408,
+      "sun_elevation_rad": 0.010689787020006948,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 0.09053571337969464,
+      "earth_elevation_rad": -0.1057094071173827,
+      "dsn_elevation_rad": {
+        "goldstone": 0.08245731066274127,
+        "canberra": 1.0622536720076823,
+        "madrid": -1.130790290466067
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 843494325.18388,
+      "sun_azimuth_rad": 0.4536709472820656,
+      "sun_elevation_rad": 0.014255972367361421,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.200125928765626,
+      "earth_elevation_rad": -0.0028343027063953987,
+      "dsn_elevation_rad": {
+        "goldstone": 0.6250796464259846,
+        "canberra": -0.31592705572944213,
+        "madrid": -0.09050805002368906
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 844363125.1838773,
+      "sun_azimuth_rad": 4.600508434085603,
+      "sun_elevation_rad": 0.01847684547071216,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 0.03888650819858137,
+      "earth_elevation_rad": 0.06875867210992395,
+      "dsn_elevation_rad": {
+        "goldstone": -0.3104984454212221,
+        "canberra": -0.8079058735451813,
+        "madrid": 1.1251714138340119
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 845231925.1838747,
+      "sun_azimuth_rad": 2.4571492527528584,
+      "sun_elevation_rad": 0.02201886503062419,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 0.04954227971769454,
+      "earth_elevation_rad": -0.12029348768118407,
+      "dsn_elevation_rad": {
+        "goldstone": -0.7606380977644029,
+        "canberra": 1.0641877314378834,
+        "madrid": -0.7108087060942356
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 846100725.1838721,
+      "sun_azimuth_rad": 0.3196344930065735,
+      "sun_elevation_rad": 0.02406281324914199,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.182279314523386,
+      "earth_elevation_rad": 0.06796373914742443,
+      "dsn_elevation_rad": {
+        "goldstone": 0.8461578331009676,
+        "canberra": 0.2899150811031347,
+        "madrid": -0.5874141499006968
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 846969525.1838695,
+      "sun_azimuth_rad": 4.469168886900212,
+      "sun_elevation_rad": 0.025841542365866964,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 0.09466666248128915,
+      "earth_elevation_rad": -0.012560290018655747,
+      "dsn_elevation_rad": {
+        "goldstone": 0.13157714972789739,
+        "canberra": -1.1471841353808656,
+        "madrid": 0.910780669357641
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 847838325.1838669,
+      "sun_azimuth_rad": 2.328447076766029,
+      "sun_elevation_rad": 0.0271618633670691,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.275077073621665,
+      "earth_elevation_rad": -0.09041278896390009,
+      "dsn_elevation_rad": {
+        "goldstone": -1.424388615913007,
+        "canberra": 0.3452449061236255,
+        "madrid": -0.08259667542800445
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 848707125.1838642,
+      "sun_azimuth_rad": 0.1942084852596672,
+      "sun_elevation_rad": 0.026666969232329082,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.205483435367281,
+      "earth_elevation_rad": 0.10774430730020712,
+      "dsn_elevation_rad": {
+        "goldstone": 0.2841622519758631,
+        "canberra": 0.5556816462957364,
+        "madrid": -0.48359611076459075
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 849575925.1838616,
+      "sun_azimuth_rad": 4.345688840479154,
+      "sun_elevation_rad": 0.025462846520730137,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 0.11642371002680492,
+      "earth_elevation_rad": -0.08671581892897638,
+      "dsn_elevation_rad": {
+        "goldstone": 0.6453860454886144,
+        "canberra": -0.4319945666902859,
+        "madrid": 0.026252884619683378
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 0.0,
+      "epoch_et": 850444725.183859,
+      "sun_azimuth_rad": 2.2068692875695506,
+      "sun_elevation_rad": 0.024269777189631307,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.214877882710347,
+      "earth_elevation_rad": -0.02793609432108549,
+      "dsn_elevation_rad": {
+        "goldstone": -0.7485538783013398,
+        "canberra": -0.401912209772672,
+        "madrid": 0.4920478452266539
+      }
+    },
+    {
+      "site_id": "pole-test-point",
+      "lat_deg": -90.0,
+      "lon_deg": 0.0,
+      "elev_m": 0.0,
+      "mast_height_m": 2.0,
+      "epoch_et": 851313525.1838564,
+      "sun_azimuth_rad": 0.07480832011610047,
+      "sun_elevation_rad": 0.020949940998057887,
+      "sun_disk_fraction": 1.0,
+      "earth_azimuth_rad": 6.260407538717525,
+      "earth_elevation_rad": 0.09111125399018136,
+      "dsn_elevation_rad": {
+        "goldstone": -0.20836969171166494,
+        "canberra": 0.3172957459473916,
+        "madrid": -0.041116918759340745
+      }
+    }
+  ]
+}

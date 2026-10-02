@@ -9,8 +9,9 @@
 .env.*
 !.env.example
 
-# Data (never commit; see docs/science/DATA_VERIFICATION_REPORT.md)
-data/
+# Raw and processed data at the repo root (never commit; see docs/science/DATA_VERIFICATION_REPORT.md).
+# Anchored: packages/engine/src/data/ holds small generated files that ARE committed.
+/data/
 
 # Node / web
 node_modules/

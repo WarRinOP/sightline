@@ -7,8 +7,11 @@ license = "Apache-2.0"
 requires-python = ">=3.12"
 dependencies = [
     "httpx>=0.28",
+    "numpy>=2.0",
     "pydantic>=2.13",
     "pyyaml>=6.0",
+    "rasterio>=1.4",
+    "spiceypy>=8.0",
 ]
 
 [project.scripts]
@@ -39,7 +42,7 @@ files = ["sightline_pipeline", "tests"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
-# PyYAML ships no type stubs and `types-PyYAML` is not on the approved dependency list.
+# These ship no type stubs, and stub packages are not on the approved dependency list.
 [[tool.mypy.overrides]]
-module = ["yaml"]
+module = ["yaml", "rasterio", "rasterio.*", "spiceypy"]
 ignore_missing_imports = true

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "frame": "MOON_ME",
+  "aberration_correction": "LT+S",
+  "start_et": 820497729.18392,
+  "end_et": 852033729.18392,
+  "step_s": 3600,
+  "record_count": 8761,
+  "bodies": [
+    "SUN",
+    "EARTH",
+    "DSN_GOLDSTONE",
+    "DSN_CANBERRA",
+    "DSN_MADRID"
+  ],
+  "spice_kernels": [
+    "naif0012.tls",
+    "de440s.bsp",
+    "moon_pa_de440_200625.bpc",
+    "pck00011.tpc",
+    "moon_de440_250416.tf",
+    "earth_2026_260806_2126_predict.bpc",
+    "earth_topo_260814.tf",
+    "earthstns_itrf93_260814.bsp"
+  ],
+  "simulated": false,
+  "provenance": {
+    "source": "SIGHTLINE_PIPELINE",
+    "simulated": false,
+    "data_sources": [
+      "naif-lsk",
+      "naif-spk-de440s",
+      "naif-pck-moon-pa-de440",
+      "naif-pck-pck00011",
+      "naif-fk-moon-de440",
+      "naif-pck-earth-predict",
+      "naif-fk-earth-topo",
+      "naif-spk-dsn-stations"
+    ],
+    "spice_kernels": [
+      "naif0012.tls",
+      "de440s.bsp",
+      "moon_pa_de440_200625.bpc",
+      "pck00011.tpc",
+      "moon_de440_250416.tf",
+      "earth_2026_260806_2126_predict.bpc",
+      "earth_topo_260814.tf",
+      "earthstns_itrf93_260814.bsp"
+    ],
+    "dem_citation": null,
+    "pipeline_version": "0.1.0",
+    "data_version": "ephem-2026-3600s-v1"
+  },
+  "start_utc": "2026-01-01T00:01:00",
+  "end_utc": "2027-01-01T00:01:00",
+  "sun_radius_km": 695700.0,
+  "moon_radius_km": 1737.4,
+  "layout": {
+    "file": "ephemeris_2026_3600s.bin",
+    "dtype": "float64",
+    "endianness": "little",
+    "values_per_body": 6,
+    "fields": [
+      "x_km",
+      "y_km",
+      "z_km",
+      "vx_km_s",
+      "vy_km_s",
+      "vz_km_s"
+    ],
+    "stations": {
+      "DSN_GOLDSTONE": "DSS-14",
+      "DSN_CANBERRA": "DSS-43",
+      "DSN_MADRID": "DSS-63"
+    }
+  }
+}

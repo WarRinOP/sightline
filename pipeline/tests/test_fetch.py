@@ -260,11 +260,15 @@ def test_the_real_sources_file_is_valid_and_complete() -> None:
     assert "pck00011.tpc" in names
 
 
-def test_the_dem_group_lists_the_two_stage_1_files() -> None:
+def test_the_dem_group_lists_the_four_dem_files() -> None:
     dem = load_sources().select(["dem"])
     assert {d.id: d.expected_bytes for d in dem} == {
         "pgda78-site04-surf": 40_980_806,
         "pgda90-ldem-80s-80m": 189_158_392,
+        "pgda78-site01-surf": 40_980_810,
+        "pgda78-site11-surf": 40_980_806,
     }
     assert all(d.expected_content_type == "image/tiff" for d in dem)
     assert all(d.url.startswith("https://pgda.gsfc.nasa.gov/data/") for d in dem)
+    # Every download is pinned: an unpinned file here is a regression.
+    assert all(d.sha256 is not None for d in dem)

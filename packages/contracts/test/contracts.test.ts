@@ -6,6 +6,7 @@ import {
   HORIZON_AZIMUTH_SAMPLES,
   HorizonMaskSchema,
   LanderProfileSchema,
+  LocationSchema,
   MAX_TIMELINE_STEPS,
   MOON_REFERENCE_RADIUS_M,
   ProvenanceRecordSchema,
@@ -103,6 +104,17 @@ describe("Site", () => {
     expect(SiteSchema.safeParse({ ...site, id: "Shackleton Rim" }).success).toBe(false);
     expect(SiteSchema.safeParse({ ...site, lat_deg: -91 }).success).toBe(false);
     expect(SiteSchema.safeParse({ ...site, lon_deg: 181 }).success).toBe(false);
+  });
+
+  it("carries the elevation into the engine location only when the site has one", () => {
+    expect(siteLocation({ lat_deg: -89, lon_deg: 10, elev_m: 1234.5 }).elev_m).toBe(1234.5);
+    expect("elev_m" in siteLocation({ lat_deg: -89, lon_deg: 10 })).toBe(false);
+    expect(LocationSchema.safeParse({ lat_rad: -1.5, lon_rad: 0.5, elev_m: 12 }).success).toBe(
+      true,
+    );
+    expect(
+      LocationSchema.safeParse({ lat_rad: -1.5, lon_rad: 0.5, elev_m: Infinity }).success,
+    ).toBe(false);
   });
 
   it("converts degrees to radians", () => {

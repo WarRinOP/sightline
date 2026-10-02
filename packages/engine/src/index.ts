@@ -7,3 +7,16 @@ export {
   MockTileSource,
   createMockTileSource,
 } from "./mock/mockTiles";
+export { Ephemeris, parseEphemerisMeta, type BodyPositions, type EphemerisMeta } from "./ephemeris";
+export {
+  MOON_REFERENCE_RADIUS_KM,
+  azElFromVector,
+  enuBasis,
+  geodeticFromMoonFixed,
+  moonFixedPosition_km,
+  type EnuBasis,
+  type Vec3,
+} from "./frames";
+export * from "./real";
+export { computeSky, diskFraction, type SkyDetails, type SkyOptions } from "./sky";
+export * from "./time";
