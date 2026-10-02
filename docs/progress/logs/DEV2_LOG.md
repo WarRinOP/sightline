@@ -36,6 +36,41 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 7 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** M3-05 (Overlay layers)
+
+**What I did:**
+- Wired the `SceneInputs` (`inputs.current.layers`) from `MoonScene.tsx` all the way down into the `TerrainQuadtree` node.
+- Re-architected `TerrainNode` to dynamically update a `uLayerMode` shader uniform within `useFrame` without triggering expensive React re-renders.
+- Extended the custom fragment shader in `MeshStandardMaterial` to evaluate the active overlay mode and apply color ramps to the output:
+  - **Slope (mode 1):** Renders a "magma" heat map based on the angle between the terrain normal and world UP.
+  - **PSR (mode 2):** Renders a proxy mapping deep shadowed regions using low elevation and high slopes.
+  - **Illumination % (mode 3):** Renders a "viridis" map mixing the ray-marched shadow mask and normalized elevation.
+  - **DTE % (mode 4):** A generic color map placeholder since we need Dev 1 to pipe the actual Earth position in.
+
+**Files changed:**
+- `packages/scene/src/TerrainQuadtree.tsx`
+- `packages/scene/src/MoonScene.tsx`
+
+**How I verified it:** 
+- `pnpm typecheck` passed.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) wrote the logic and updated the shaders.
+
+**Proposed decisions:** 
+- Evaluated overlay layer conditions via conditional blocks directly in the fragment shader for performance. For production, the exact texture masks from Dev 1 will just replace these procedural proxy functions.
+
+**Blockers / questions:**
+- We need the true texture overlays (from Dev 1) to replace the procedural approximations if pixel-perfect accuracy is required.
+
+**Next 3 tasks:**
+1. M3-06: Deep space sky (J2000, Sun sprite, Earth).
+2. M3-08: Site pins with extruded horizon rings and masts.
+3. M3-10: Hero sequence.
+
+---
+
 ### Session 6 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** M3-04 (Near-field heightfield shadow ray-march)
