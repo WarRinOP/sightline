@@ -409,6 +409,22 @@ Reported, not pass or fail: our longest continuous illumination and shadow perio
 
 ---
 
+### D-028 · 2026-10-02 · Accepted
+
+**Context:** After PR #11 the team lead asked that the browser can load the tiles over HTTP (M1-04b), either from `apps/web/public/tiles/` or from a route `/tiles/[level]/[x]/[y]/route.ts` that falls back from `data/processed/tiles/` to the engine's committed tiles. The per-tile scale of D-027 was approved with no contract change.
+
+**Decision:**
+
+1. **A route handler, not a copy.** `public/tiles` would commit the same 833 KB of binaries a second time. The route is `apps/web/app/api/tiles/[level]/[x]/[y]/route.ts`, plus static `manifest.json/route.ts` and `coverage.json/route.ts` (`apps/web/app/api/tiles/tileFiles.ts` holds the file lookup). It is under `app/api/`, which is Dev 1's folder in `apps/web`, not under `app/tiles/` as the brief named, so no file of Dev 3's changes. URL: `/api/tiles/<level>/<x>/<y>.bin`.
+2. **The loader's default `baseUrl` changes from `/tiles` to `/api/tiles`** (D-027 item 6 said `/tiles`, which nothing served). `fetchTileCoverage(baseUrl?)` reads the served `coverage.json`; the loader's bundled coverage lists only the committed subset, so a host that serves the full pyramid passes the fetched one.
+3. **Lookup order:** `data/processed/tiles/` (the full pyramid, local and gitignored), then `packages/engine/src/data/tiles/`. The 100 committed tiles are prerendered at build time (`generateStaticParams`), so a deploy needs no file access for them; every other tile is read when asked for, so it works in `next dev` and `next start` where the pyramid exists and is a 404 where it does not. `manifest.json` and `coverage.json` are read at build time (`force-static`); a local build therefore lists the full pyramid and a CI build the committed subset. The `data/processed` path carries `/* turbopackIgnore: true */`: without it Turbopack tried to trace its 31,873 files into the build.
+4. **Path safety.** Level, x and y must be plain decimal (`\d{1,2}`, `\d{1,7}`, `.bin`); anything else is a 404 and never reaches a file path (tested with `..`, encoded separators, extra segments).
+5. **A bug found only by running the server.** The first version had `[name]` (for the two JSON files) next to `[level]`. `next build` and every test passed, but `next start` failed every request, the home page included, with "You cannot use different slug names for the same dynamic path". Fixed with two static routes; a unit test now walks `apps/web/app` and fails when a directory has two different dynamic segments (shown to fail when one is added). This class of bug is only caught by a real server, so check it with `next start` after changing routes.
+
+**Consequences:** `createLolaTileSource()` with no options resolves over HTTP against `next start` and `next dev`. A deployed site serves only the 100 committed tiles (levels 0 to 3 and the tile under each site at levels 7 to 11) until the pyramid is published (M1-08). Deployment places `apps/web` as the working directory (the path to the repository root is `../..` from it); not tested on Vercel.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._
