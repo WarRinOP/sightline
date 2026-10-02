@@ -5,6 +5,7 @@ import * as THREE from "three";
 import type { MoonSceneProps, CameraHandle } from "./types";
 import { locationToScenePosition } from "./math";
 import { TerrainQuadtree } from "./TerrainQuadtree";
+import { DeepSpaceSky } from "./DeepSpaceSky";
 
 function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" | "onReady" | "onPickLocation">) {
   const [sunDirection, setSunDirection] = useState(new THREE.Vector3(1, 0.5, 0));
@@ -33,18 +34,16 @@ function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" 
     <>
       <color attach="background" args={["#05070A"]} />
       
+      {/* Deep Space Sky */}
+      <DeepSpaceSky sunDirection={sunDirection} />
+
       {/* Sun Light */}
       <directionalLight 
         position={sunDirection.clone().multiplyScalar(100)} 
         intensity={1.5} 
         castShadow 
         shadow-mapSize={[1024, 1024]}
-      >
-        <mesh>
-          <sphereGeometry args={[2]} />
-          <meshBasicMaterial color="#FFC857" />
-        </mesh>
-      </directionalLight>
+      />
       <ambientLight intensity={0.1} />
 
       {/* Terrain (SIMULATED) */}
