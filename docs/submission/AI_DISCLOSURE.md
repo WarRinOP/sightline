@@ -17,6 +17,7 @@ from the deterministic engine or from a cited source. Where data is synthetic, i
 | Date | Tool | Who | Task | What it produced | How it was checked |
 |---|---|---|---|---|---|
 | 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5` | Dev 1 (team lead), supervising | S1-01 | The monorepo scaffold and root tooling; the zod contracts in `packages/contracts`; the synthetic mock engine and mock tiles in `packages/engine`; the Next.js app shell with design tokens; the scene stub; the Python pipeline CLI skeleton; the GitHub Actions workflow; the unit tests; the progress documents | `pnpm verify` and the pipeline checks run locally and reviewed by Dev 1; results recorded in `docs/progress/PROGRESS.md` (session 010) and in the S1-01 pull request |
+| 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5` | Dev 1 (team lead), supervising | S1-02 | The `sightline fetch` downloader and the `sources.yaml` registry in `pipeline/`, with its tests; it also ran the download of the 8 NAIF SPICE kernels | Unit tests with a mocked network; a real download whose size, content type and NAIF-published MD5 were checked, then re-checked with system `md5` and `shasum`; results in `docs/progress/PROGRESS.md` (session 011) |
 
 Earlier Claude Code sessions (2026-10-01) wrote planning and documentation only: the master plan,
 the work split, the data-source verification report and the contributor rules. No application code.

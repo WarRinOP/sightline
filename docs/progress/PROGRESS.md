@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | S1-01 built, **PR + first CI run pending**; GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17) |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); real site coordinates (P1-04b); DEM downloads (rest of S1-02) |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -27,11 +27,11 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| S1 Stage 1 sprint (Oct 1–7) | In progress | 20% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 30% |
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
-| M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks built; CI unverified) | 40% |
-| M1 Data Pipeline | Not started | 0% |
+| M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
+| M1 Data Pipeline | In progress (`fetch` built; SPICE kernels downloaded and pinned) | 15% |
 | M2 Engine | Not started | 0% |
 | M3 Visual Canvas | Not started | 0% |
 | M4 Command Center UI | Not started | 0% |
@@ -77,6 +77,40 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 011 — 2026-10-02 — S1-01 wrap-up and S1-02 SPICE downloads (Claude Code)
+
+**Phase / tasks:** S1-01b, S1-01 (tick), S1-02 (SPICE part), M1-02 (first version). Branch `dev1/S1-02-downloads-and-pipeline`.
+
+**Done:**
+
+- PR #1 (S1-01) is merged. `web` and `pipeline` are now required status checks on `main`; the other protection settings are unchanged. S1-01 is ticked.
+- `sightline fetch` is real: reads `pipeline/sources.yaml`, downloads into `data/raw/<id>/`, resumes, retries, rate-limits, checks size, Content-Type, SHA-256 and the publisher MD5, and logs throughput.
+- Downloaded the 8-kernel SPICE set (65,010,769 B) and pinned the 8 SHA-256 values in `sources.yaml`.
+- Two names in the brief were wrong or out of date (`moon_pa_de440_200650.bpc` is a 404; the D-008 set uses `pck00011.tpc`); the verified names were used. D-018 records this and the checksum method.
+
+**Verified by:**
+
+- `gh api PUT .../branches/main/protection`: response lists `contexts: ["web","pipeline"]`, 1 review, code owners, no force push or deletion, conversations resolved. (Required checks were added with the full protection document, because `required_status_checks` was null and the `/contexts` endpoint needs it to exist.)
+- `curl -I` on all 8 kernel URLs: 200, sizes equal the report's. `aa_checksums.txt` exists only for `spk/planets`.
+- `uv run --project pipeline sightline fetch --only spice`: 8 downloaded, 65,010,769 B, 68.8 s, average 945 KB/s, no check failed (a failed size, type or MD5 check aborts the run). Per file: `de440s.bsp` 1749 KB/s, `moon_pa` 346 KB/s, `earth_2026…predict.bpc` 1912 KB/s.
+- Independent checks: system `md5` of `de440s.bsp` = NAIF's 3917ee56…843d; `shasum -a 256` = the pinned c1c7feea…49f2; first bytes of each file are the expected SPICE ID words; `find` sums to 65,010,769 B; no `.part` left; `git status` shows nothing under `data/`.
+- `sightline fetch --only spice --strict` after pinning: all 8 `cached … pinned`, 0 B downloaded, exit 0, 8 s.
+- `ruff check`, `ruff format --check`, `mypy --strict`: clean; `pytest`: 30 passed (mocked transport: resume, range ignored, soft-404 HTML, wrong size, wrong hash, wrong MD5, retries and backoff, cache, corrupt cache, id and group selection, the real `sources.yaml`); `uv sync --locked`: ok.
+- **NOT VERIFIED:** the new code on GitHub CI (this branch has no PR yet); downloads from PDS, PGDA and MIT hosts (no entries yet); the 7 kernels without a publisher checksum are pinned from our own first download (trust on first use), not checked against a NAIF value; the fetcher against a connection reset mid-file on a real network (resume is tested only with a mocked transport); `.bpc` and `.bsp` Content-Types may change if NAIF changes its server.
+
+**Decisions logged:** D-018
+
+**Blockers / risks:**
+
+- The other half of S1-02 (one site DEM and the 80 m mid tier) is open: the report's draft has sizes but not hashes, and PGDA was 2.7 KB/s on Oct 1 (189 MB would take about 19 h at that speed). Measure PGDA and PDS before deciding on the relay (D-009, P0-12).
+- Stage 1 is Oct 7. S1-03 (real Sun/Earth for 3 sites) now has its kernels, but it needs real site coordinates (P1-04b, M1-06), which are still unverified.
+
+**Next 3 tasks:**
+
+1. Open the S1-02 PR; then HEAD-verify, add and fetch the PGDA #90 80 m DEM and one #78 site DEM (measure the speed first).
+2. S1-03 Real ephemeris for the 3 sites in the engine (needs the verified site coordinates, or a clear label that the sites are placeholders).
+3. P0-18 GitHub Issues for Dev 2 and Dev 3; S1-01c when Dev 2 asks for the three.js packages.
 
 ### Session 010 — 2026-10-02 — S1-01 scaffold, contracts, mock engine (Claude Code)
 

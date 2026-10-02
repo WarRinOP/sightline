@@ -177,6 +177,22 @@ _To be written after P1-01 / P1-02._
 
 ---
 
+### D-018 · 2026-10-02 · Accepted
+
+**Context:** S1-02 builds `sightline fetch` and downloads the SPICE kernels. The brief named four kernels and a "verified checksum" source; DATA_VERIFICATION_REPORT has exact byte sizes but **no SHA-256 values** (it says they are filled on first fetch), and two kernel names in the brief do not match the verified set.
+
+**Decision:**
+
+1. **Kernel names follow D-008, not the brief.** `moon_pa_de440_200650.bpc` does not exist (HTTP 404, checked 2026-10-02); the file is `moon_pa_de440_200625.bpc`. `pck00010.tpc` exists, but D-008 chose `pck00011.tpc`. The `spice` group is the full 8-kernel set of D-008 (65,010,769 B, 62.0 MiB), not 4 files: the Earth predict PCK, the Moon FK, the DSN topocentric FK and the DSN station SPK are needed too.
+2. **Checksums are trust on first use, plus one independent check.** The 8 SHA-256 values were computed on the first download and pinned in `pipeline/sources.yaml`; from then on every fetch verifies them. NAIF publishes an MD5 only for `de440s.bsp` (`aa_checksums.txt` in the same directory; no such file exists for the other kernel directories); the fetcher checks it, and `md5` from the system tool agreed. All 8 files also carry the expected SPICE ID word (`DAF/SPK`, `DAF/PCK`, `KPL/LSK`, ...). The other 7 files rest on size, Content-Type, file header and the pin, not on a publisher checksum.
+3. **Content-Type is checked exactly as the server sends it**, recorded in `sources.yaml`: `.bsp` files come as `model/vnd.valve.source.compiled-map`, `.bpc` files send no header (`null`), text kernels `text/plain`. Anything else, including `text/html`, is rejected. If NAIF changes its server mapping, the fetch fails loudly and the value is updated here.
+4. **Fetcher behaviour:** one dataset at a time, at most one request per second, `User-Agent: sightline-spaceapps/<version>`, `Range` resume from `<file>.part`, backoff on transport errors, 429 and 5xx, a file only appears at its final path after size, Content-Type, SHA-256 and MD5 pass. A corrupt cached file is deleted and fetched again. Files live at `data/raw/<dataset id>/<original file name>` (gitignored) with a `fetch_log.jsonl` of throughput. `--only` takes a dataset id or a group (`spice`) and may repeat; `--strict` fails while any selected dataset has no pinned hash.
+5. **Dependencies:** `httpx` 0.28.1 (BSD-3), `pydantic` 2.13.5 (MIT), `pyyaml` 6.0.3 (MIT), all on the CLAUDE.md §7 Python list (versions checked with `pip index versions`). `types-PyYAML` is not on the list, so mypy ignores missing stubs for `yaml` only. Pipeline version is now 0.1.0.
+
+**Consequences:** A kernel that NAIF silently replaces under the same name will fail the pin; that is intended (D-008: pin and mirror). Throughput measured on 2026-10-02 from the team lead's network: **62.0 MiB in 68.8 s, 945 KB/s average** (large files 0.35 to 1.9 MB/s), about 27 times the 35 KB/s measured on 2026-10-01, so the NAIF part of D-009's relay is probably unnecessary. PDS, PGDA and MIT speeds have not been re-measured (PGDA was 2.7 KB/s); P0-12 and the DEM downloads decide whether the relay is still needed.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._
