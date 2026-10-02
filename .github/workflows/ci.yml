@@ -39,7 +39,7 @@ jobs:
       - run: uv sync --project pipeline --locked
       - run: uv run --project pipeline ruff check pipeline
       - run: uv run --project pipeline ruff format --check pipeline
-      - run: uv run --project pipeline mypy sightline_pipeline
+      - run: uv run mypy sightline_pipeline
         working-directory: pipeline
-      - run: uv run --project pipeline pytest
+      - run: uv run pytest
         working-directory: pipeline
