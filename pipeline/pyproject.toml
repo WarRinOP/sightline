@@ -1,11 +1,15 @@
 [project]
 name = "sightline-pipeline"
-version = "0.0.0"
+version = "0.1.0"
 description = "SIGHTLINE data pipeline: LOLA terrain, SPICE ephemeris, tiles, golden fixtures"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "httpx>=0.28",
+    "pydantic>=2.13",
+    "pyyaml>=6.0",
+]
 
 [project.scripts]
 sightline = "sightline_pipeline.cli:main"
@@ -34,3 +38,8 @@ files = ["sightline_pipeline", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+# PyYAML ships no type stubs and `types-PyYAML` is not on the approved dependency list.
+[[tool.mypy.overrides]]
+module = ["yaml"]
+ignore_missing_imports = true

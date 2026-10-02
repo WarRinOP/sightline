@@ -1,0 +1,108 @@
+# Every external URL in the project lives here (CLAUDE.md §7.1). Code refers to datasets by id.
+# sha256 is null until pinned: the first verified download prints the hash to paste in (trust on
+# first use). The 8 SPICE hashes below were pinned from the download of 2026-10-02. md5, where present, is the checksum the publisher lists, an independent check.
+# expected_content_type is exactly what the server sent on 2026-10-02; null means no header.
+schema_version: 1
+
+datasets:
+  # ---- SPICE: the 8-kernel essential set (DECISIONS D-008), 65,010,769 bytes in total ----
+  - id: naif-lsk
+    group: spice
+    url: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls
+    role: spice-lsk
+    expected_bytes: 5257
+    expected_content_type: text/plain
+    sha256: 678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b
+    md5: null
+    license: "NAIF generic kernels: public, no restrictions"
+    citation: "Acton, C.H. (1996) Planetary and Space Science 44:65-70"
+    verified_at: 2026-10-02
+
+  - id: naif-spk-de440s
+    group: spice
+    url: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp
+    role: spice-spk-planets
+    expected_bytes: 32726016
+    expected_content_type: model/vnd.valve.source.compiled-map
+    sha256: c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2
+    # From NAIF's aa_checksums.txt in the same directory, read 2026-10-02.
+    md5: 3917ee56769db332790c751e2168843d
+    license: "NAIF generic kernels: public, no restrictions"
+    citation: "Park, R.S., et al. (2021) Astronomical Journal 161:105"
+    verified_at: 2026-10-02
+    note: "Coverage 1849-12-26 to 2150-01-22. The odd content type is NAIF's server mapping for .bsp."
+
+  - id: naif-pck-moon-pa-de440
+    group: spice
+    url: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/moon_pa_de440_200625.bpc
+    role: spice-pck-moon
+    expected_bytes: 12863488
+    expected_content_type: null
+    sha256: 60cd55aa401ea2ea97360636f567554bfe4e37bb829f901b4460a455dfaf783f
+    md5: null
+    license: "NAIF generic kernels: public, no restrictions"
+    citation: "NASA/JPL NAIF generic kernels"
+    verified_at: 2026-10-02
+    note: "Coverage 1549-12-31 to 2650-01-25. The server sends no Content-Type for .bpc."
+
+  - id: naif-pck-pck00011
+    group: spice
+    url: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00011.tpc
+    role: spice-pck-constants
+    expected_bytes: 131226
+    expected_content_type: text/plain
+    sha256: 3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1
+    md5: null
+    license: "NAIF generic kernels: public, no restrictions"
+    citation: "NASA/JPL NAIF generic kernels"
+    verified_at: 2026-10-02
+
+  - id: naif-fk-moon-de440
+    group: spice
+    url: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/fk/satellites/moon_de440_250416.tf
+    role: spice-fk-moon
+    expected_bytes: 19478
+    expected_content_type: text/plain
+    sha256: a47c71e9c9f33796bdafb2c9d69a7ee447b6016ecad80f71cd6f3e479f9cf768
+    md5: null
+    license: "NAIF generic kernels: public, no restrictions"
+    citation: "NASA/JPL NAIF generic kernels"
+    verified_at: 2026-10-02
+    note: "MOON_ME is MOON_ME_DE440_ME421, aligned with DE421 ME (D-008)."
+
+  - id: naif-pck-earth-predict
+    group: spice
+    url: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/earth_2026_260806_2126_predict.bpc
+    role: spice-pck-earth
+    expected_bytes: 19169280
+    expected_content_type: null
+    sha256: 9f565ab5aaccd33afe54f3a1b20cb8b136636c31a0bd4c0986fac722b931c280
+    md5: null
+    license: "NAIF generic kernels: public, no restrictions"
+    citation: "NASA/JPL NAIF generic kernels"
+    verified_at: 2026-10-02
+    note: "Low-accuracy predict to 2126; earth_latest_high_prec.bpc ends 2026-12-27. NAIF re-dates this file, so the name is pinned."
+
+  - id: naif-fk-earth-topo
+    group: spice
+    url: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/fk/stations/earth_topo_260814.tf
+    role: spice-fk-dsn
+    expected_bytes: 69400
+    expected_content_type: text/plain
+    sha256: 4f40cd1e86718047bc8ea6ff6bd063c9fbf36102b63f0dca370c8e94fd282490
+    md5: null
+    license: "NAIF generic kernels: public, no restrictions"
+    citation: "NASA/JPL NAIF generic kernels"
+    verified_at: 2026-10-02
+
+  - id: naif-spk-dsn-stations
+    group: spice
+    url: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/stations/earthstns_itrf93_260814.bsp
+    role: spice-spk-dsn
+    expected_bytes: 26624
+    expected_content_type: model/vnd.valve.source.compiled-map
+    sha256: 007eb0aad5dd022c6d61bdbfb2395680bd1eb31c49a8637d0b0a1cfbea737c6b
+    md5: null
+    license: "NAIF generic kernels: public, no restrictions"
+    citation: "NASA/JPL NAIF generic kernels"
+    verified_at: 2026-10-02

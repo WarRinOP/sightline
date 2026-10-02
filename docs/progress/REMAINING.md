@@ -14,13 +14,13 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **S1-00** Ask the organizers (info@nasaspaceappsbd.com or the Local Lead): the exact Stage 1 deadline time; where and how to submit the link and video; video format and size; must the repo be public (or add them as collaborators); what the selectors judge and how many teams are chosen; whether teams that are not selected can still take part (for example the Universal Event). *Owner: team lead.*
 
-- [~] **S1-01** Scaffold, contracts, mock engine, mock tiles, CI. *Dev 1, Oct 1–2.* *Built 2026-10-02 on `dev1/S1-01-scaffold-and-contracts` (D-016); `pnpm verify` and the pipeline checks pass locally. Open: the pull request, and the first CI run on GitHub. Tick when merged with CI green.* Covers M0-03, M0-04, M0-06 (partly: mock engine and tiles; no JSON export) and M0-05 (zod schemas only).
+- [x] **S1-01** Scaffold, contracts, mock engine, mock tiles, CI. *Dev 1, Oct 1–2.* *Done 2026-10-02: PR #1 merged, CI green (`web`, `pipeline`). Built on `dev1/S1-01-scaffold-and-contracts` (D-016); `pnpm verify` and the pipeline checks pass.* Covers M0-03, M0-04, M0-06 (partly: mock engine and tiles; no JSON export) and M0-05 (zod schemas only).
   - [ ] **S1-01a** Contracts: JSON Schema export and the pydantic mirror (rest of M0-05). *Dev 1.*
-  - [ ] **S1-01b** After the first green CI run, add `web` and `pipeline` as required status checks on `main`. *Dev 1.*
+  - [x] **S1-01b** *(2026-10-02)* `web` and `pipeline` are required status checks on `main` (not strict: branches need not be up to date). *Dev 1.*
   - [ ] **S1-01c** Install `three@0.186.x`, `@react-three/fiber`, `@react-three/drei` and `@types/three@0.186.0` for Dev 2 (approved in D-017; versions of the R3F packages still to check). *Dev 1, when Dev 2 asks.*
   - [ ] **S1-01d** Favicon (the browser logs a 404 for it) and self-hosted IBM Plex / Instrument Serif subsets. *Dev 3 (S1-08).*
 
-- [ ] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.*
+- [~] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.* *Done 2026-10-02 (branch `dev1/S1-02-downloads-and-pipeline`, D-018):* `sightline fetch` built; all 8 SPICE kernels (65,010,769 B) downloaded, size and type checked, SHA-256 pinned. *Open:* one site DEM and the 80 m mid tier (`sources.yaml` entries still to HEAD-verify; PGDA speed not re-measured).
 
 - [ ] **S1-03** Real ephemeris for 3 sites, engine `time`/`frames`/`getSunEarth`. *Dev 1, Oct 2–4.*
 
@@ -72,7 +72,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [~] **P0-11** Read the reference papers in MASTER_PLAN Appendix C (learning only). The science lead reads all; others skim Mazarico 2011 and Barker 2021. *(2026-10-01: data products for these papers were located and documented in `docs/science/DATA_VERIFICATION_REPORT.md`; the papers themselves are still to read.)*
 
-- [ ] **P0-12** Network plan (D-009): create a Cloudflare R2 bucket (and a US-region cloud VM or CI runner if available). Run a throughput test from the team's usual network to NAIF, PDS, PGDA, GitHub, the npm registry and PyPI, and paste the results into PROGRESS.md. **High priority:** measured ~3–35 KB/s to US origins from the current network.
+- [ ] **P0-12** Network plan (D-009): create a Cloudflare R2 bucket (and a US-region cloud VM or CI runner if available). Run a throughput test from the team's usual network to NAIF, PDS, PGDA, GitHub, the npm registry and PyPI, and paste the results into PROGRESS.md. **High priority:** measured ~3–35 KB/s to US origins from the current network. *Update 2026-10-02 (D-018): NAIF about 1 MB/s and PGDA about 130 KB/s measured; the relay and R2 are not needed for Stage 1. Keep the R2 mirror for the final deploy (M1-08).*
 
 - [ ] **P0-14** 🚨 **URGENT, by Oct 7 (same day as the Stage 1 submission):** register the team on https://www.nasaspaceappsbd.com/registration (team name, leader name/mobile/email, **region**, up to 6 members with name/email/mobile, **team group photo**). Pick the region where we will attend in person (nine regions; Dhaka's main venue is AIUB). Screenshot the confirmation into PROGRESS.md.
 
@@ -144,9 +144,9 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 ### M1 — Data Ingestion & Transformation (Oct 1–21 · Dev 1)
 
-- [ ] **M1-01** `sources.yaml` with every dataset verified (HTTP check + SHA-256 + license + citation).
+- [~] **M1-01** `sources.yaml` with every dataset verified (HTTP check + SHA-256 + license + citation). *2026-10-02: the 8 SPICE kernels are in with pinned SHA-256; DEM, validation and stretch entries are still to add (draft in DATA_VERIFICATION_REPORT §5, which has no hashes).*
 
-- [ ] **M1-02** `sightline fetch`: resumable, checksum-verified downloads.
+- [~] **M1-02** `sightline fetch`: resumable, checksum-verified downloads. *Built 2026-10-02 (S1-02, D-018); tested with a mocked transport (30 pipeline tests) and a real SPICE download. Still to try on PGDA/PDS hosts.*
 
 - [ ] **M1-03** `sightline dem`: PDS3 LBL parser → `DemMeta` (pydantic) + memmap; test on a real label.
 
@@ -162,7 +162,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **M1-09** `sightline mock`: same contracts, `simulated: true`.
 
-- [ ] **M1-10** CI rule: no URL literals outside `sources.yaml` / docs / env.
+- [ ] **M1-10** CI rule: no URL literals outside `sources.yaml` / docs / env. *Note: `pipeline/tests/` uses synthetic `example.invalid` URLs on purpose; exempt it, or the rule fails on the fetch tests.*
 
 **Acceptance:** real tiles for 85–90°S + 5 m tiles at ≥ 3 sites published; ephemeris 2026–2032 published; golden fixtures committed.
 
