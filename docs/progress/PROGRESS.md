@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); site coordinate source (D-019, S1-02a) |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #3 merge; S1-03 PR; Horizons check (S1-04) |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -27,12 +27,12 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| S1 Stage 1 sprint (Oct 1–7) | In progress | 30% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 50% |
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
-| M1 Data Pipeline | In progress (`fetch` built; SPICE kernels and 2 DEMs downloaded and pinned) | 20% |
-| M2 Engine | Not started | 0% |
+| M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden` built; kernels and 4 DEMs pinned) | 35% |
+| M2 Engine | In progress (time, frames, ephemeris, `getSunEarth` real; horizon not started) | 20% |
 | M3 Visual Canvas | Not started | 0% |
 | M4 Command Center UI | Not started | 0% |
 | M5 Story & Analyst | Not started | 0% |
@@ -77,6 +77,48 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 013 — 2026-10-02 — PR #3, then S1-03 real ephemeris, time, frames, getSunEarth (Claude Code)
+
+**Phase / tasks:** S1-02 close-out, S1-02a, S1-03, and the parts of M1-05, M1-06, M1-07, M2-01, M2-02, M2-03 it covers. Branch `dev1/S1-03-real-ephemeris`, stacked on `dev1/S1-02b-dem-downloads`.
+
+**Done:**
+
+- PR #2 is merged. Opened **PR #3** (https://github.com/WarRinOP/sightline/pull/3), CI green. **I did not merge it:** the permission classifier blocked `gh pr merge --admin` ("merge without review"), so it waits for the team lead.
+- Pipeline: `sightline sites` (tile centres of the PGDA #78 DEMs), `sightline ephem` (Sun, Earth, 3 DSN complexes from SPICE), `sightline golden` (time and Sun/Earth fixtures from SPICE). Downloaded and pinned the Site01 and Site11 DEMs.
+- Engine: `time` (leap seconds), `frames`, `ephemeris` (Hermite), `sky` (`computeSky`), and `SightlineEngineClient` (`listSites` and `getSunEarth` real; the four terrain-dependent methods refuse).
+- Contract: `Location.elev_m` (optional). CI fetches the SPICE kernels. `docs/science/METHODS.md` created.
+- D-019 accepted (option A), D-020 logged, D-008 amended.
+
+**Verified by:**
+
+- `gh pr checks 3`: `pipeline` pass (9 s), `web` pass (30 s).
+- `sightline fetch --only pgda78-site01-surf --only pgda78-site11-surf`: 81,961,616 B, sizes and Content-Type matched, SHA-256 pinned (the throughput was 124 to 317 KB/s).
+- `sightline sites`: Shackleton Rim (-89.766811°, 188.130°E, 769.7 m), Connecting Ridge (-89.463163°, 222.510°E, 1944.8 m), de Gerlache Rim (-88.683418°, 292.068°E, 1793.7 m): the centres the team lead confirmed.
+- `sightline ephem` (1 s): 8,761 records, 2,102,640 B. The first attempt failed with a SPICE error (no ITRF93 orientation at 2026-01-01T00:00:00 UTC minus the light time); `pckcov` showed the kernel starts at exactly that instant, so the first sample moved one minute later (D-020 item 3).
+- `sightline golden`: `time.json` 15 cases (three leap seconds), `sun_earth.json` 144 cases.
+- `pnpm verify` exit 0: prettier clean; typecheck clean in 4 workspaces; tests: contracts 38, engine 89; **parity 34**; build ok.
+- Parity (tolerances fixed before the first run): Sun worst gap 2.07e-8° (limit 1e-4°), Earth 2.68e-5° (1e-4°), disk fraction 6.4e-9, DSN elevation 0.189° (0.25°), time within 1 µs on all 15 cases. The 0.189° is the known geodetic-versus-geocentric vertical gap (up to 0.19°), measured beforehand with `spkcpt` at 0.03° to 0.18°.
+- `listSites()` returns the 3 sites with `simulated: false` and the PGDA #78 `source_url` (test `realEngine.test.ts`).
+- Seasonal behaviour in 2026 (engine, hourly): Sun elevation ±1.77° (Shackleton), ±2.05 to 2.11° (Connecting Ridge), ±2.8° (de Gerlache), i.e. the 1.54° tilt plus each colatitude; 12 or 13 turns round the horizon; month-averaged elevation changes sign on 2026-02-27 and 2026-08-23; Earth within about 10° of the horizon and above the flat horizon 44% to 49% of the time; a link exists whenever Earth is up with a 0° mask (best complex never below about 8.7°), with short gaps (about 0.5% of Earth-up time) at a 10° mask.
+- Two test assertions of mine were wrong and were corrected, not the engine: a 2 m mast dips the horizon 0.0869°, not 0.0861°; and "Earth up but no DSN" never happens at a 0° mask (measured, then the test was rewritten to assert that and the 10° gaps).
+- Pipeline: `ruff check`, `ruff format --check`, `mypy --strict` (17 files) clean; `pytest` 53 passed; `uv sync --locked` ok. Reproducibility tests regenerate the catalog, an ephemeris slice (49 records) and both fixtures and compare them with the committed files.
+- **NOT VERIFIED:** this branch on GitHub CI (no PR yet; the CI job now downloads 62 MiB of kernels, never run there); a comparison with JPL Horizons (S1-04); the engine in a browser worker (everything ran in Node); the Earth orientation predict kernel's accuracy (it is a long-term predict); results on Linux versus macOS (the regeneration tests use a 1e-9 relative tolerance, untested off macOS); the DEM-dependent tests in CI (they skip there).
+
+**Decisions logged:** D-019 accepted; D-020; D-008 amended
+
+**Blockers / risks:**
+
+- PR #3 needs the team lead's merge, and the S1-03 branch is stacked on it.
+- Terrain (M2-05) is not built, so no illumination or communication-window number exists yet. The real client refuses those methods by design. For the Stage 1 video this means the real numbers on screen are Sun and Earth directions (checked against SPICE), not percentages.
+- `Location.elev_m` is a contract change; it must be in place before the freeze on Oct 3. Dev 2 and Dev 3 should be told.
+- The web app still renders the mock engine (labelled SIMULATED). S1-03a wires the real one.
+
+**Next 3 tasks:**
+
+1. Merge PR #3; open the S1-03 PR and watch the first CI run with the kernel download.
+2. S1-04 Horizons check: 3 sites by 50 epochs, residuals saved as JSON (needs `sources.yaml` entry for the Horizons API; rate limit 1 request/s).
+3. S1-03a Wire the real client into the app (worker loads the ephemeris), and tell Dev 3 about `Location.elev_m`.
 
 ### Session 012 — 2026-10-02 — PGDA benchmark, PR #2, DEM downloads, coordinate check (Claude Code)
 
