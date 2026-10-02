@@ -1,0 +1,23 @@
+{
+  "name": "@sightline/scene",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SIGHTLINE 3D scene (Dev 2). Baseline stub for seam S3; the real scene replaces it.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@sightline/contracts": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "typescript": "6.0.3"
+  }
+}
