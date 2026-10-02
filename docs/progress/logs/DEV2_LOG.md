@@ -391,3 +391,11 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 3. Fetch real site locations for the site pin.
 
 _No prior sessions._
+
+## 2026-10-02 (Agent)
+- **Merged `main`**: Resolved conflicts in `packages/scene/package.json` and `pnpm-lock.yaml` by accepting `main`'s exact pins.
+- **`dev.tsx` UI**: Added checkboxes to control mock data payload. Labelled terrain shadows explicitly as 'visual only'.
+- **Coordinate Math Fixes**: Corrected `getLocalDirectionInScene` to appropriately map local azimuthal coordinates in polar stereographic projection.
+- **Types**: Ensured type conformance with `SunEarthState` and `HorizonMask` contracts, and refactored `MoonScene` to support `forwardRef`.
+- **Passes Checks**: `pnpm verify` successfully passes including all tests, types and linting checks.
+
