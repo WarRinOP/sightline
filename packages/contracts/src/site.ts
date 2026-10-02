@@ -27,7 +27,13 @@ export const SiteSchema = z
   });
 export type Site = z.infer<typeof SiteSchema>;
 
-/** Catalog degrees to the radians the engine takes. */
-export function siteLocation(site: Pick<Site, "lat_deg" | "lon_deg">): Location {
-  return { lat_rad: (site.lat_deg * Math.PI) / 180, lon_rad: (site.lon_deg * Math.PI) / 180 };
+/** Catalog degrees to the radians the engine takes; the height rides along when given. */
+export function siteLocation(
+  site: Pick<Site, "lat_deg" | "lon_deg"> & { elev_m?: number },
+): Location {
+  return {
+    lat_rad: (site.lat_deg * Math.PI) / 180,
+    lon_rad: (site.lon_deg * Math.PI) / 180,
+    ...(site.elev_m === undefined ? {} : { elev_m: site.elev_m }),
+  };
 }

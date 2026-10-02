@@ -30,5 +30,10 @@ export const FractionSchema = z.number().min(0).max(1);
 export const LocationSchema = z.object({
   lat_rad: ElevationRadSchema,
   lon_rad: z.number().min(-Math.PI).max(Math.PI),
+  /**
+   * Height of the ground above the 1737.4 km reference sphere, in meters; 0 when omitted. It
+   * matters: 2 km of height moves the Earth direction by about 3e-4° through parallax.
+   */
+  elev_m: z.number().finite().optional(),
 });
 export type Location = z.infer<typeof LocationSchema>;
