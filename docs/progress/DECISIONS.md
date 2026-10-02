@@ -148,6 +148,35 @@ _To be written after P1-01 / P1-02._
 
 ---
 
+### D-016 · 2026-10-02 · Accepted
+
+**Context:** S1-01 builds the scaffold, the contracts and the SIMULATED mock engine. The brief allowed only the CLAUDE.md §7 package list, did not name every tool the stack needs, and left several details open.
+
+**Decision:**
+
+1. **Packages added beyond the allowed list** (CLAUDE.md §7.5; `npm view` on 2026-10-02 showed each exists with the MIT license): `typescript-eslint` 8.71.0 and `@eslint/js` 10.0.1 (ESLint cannot parse TypeScript without them), `@tailwindcss/postcss` 4.3.3 (the official Tailwind v4 PostCSS plugin; `tailwindcss` is on the list), `@types/react` and `@types/react-dom` 19.3.0, `@types/node` 24.19.1 (matches Node 24). All versions are pinned exactly.
+2. **TypeScript 6.0.3, not 7.0.2.** `typescript-eslint` 8.71.0 declares `typescript >=4.8.4 <6.1.0`. **pnpm 10.34.6** is pinned in `packageManager` (CLAUDE.md asks for ≥ 9; 12.8.1 is the newest, but 10 is the line we know).
+3. **Workspace packages ship TypeScript source** (`exports` point at `src/index.ts`; Next uses `transpilePackages`). No build step for packages.
+4. **Contracts go beyond the brief where the later tasks need it.** Added: `earth_visible` (SunEarthState); profile fields `min_sun_disk_fraction`, `min_earth_elev_rad`, `dsn_min_elev_rad` (M4-04 lists them); `both_ratio` and `nights_over_battery` (timeline statistics); `WindowRequest`, `WindowSearchResponse`, `ProbeLitResult`; `TileData` (uint16 + offset, 1-sample border, as M1-04); helpers `siteLocation`, `isTileCoordInRange`, `tileGsdM`. Every response carries `simulated` and, for datasets, a `ProvenanceRecord`. The schemas enforce that a `SYNTHETIC*` source is simulated, that real data cites sources and a pipeline version, and that a non-simulated site has a `source_url`. `EngineClient` also exposes `provenance`, so the UI can show the badge from data.
+5. **The three preset sites are placeholders.** No verified coordinates exist yet (P1-04b, M1-06), so the mock catalog uses nominal round coordinates near the pole, `simulated: true`, `source_url: null`, and a description saying so. They carry real feature names because the brief asked for them; the UI says the coordinates are placeholders.
+6. **Mock physics:** constants from CLAUDE.md §9 (synodic month, 1.54° tilt, 0.2666° Sun radius, ±6.7° libration); the Sun and Earth periods for the circular orbits (365.25 d, 27.32 d) are nominal and mock-only. The mock treats DSN visibility as Earth visibility and ignores `dsn_min_elev_rad`. Terrain is two analytic bowls; the horizon is a flat-plane ray-march (no curvature). The mock `findWindows` is a placeholder (runs of sunlight weighted by link share) and lives in `mock/`, not in Dev 3's `windows/`.
+7. **Stubs that say so.** `test:parity` and `test:e2e` print `NOT RUN` and exit 0, so a green `pnpm verify` is not read as "parity passed". `dev:mock` equals `dev` until real data exists. The Python CLI uses `argparse` (no runtime dependencies) and every subcommand exits 2. Fonts are CSS stacks, not `next/font/google` (needs network at build; self-hosted subsets come with S1-08).
+8. **CI** runs lint, typecheck, test, test:parity and build for the web workspace, and ruff, mypy and pytest for the pipeline. Action versions checked with `gh api`: `actions/checkout` v7, `actions/setup-node` v7, `astral-sh/setup-uv` v10.2.0 (no floating `v10` tag exists, so it is pinned exactly).
+
+**Consequences:** Dev 2 and Dev 3 can build against `EngineClient` and `TileSource` now. The contracts freeze on Oct 3 with these additions included. Dev 2 will need `three`, `@react-three/*` and `@types/three` (the last is not on the allowed list yet; needs its own entry). The mock is not a model of the real Moon: none of its numbers may appear in the final demo (SIMULATED badge, CLAUDE.md §7.9).
+
+---
+
+### D-017 · 2026-10-02 · Accepted
+
+**Context:** Dev 2 builds the 3D scene in `packages/scene` with `three`, `@react-three/fiber` and `@react-three/drei`, which are on the allowed list. `three` ships no TypeScript types, so `strict` TypeScript needs `@types/three`, which is not on the list (CLAUDE.md §7.5).
+
+**Decision:** Approve `@types/three` for `packages/scene`. Evidence (`npm view`, 2026-10-02): `@types/three` 0.186.0, license MIT; `three` 0.186.1, license MIT. The types package tracks the `three` minor version, so install the pair `three@0.186.x` with `@types/three@0.186.0`, exact-pinned. Dev 1 edits `package.json` and the lockfile (AGENTS.md §4); Dev 2 asks in an issue when ready (S1-01c).
+
+**Consequences:** No dependency is installed by this entry. Dev 2 may not install it themselves. Any other package for the scene still needs its own entry.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._

@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* Design tokens: docs/MASTER_PLAN.md §2.1 "Regolith & Sunline".
+   Semantic colours are fixed: gold = sunlight, cyan = Earth/signal, mint = both,
+   indigo = darkness, purple = SIMULATED. Components use the variables, never raw hex. */
+:root {
+  --void: #05070a;
+  --surface-0: #0b0f14;
+  --surface-glass: rgba(16, 22, 30, 0.62);
+  --hairline: rgba(232, 236, 241, 0.1);
+  --text-1: #e8ecf1;
+  --text-2: #9aa4b2;
+  --text-3: #5e6875;
+  --regolith: #8a8f98;
+  --sun: #ffc857;
+  --sun-hot: #ffe3a3;
+  --earth: #4cc9f0;
+  --earth-deep: #1b6f9a;
+  --both: #b8f2a0;
+  --dark: #4b3fc4;
+  --dark-deep: #1e1a4d;
+  --alert: #ff6b4a;
+  --ok: #3ddc97;
+  --sim: #c77dff;
+
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-condensed:
+    "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-void: var(--void);
+  --color-surface-0: var(--surface-0);
+  --color-surface-glass: var(--surface-glass);
+  --color-hairline: var(--hairline);
+  --color-text-1: var(--text-1);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-regolith: var(--regolith);
+  --color-sun: var(--sun);
+  --color-sun-hot: var(--sun-hot);
+  --color-earth: var(--earth);
+  --color-earth-deep: var(--earth-deep);
+  --color-both: var(--both);
+  --color-dark: var(--dark);
+  --color-dark-deep: var(--dark-deep);
+  --color-alert: var(--alert);
+  --color-ok: var(--ok);
+  --color-sim: var(--sim);
+  --font-sans: var(--font-sans);
+  --font-condensed: var(--font-condensed);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+}
+
+body {
+  background: var(--void);
+  color: var(--text-1);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--earth);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

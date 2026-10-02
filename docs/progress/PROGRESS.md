@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | Scaffold + contracts + mock engine (S1-01); GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17) |
+| Open before work joins up | S1-01 built, **PR + first CI run pending**; GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17) |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -27,10 +27,10 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| S1 Stage 1 sprint (Oct 1–7) | In progress | 5% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 20% |
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
-| M0 Kickoff & Contracts | Not started | 0% |
+| M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks built; CI unverified) | 40% |
 | M1 Data Pipeline | Not started | 0% |
 | M2 Engine | Not started | 0% |
 | M3 Visual Canvas | Not started | 0% |
@@ -77,6 +77,42 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 010 — 2026-10-02 — S1-01 scaffold, contracts, mock engine (Claude Code)
+
+**Phase / tasks:** S1-01 (branch `dev1/S1-01-scaffold-and-contracts`). The team lead told this session to proceed; D-010 still has no written confirmation (P0-02).
+
+**Done:**
+
+- Monorepo: pnpm workspace, root scripts from CLAUDE.md §4, strict TypeScript base, ESLint 10 + Prettier.
+- `packages/contracts`: zod schemas, inferred types and the `EngineClient` / `TileSource` interfaces; provenance and `simulated` rules enforced in the schemas.
+- `packages/engine`: SIMULATED mock engine (analytic bowls, circular Sun/Earth) and 64 × 64 mock tiles.
+- `packages/scene`: S3 stub (`MoonScene`, `FisheyeSky`). `apps/web`: Next.js shell, design tokens, "Hello Moon" page with the SIMULATED badge, site list and live readout.
+- `pipeline/`: Python CLI skeleton (all stubs). `.github/workflows/ci.yml`.
+- D-016 records the added packages, the contract additions and the mock's limits.
+
+**Verified by:**
+
+- `pnpm install` (then `--frozen-lockfile`): ok. `pnpm verify` exit 0: lint (eslint + prettier) clean; typecheck clean in 4 workspaces; tests 37 (contracts) + 35 (engine) passed; build ok (routes `/` and `/_not-found`, both static). `test:parity` prints `NOT RUN` (no golden fixtures yet).
+- Pipeline: `ruff check`, `ruff format --check`, `mypy --strict` clean; `pytest` 10 passed; `sightline --help` works and `sightline ephem` exits 2.
+- Browser: ran `next start`, opened the page with `playwright-cli`: the badge and 3 sites render, and the readout changed between two reads (Sun −0.17° → −0.16°, Earth +5.34° → +6.40°, epoch +2.3 days). The only console error was a missing favicon.
+- Two engine tests failed first and exposed real defects: `getTimeline` threw synchronously instead of rejecting (fixed with `async`), and a test used a window where the site is dark anyway (test fixed).
+- **NOT VERIFIED:** the GitHub Actions run (workflow has never executed; action versions were checked with `gh api`, not run); Python 3.12 (local checks ran on 3.13; CI pins 3.12); that Windows laptops can run `pnpm verify`; keyboard and screen-reader behaviour of the page beyond reading its markup; reduced-motion start-paused behaviour (code only).
+
+**Decisions logged:** D-016
+
+**Blockers / risks:**
+
+- The mock's numbers are not the Moon's. The three sites have placeholder coordinates; nothing from `mock/` may be shown as real.
+- `docs/submission/AI_DISCLOSURE.md` is not in the repo (CLAUDE.md §2.5 says AI use is recorded there as it happens). Claude Code wrote all of S1-01; the file belongs to the non-dev teammates, so it needs creating or the entry handing over.
+- Contracts freeze on Oct 3; Dev 2 and Dev 3 have one day to find gaps.
+- Tooling used a pnpm shim and `uv` installed under the session scratchpad. The team lead's machine still lacks `pnpm` on the PATH and `uv`.
+
+**Next 3 tasks:**
+
+1. Open the PR for S1-01, watch the first CI run, then add the required checks (S1-01b) and tick S1-01.
+2. P0-18 Create the GitHub Issues; tell Dev 2 and Dev 3 to start from the merged scaffold.
+3. S1-03 Real ephemeris for 3 sites (needs S1-02 kernels downloaded).
 
 ### Session 009 — 2026-10-01 — Readiness check and group message (Claude Code)
 

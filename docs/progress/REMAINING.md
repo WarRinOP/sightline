@@ -14,7 +14,11 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **S1-00** Ask the organizers (info@nasaspaceappsbd.com or the Local Lead): the exact Stage 1 deadline time; where and how to submit the link and video; video format and size; must the repo be public (or add them as collaborators); what the selectors judge and how many teams are chosen; whether teams that are not selected can still take part (for example the Universal Event). *Owner: team lead.*
 
-- [ ] **S1-01** Scaffold, contracts, mock engine, mock tiles, CI. *Dev 1, Oct 1–2.*
+- [~] **S1-01** Scaffold, contracts, mock engine, mock tiles, CI. *Dev 1, Oct 1–2.* *Built 2026-10-02 on `dev1/S1-01-scaffold-and-contracts` (D-016); `pnpm verify` and the pipeline checks pass locally. Open: the pull request, and the first CI run on GitHub. Tick when merged with CI green.* Covers M0-03, M0-04, M0-06 (partly: mock engine and tiles; no JSON export) and M0-05 (zod schemas only).
+  - [ ] **S1-01a** Contracts: JSON Schema export and the pydantic mirror (rest of M0-05). *Dev 1.*
+  - [ ] **S1-01b** After the first green CI run, add `web` and `pipeline` as required status checks on `main`. *Dev 1.*
+  - [ ] **S1-01c** Install `three@0.186.x`, `@react-three/fiber`, `@react-three/drei` and `@types/three@0.186.0` for Dev 2 (approved in D-017; versions of the R3F packages still to check). *Dev 1, when Dev 2 asks.*
+  - [ ] **S1-01d** Favicon (the browser logs a 404 for it) and self-hosted IBM Plex / Instrument Serif subsets. *Dev 3 (S1-08).*
 
 - [ ] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.*
 

@@ -1,0 +1,29 @@
+{
+  "name": "sightline",
+  "private": true,
+  "version": "0.0.0",
+  "description": "SIGHTLINE: lunar south-pole sunlight and Earth-link browser (NASA Space Apps 2026)",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@10.34.6",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @sightline/web dev",
+    "dev:mock": "pnpm --filter @sightline/web dev:mock",
+    "lint": "eslint . && prettier --check .",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "test": "pnpm -r --if-present run test",
+    "test:parity": "node scripts/not-yet.mjs test:parity 'no golden fixtures yet (M1-07, M2-05)'",
+    "test:e2e": "node scripts/not-yet.mjs test:e2e 'no e2e tests yet (M4-11)'",
+    "build": "pnpm -r --if-present run build",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm test:parity && pnpm build"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.11.0",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.0"
+  }
+}
