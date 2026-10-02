@@ -54,6 +54,19 @@ describe("azElFromVector", () => {
     expect(azElFromVector(neg(east), lat, lon).azimuth_rad).toBeCloseTo((3 * Math.PI) / 2, 12);
   });
 
+  it("keeps azimuth below 2π for a vector a hair west of north", () => {
+    // East component of about -1e-16: atan2 gives -1e-16, and a single `% 2π` would round that up
+    // to exactly 2π (the Python golden code did, see test_golden.py). The double wrap avoids it.
+    const hairWest: Vec3 = [
+      north[0] - 1e-16 * east[0],
+      north[1] - 1e-16 * east[1],
+      north[2] - 1e-16 * east[2],
+    ];
+    const az = azElFromVector(hairWest, lat, lon).azimuth_rad;
+    expect(az).toBeGreaterThanOrEqual(0);
+    expect(az).toBeLessThan(2 * Math.PI);
+  });
+
   it("measures elevation above the tangent plane", () => {
     expect(azElFromVector(north, lat, lon).elevation_rad).toBeCloseTo(0, 12);
     expect(azElFromVector(up, lat, lon).elevation_rad).toBeCloseTo(Math.PI / 2, 12);
