@@ -10,3 +10,4 @@ listed here. Datasets are cited by their id in `pipeline/sources.yaml`.
 | `pgda90-ldem-80s-80m` | Barker et al. (2023), Planetary Science Journal (DOI still to verify, P1-04d) | The 80 m terrain beyond the site tiles |
 | SPICE kernels | NAIF generic kernels, DE440s, `MOON_ME` (DECISIONS D-008) | Sun, Earth and DSN directions |
 | JPL Horizons | `sources.yaml` `apis` section | The independent direction check (METHODS §5.1) |
+| Terrain tile pyramid | Derived from `pgda90-ldem-80s-80m` and `pgda78-site04/01/11-surf` by `sightline tiles` (DECISIONS D-027, METHODS §8); same citations as those datasets | The terrain the scene draws and the future TypeScript horizon marcher reads |

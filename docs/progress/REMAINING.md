@@ -163,7 +163,11 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **M1-03** `sightline dem`: PDS3 LBL parser → `DemMeta` (pydantic) + memmap; test on a real label.
 
-- [ ] **M1-04** `sightline tiles`: polar-stereo pyramid, uint16 + offset (0.1 m), 1 px border, brotli; round-trip error ≤ 0.05 m.
+- [~] **M1-04** `sightline tiles`: polar-stereo pyramid, uint16 + offset (0.1 m), 1 px border, brotli; round-trip error ≤ 0.05 m. *Built 2026-10-02 on `dev1/M1-04-real-tiles` (PR #11; D-027, METHODS §8):* sparse pyramid of 12 levels (31,873 tiles, 262 MB in `data/processed/tiles/`), levels 0–7 from the 80 m map, 8–11 from the three 5 m DEMs; `LolaTileSource` in the engine; 100 tiles (833 KB) committed with the engine; 500 probes against the raw rasters. *Round-trip error is ≤ 0.05 m at levels 6–11 only; levels 0–5 carry a coarser per-tile scale (up to 0.21 m, error ≤ 0.105 m) because their relief exceeds uint16 at 0.1 m (M1-04a). No brotli (M1-04c).*
+  - [ ] **M1-04a** Decide on levels 0–5: accept the per-tile scale (error ≤ 0.105 m at level 0), or add a second offset/lower precision field (contract change; frozen after Oct 3). *Dev 1 + Dev 2.*
+  - [ ] **M1-04b** Serve the full pyramid to the app: `apps/web/public/tiles` (offline subset) or R2 (M1-08), and pass `readTile`/`baseUrl` and the full `coverage.json` to `createLolaTileSource`. *Dev 3 / Dev 1.*
+  - [ ] **M1-04c** Brotli (or R2 `Content-Encoding`) once the pyramid is published (M1-08); not done because the browser needs a decompressor and the raw pyramid is 262 MB. *Dev 1.*
+  - [ ] **M1-04d** The pyramid stops at the 80 m map's ±304 km square and 5 m levels stop short of each DEM edge; the 5 m DEMs for the other candidate regions are not downloaded. *Dev 1, low priority.*
 
 - [~] **M1-05** `sightline ephem`: Sun, Earth, 3 DSN complexes in MOON_ME, LT+S, 10-min step, 2026–2032 → binary + header. *Built 2026-10-02 (S1-03, D-020) with 1-hour steps, one year (2026-01-01T00:01:00 to 2027-01-01T00:01:00), 2.1 MB, committed under `packages/engine/src/data/`. The 2032, 10-minute, published file is S1-03b.*
 
