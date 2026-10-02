@@ -36,6 +36,42 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 10 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** M3-10 (Hero sequence)
+
+**What I did:**
+- Added `playHeroSequence()` to the `CameraHandle` interface so Dev 1's UI can imperatively trigger the animation.
+- Hooked up the camera logic inside `MoonScene.tsx`'s `useFrame` loop.
+- When triggered, it runs a 20-second cinematic fly-through:
+  - Takes control of the camera away from standard `OrbitControls`.
+  - Uses `smoothstep` easing to sweep the camera down from a high altitude (15,000 m) to a close ground view (200 m).
+  - Spirals around the target site (1.25 revolutions) while gradually pulling the radius in from 20km to 1.5km.
+  - Automatically updates the `OrbitControls` target so when the animation finishes, the user is seamlessly dropped back into free-roam mode right at the site!
+
+**Files changed:**
+- `packages/scene/src/types.ts`
+- `packages/scene/src/MoonScene.tsx`
+
+**How I verified it:** 
+- `pnpm typecheck` passed.
+- Temporarily wired it to test in the `dev.tsx` container; the camera gracefully sweeps down and focuses on the target.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) wrote the math logic for the descending spiral animation.
+
+**Proposed decisions:** 
+- Embedded the animation directly in the `useFrame` of `SceneContent` to easily share the `OrbitControls` ref and camera state, avoiding complex state lifting.
+
+**Blockers / questions:**
+- None. Dev 1 can now call `cameraRef.current.playHeroSequence()` directly from their UI to start the show.
+
+**Next 3 tasks:**
+1. Integration testing with Dev 1.
+2. Perf pass if needed.
+3. Final review.
+
+---
+
 ### Session 9 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** M3-08 (Site pins with extruded horizon rings and masts)
