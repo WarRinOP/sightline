@@ -52,6 +52,19 @@ interpolates them, and its output is compared with SPICE's own answers (`docs/sc
 §5). The terrain horizon is not built, so no illumination or communication percentage exists yet;
 the mock engine still answers those questions and is labelled SIMULATED.
 
+**How the NAIF SPICE kernels are used (S1-03).** The pipeline loads eight kernels, each checked
+against a pinned SHA-256 first: `naif0012.tls` (leap seconds), `de440s.bsp` (planets), 
+`moon_pa_de440_200625.bpc`, `pck00011.tpc` and `moon_de440_250416.tf` (the Moon's orientation and
+the `MOON_ME` frame), `earth_2026_260806_2126_predict.bpc` and `earth_topo_260814.tf` (Earth
+orientation and station frames), and `earthstns_itrf93_260814.bsp` (DSN station positions). The
+SPICE routines `spkezr` (states with light time and stellar aberration), `str2et`, `et2utc` and
+`pckcov` build the ephemeris and the time tests. `spkcpo` and `spkcpt` produce the independent
+reference values the engine is compared with. The AI chose which routines to call and wrote the
+glue code; it did not write or alter any of the kernels or SPICE's own algorithms. The files the
+pipeline produces (`ephemeris_2026_3600s.bin`, `leapseconds.json`, `sites.json`,
+`fixtures/golden/*.json`) can be regenerated with `sightline ephem`, `sites` and `golden`, and the
+tests rebuild them and compare.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list
