@@ -10,7 +10,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p .",
     "test": "vitest run test/",
-    "test:parity": "vitest run parity/"
+    "test:parity": "vitest run parity/",
+    "residuals": "node scripts/write-horizons-residuals.mjs"
   },
   "dependencies": {
     "@sightline/contracts": "workspace:*"
