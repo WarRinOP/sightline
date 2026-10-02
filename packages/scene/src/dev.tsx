@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { useRef, useMemo } from "react";
 import { MoonScene } from "./MoonScene";
+import { FisheyeSky } from "./FisheyeSky";
 import type { SceneInputs } from "./types";
 import type { Site } from "@sightline/contracts";
 
@@ -64,12 +65,22 @@ function DevApp() {
   }, []);
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <MoonScene 
-        sites={sites} 
-        tileSource={mockTileSource} 
-        inputs={inputsRef} 
-      />
+    <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
+      <div style={{ flex: 1, position: "relative" }}>
+        <MoonScene 
+          sites={sites} 
+          tileSource={mockTileSource} 
+          inputs={inputsRef} 
+        />
+      </div>
+      <div style={{ flex: 1, borderLeft: "2px solid #333", backgroundColor: "#000" }}>
+        {sites[0] && (
+          <FisheyeSky 
+            inputs={inputsRef}
+            location={{ lat_rad: sites[0].lat_deg * Math.PI / 180, lon_rad: sites[0].lon_deg * Math.PI / 180, elev_m: sites[0].elev_m }}
+          />
+        )}
+      </div>
     </div>
   );
 }
