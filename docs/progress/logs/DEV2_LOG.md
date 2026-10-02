@@ -36,6 +36,40 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 9 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** M3-08 (Site pins with extruded horizon rings and masts)
+
+**What I did:**
+- Built the `SitePin.tsx` component to replace the placeholder cylinder.
+- Included a 20-meter central mast and a landing pad base using standard cylinders.
+- Implemented an extruded 3D horizon ring that sweeps a cross-section along the 360-degree horizon profile using `CatmullRomCurve3` and `TubeGeometry`.
+- For now, the component simulates a jagged horizon profile with math functions if the real `horizonMask` prop isn't passed (so it still looks great while we wait for Dev 1 to pipe the array).
+- Integrated `SitePin` into `MoonScene.tsx`, displaying the active site's name dynamically above the pin.
+
+**Files changed:**
+- `packages/scene/src/SitePin.tsx` (new)
+- `packages/scene/src/MoonScene.tsx`
+
+**How I verified it:** 
+- `pnpm typecheck` passed.
+- Vite dev server shows the site pin mast, floating label, and the wavy pink horizon ring accurately tracking the simulated profile.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) generated the procedural curve logic for the ring.
+
+**Proposed decisions:** 
+- `TubeGeometry` along a closed curve provides a smooth, continuous 3D ring that looks much better than trying to individually construct polygons for each degree of the horizon mask.
+
+**Blockers / questions:**
+- We need the true `horizonMask` array piped from `EngineClient.getHorizon()` into the scene inputs to drive the true ring shape.
+
+**Next 3 tasks:**
+1. M3-10: Hero sequence.
+2. M3-11: Perf pass.
+3. Review Dev 1 integration timeline.
+
+---
+
 ### Session 8 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** M3-06 (Deep space sky)
