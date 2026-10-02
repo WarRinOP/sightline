@@ -168,8 +168,8 @@ describe("getSunEarth on real positions", () => {
     expect(Math.max(...avg.map(Math.abs))).toBeLessThan(2.2 * DEG);
   });
 
-  it("shows Earth bobbing within about 10° of the horizon and visible a fair share of the time", async () => {
-    const states = await year(0, 3600);
+  it("shows Earth bobbing within about 10° of the horizon and visible a fair share of the time (flat horizon: a site with no terrain mask)", async () => {
+    const states = await year(1, 3600);
     const els = states.map((s) => s.earth_elevation_rad);
     expect(Math.max(...els)).toBeLessThan(12 * DEG);
     expect(Math.min(...els)).toBeGreaterThan(-12 * DEG);
@@ -236,26 +236,35 @@ describe("getSunEarth on real positions", () => {
   });
 });
 
-describe("methods that need terrain", () => {
-  const loc = siteLocation(BUNDLED_SITES[0]!);
+describe("methods that need terrain or the timeline engine", () => {
   const range = { start_et: START_ET, end_et: START_ET + DAY_S, step_s: 3600 };
+  // Connecting Ridge has no terrain horizon yet; Shackleton Rim has (see horizon.test.ts).
+  const noTerrain = siteLocation(BUNDLED_SITES[1]!);
+  const withTerrain = siteLocation(BUNDLED_SITES[0]!);
 
-  it("refuse instead of answering with a flat-ground verdict", async () => {
-    const calls: Promise<unknown>[] = [
-      engine.getHorizon(loc, 2),
-      engine.getTimeline({ location: loc, profile: DEFAULT_LANDER_PROFILE, ...range }),
-      engine.findWindows({
-        location: loc,
-        profile: DEFAULT_LANDER_PROFILE,
-        ...range,
-        min_duration_s: 0,
-        max_results: 3,
-      }),
-      engine.probeLit(loc, START_ET),
-    ];
-    for (const c of calls) {
+  it("refuse a site that has no terrain horizon instead of answering with a flat-ground verdict", async () => {
+    for (const c of [engine.getHorizon(noTerrain, 2), engine.probeLit(noTerrain, START_ET)]) {
       await expect(c).rejects.toBeInstanceOf(NotAvailableError);
-      await expect(c).rejects.toThrow(/M2-05/);
+      await expect(c).rejects.toThrow(/Shackleton Rim.*S1-05/);
+    }
+  });
+
+  it("refuse the timeline and the window search everywhere until M2-08", async () => {
+    for (const loc of [noTerrain, withTerrain]) {
+      const calls: Promise<unknown>[] = [
+        engine.getTimeline({ location: loc, profile: DEFAULT_LANDER_PROFILE, ...range }),
+        engine.findWindows({
+          location: loc,
+          profile: DEFAULT_LANDER_PROFILE,
+          ...range,
+          min_duration_s: 0,
+          max_results: 3,
+        }),
+      ];
+      for (const c of calls) {
+        await expect(c).rejects.toBeInstanceOf(NotAvailableError);
+        await expect(c).rejects.toThrow(/M2-08/);
+      }
     }
   });
 });

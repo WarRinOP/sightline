@@ -17,6 +17,12 @@ export interface SkyOptions {
   min_earth_elev_rad?: number;
   /** A DSN complex must see the site at least this high above its own horizon. Default 0. */
   dsn_min_elev_rad?: number;
+  /**
+   * Terrain elevation angle towards an azimuth, for this site and mast height. When given it
+   * replaces the flat-ground horizon for the Sun and Earth. It is read once at each body's
+   * azimuth, so it treats the horizon as straight across the Sun's disk (0.27° radius).
+   */
+  terrain_horizon?: (azimuth_rad: number) => number;
 }
 
 export interface SkyDetails {
@@ -24,6 +30,9 @@ export interface SkyDetails {
   /** Elevation of the site above each DSN complex's horizon, keyed `goldstone`, `canberra`, `madrid`. */
   dsn_elevation_rad: Record<string, number>;
   horizon_dip_rad: number;
+  /** The horizon elevation the Sun and Earth were judged against: terrain if given, else -dip. */
+  sun_horizon_rad: number;
+  earth_horizon_rad: number;
   sun_angular_radius_rad: number;
 }
 
@@ -46,8 +55,9 @@ export function diskFraction(
  * - Site vector: lat, lon and height (ground plus mast) on the 1737.4 km sphere, MOON_ME.
  * - Directions: apparent (LT+S) Moon-centre states minus the site vector, so topocentric
  *   parallax is included for both bodies (about 0.26° for Earth at the pole).
- * - Horizon: terrain is NOT modelled. The horizon is flat ground at the site's own height, so it
- *   dips below the tangent plane by acos(R/(R+mast)) from the top of the mast.
+ * - Horizon: flat ground at the site's own height unless `terrain_horizon` is given, so it dips
+ *   below the tangent plane by acos(R/(R+mast)) from the top of the mast. With a terrain horizon
+ *   the Sun's disk fraction and Earth's visibility are judged against the mask at their azimuths.
  * - DSN: a complex sees the site when the site is above that complex's horizon, taking the
  *   station's vertical as its geocentric direction (up to 0.19° from the geodetic vertical).
  */
@@ -83,7 +93,10 @@ export function computeSky(
     );
   });
 
-  const earth_visible = earthDir.elevation_rad > -dip + (options.min_earth_elev_rad ?? 0);
+  const sun_horizon_rad = options.terrain_horizon?.(sunDir.azimuth_rad) ?? -dip;
+  const earth_horizon_rad = options.terrain_horizon?.(earthDir.azimuth_rad) ?? -dip;
+  const earth_visible =
+    earthDir.elevation_rad > earth_horizon_rad + (options.min_earth_elev_rad ?? 0);
   const dsnMin = options.dsn_min_elev_rad ?? 0;
   const dsn_visible =
     earth_visible && Object.values(dsn_elevation_rad).some((elevation) => elevation >= dsnMin);
@@ -93,7 +106,7 @@ export function computeSky(
       epoch_et,
       sun_azimuth_rad: sunDir.azimuth_rad,
       sun_elevation_rad: sunDir.elevation_rad,
-      sun_disk_fraction: diskFraction(sunDir.elevation_rad, -dip, sunRadius),
+      sun_disk_fraction: diskFraction(sunDir.elevation_rad, sun_horizon_rad, sunRadius),
       earth_azimuth_rad: earthDir.azimuth_rad,
       earth_elevation_rad: earthDir.elevation_rad,
       earth_visible,
@@ -103,6 +116,8 @@ export function computeSky(
     },
     dsn_elevation_rad,
     horizon_dip_rad: dip,
+    sun_horizon_rad,
+    earth_horizon_rad,
     sun_angular_radius_rad: sunRadius,
   };
 }
