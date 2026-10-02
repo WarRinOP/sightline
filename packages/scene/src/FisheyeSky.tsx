@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrthographicCamera, Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { FisheyeSkyProps } from "./types";
-import { locationToScenePosition } from "./math";
 
-function FisheyeContent({ inputs, location }: Omit<FisheyeSkyProps, "onReady">) {
+function FisheyeContent() {
   const sunRef = useRef<THREE.Mesh>(null);
   const earthRef = useRef<THREE.Mesh>(null);
 
@@ -22,18 +21,26 @@ function FisheyeContent({ inputs, location }: Omit<FisheyeSkyProps, "onReady">) 
   return (
     <>
       <color attach="background" args={["#000000"]} />
-      
+
       {/* Outer horizon ring */}
       <mesh>
         <ringGeometry args={[45, 50, 64]} />
         <meshBasicMaterial color="#333333" side={THREE.DoubleSide} />
       </mesh>
-      
+
       {/* Compass / Horizon markers */}
-      <Text position={[0, 40, 0]} fontSize={5} color="#AAAAAA">N</Text>
-      <Text position={[0, -40, 0]} fontSize={5} color="#AAAAAA">S</Text>
-      <Text position={[40, 0, 0]} fontSize={5} color="#AAAAAA">E</Text>
-      <Text position={[-40, 0, 0]} fontSize={5} color="#AAAAAA">W</Text>
+      <Text position={[0, 40, 0]} fontSize={5} color="#AAAAAA">
+        N
+      </Text>
+      <Text position={[0, -40, 0]} fontSize={5} color="#AAAAAA">
+        S
+      </Text>
+      <Text position={[40, 0, 0]} fontSize={5} color="#AAAAAA">
+        E
+      </Text>
+      <Text position={[-40, 0, 0]} fontSize={5} color="#AAAAAA">
+        W
+      </Text>
 
       {/* Sun marker */}
       <mesh ref={sunRef} position={[20, 20, 0]}>
@@ -59,7 +66,7 @@ function FisheyeContent({ inputs, location }: Omit<FisheyeSkyProps, "onReady">) 
   );
 }
 
-export function FisheyeSky({ inputs, location, onReady }: FisheyeSkyProps) {
+export function FisheyeSky({ onReady }: FisheyeSkyProps) {
   useEffect(() => {
     onReady?.();
   }, [onReady]);
@@ -67,7 +74,7 @@ export function FisheyeSky({ inputs, location, onReady }: FisheyeSkyProps) {
   return (
     <div style={{ width: "100%", height: "100%", display: "block" }}>
       <Canvas>
-        <FisheyeContent inputs={inputs} location={location} />
+        <FisheyeContent />
       </Canvas>
     </div>
   );

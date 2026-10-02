@@ -8,7 +8,10 @@ interface DeepSpaceSkyProps {
   earthDirection?: THREE.Vector3;
 }
 
-export function DeepSpaceSky({ sunDirection, earthDirection = new THREE.Vector3(0, 0.5, 1).normalize() }: DeepSpaceSkyProps) {
+export function DeepSpaceSky({
+  sunDirection,
+  earthDirection = new THREE.Vector3(0, 0.5, 1).normalize(),
+}: DeepSpaceSkyProps) {
   const sunRef = useRef<THREE.Mesh>(null);
   const earthRef = useRef<THREE.Mesh>(null);
 
@@ -31,7 +34,7 @@ export function DeepSpaceSky({ sunDirection, earthDirection = new THREE.Vector3(
   return (
     <>
       <Stars radius={10000} depth={500} count={5000} factor={4} saturation={0} fade speed={0.5} />
-      
+
       {/* Sun */}
       <mesh ref={sunRef}>
         <sphereGeometry args={[500, 32, 32]} />
@@ -39,11 +42,23 @@ export function DeepSpaceSky({ sunDirection, earthDirection = new THREE.Vector3(
         {/* Simple bloom hack using a slightly larger transparent sphere */}
         <mesh>
           <sphereGeometry args={[700, 32, 32]} />
-          <meshBasicMaterial color="#FFEA00" transparent opacity={0.3} blending={THREE.AdditiveBlending} depthWrite={false} />
+          <meshBasicMaterial
+            color="#FFEA00"
+            transparent
+            opacity={0.3}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
         </mesh>
         <mesh>
           <sphereGeometry args={[1200, 32, 32]} />
-          <meshBasicMaterial color="#FFB300" transparent opacity={0.1} blending={THREE.AdditiveBlending} depthWrite={false} />
+          <meshBasicMaterial
+            color="#FFB300"
+            transparent
+            opacity={0.1}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
         </mesh>
       </mesh>
 

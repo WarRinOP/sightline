@@ -19,38 +19,52 @@ interface TerrainNodeProps {
   inputs: React.MutableRefObject<SceneInputs>;
 }
 
-function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs }: TerrainNodeProps) {
+function TerrainNode({
+  tileSource,
+  manifest,
+  coord,
+  bounds,
+  sunDirection,
+  inputs,
+}: TerrainNodeProps) {
   const { camera } = useThree();
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [isSubdivided, setIsSubdivided] = useState(false);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const uniformsRef = useRef<{ uLayerMode: { value: number }, uSunDirection?: { value: THREE.Vector3 } }>({ 
-    uLayerMode: { value: 0 } 
+  const uniformsRef = useRef<{
+    uLayerMode: { value: number };
+    uSunDirection?: { value: THREE.Vector3 };
+  }>({
+    uLayerMode: { value: 0 },
   });
 
   useEffect(() => {
     let canceled = false;
-    tileSource.getTile(coord).then((data) => {
-      if (!canceled) setTileData(data);
-    }).catch(e => {
-      console.warn("Failed to load tile", coord, e);
-    });
-    return () => { canceled = true; };
+    tileSource
+      .getTile(coord)
+      .then((data) => {
+        if (!canceled) setTileData(data);
+      })
+      .catch((e) => {
+        console.warn("Failed to load tile", coord, e);
+      });
+    return () => {
+      canceled = true;
+    };
   }, [tileSource, coord.level, coord.x, coord.y]);
 
   useFrame(() => {
     // Basic LOD check
     const center = new THREE.Vector3(
       (bounds.x_min + bounds.x_max) / 2,
-      (tileData?.offset_m || 0), // Rough height approximation
-      -(bounds.y_min + bounds.y_max) / 2
+      tileData?.offset_m || 0, // Rough height approximation
+      -(bounds.y_min + bounds.y_max) / 2,
     );
     const dist = camera.position.distanceTo(center);
     const size = bounds.x_max - bounds.x_min;
-    
+
     // Subdivide if we are close enough and not at max level
-    const shouldSubdivide = (dist < size * 2) && (coord.level < manifest.level_count - 1);
-    
+    const shouldSubdivide = dist < size * 2 && coord.level < manifest.level_count - 1;
+
     if (shouldSubdivide !== isSubdivided) {
       setIsSubdivided(shouldSubdivide);
     }
@@ -63,7 +77,7 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs
       else if (layers.psr) mode = 2;
       else if (layers.illum) mode = 3;
       else if (layers.dte) mode = 4;
-      
+
       if (uniformsRef.current.uLayerMode.value !== mode) {
         uniformsRef.current.uLayerMode.value = mode;
         // Material needs update is not required for uniforms, they update automatically!
@@ -76,23 +90,23 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs
     const { size_px, offset_m, scale_m, heights } = tileData;
     const sizeX = bounds.x_max - bounds.x_min;
     const sizeY = bounds.y_max - bounds.y_min;
-    
+
     const segments = size_px - 1;
     const geom = new THREE.PlaneGeometry(sizeX, sizeY, segments, segments);
     geom.rotateX(-Math.PI / 2);
-    
+
     const pos = geom.attributes.position as THREE.BufferAttribute;
     if (pos) {
       for (let i = 0; i < pos.count; i++) {
         const col = i % size_px;
-        const row = (size_px - 1) - Math.floor(i / size_px);
+        const row = size_px - 1 - Math.floor(i / size_px);
         const idx = row * size_px + col;
         const hCount = heights[idx] ?? 0;
         pos.setY(i, offset_m + hCount * scale_m);
       }
       geom.computeVertexNormals();
     }
-    
+
     // Create DataTexture for the heightmap
     const data = new Float32Array(size_px * size_px);
     for (let i = 0; i < heights.length; i++) {
@@ -100,7 +114,7 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs
     }
     const texture = new THREE.DataTexture(data, size_px, size_px, THREE.RedFormat, THREE.FloatType);
     texture.needsUpdate = true;
-    
+
     return { geometry: geom, heightTexture: texture };
   }, [tileData, bounds]);
 
@@ -115,34 +129,38 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs
     return (
       <group>
         {/* Top Left (y max, x min) */}
-        <TerrainNode 
-          tileSource={tileSource} manifest={manifest} 
+        <TerrainNode
+          tileSource={tileSource}
+          manifest={manifest}
           coord={{ level: nextLevel, x: coord.x * 2, y: coord.y * 2 + 1 }}
-          bounds={{ x_min: bounds.x_min, y_min: midY, x_max: midX, y_max: bounds.y_max }} 
+          bounds={{ x_min: bounds.x_min, y_min: midY, x_max: midX, y_max: bounds.y_max }}
           sunDirection={sunDirection}
           inputs={inputs}
         />
         {/* Top Right (y max, x max) */}
-        <TerrainNode 
-          tileSource={tileSource} manifest={manifest} 
+        <TerrainNode
+          tileSource={tileSource}
+          manifest={manifest}
           coord={{ level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 + 1 }}
-          bounds={{ x_min: midX, y_min: midY, x_max: bounds.x_max, y_max: bounds.y_max }} 
+          bounds={{ x_min: midX, y_min: midY, x_max: bounds.x_max, y_max: bounds.y_max }}
           sunDirection={sunDirection}
           inputs={inputs}
         />
         {/* Bottom Left (y min, x min) */}
-        <TerrainNode 
-          tileSource={tileSource} manifest={manifest} 
+        <TerrainNode
+          tileSource={tileSource}
+          manifest={manifest}
           coord={{ level: nextLevel, x: coord.x * 2, y: coord.y * 2 }}
-          bounds={{ x_min: bounds.x_min, y_min: bounds.y_min, x_max: midX, y_max: midY }} 
+          bounds={{ x_min: bounds.x_min, y_min: bounds.y_min, x_max: midX, y_max: midY }}
           sunDirection={sunDirection}
           inputs={inputs}
         />
         {/* Bottom Right (y min, x max) */}
-        <TerrainNode 
-          tileSource={tileSource} manifest={manifest} 
+        <TerrainNode
+          tileSource={tileSource}
+          manifest={manifest}
           coord={{ level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 }}
-          bounds={{ x_min: midX, y_min: bounds.y_min, x_max: bounds.x_max, y_max: midY }} 
+          bounds={{ x_min: midX, y_min: bounds.y_min, x_max: bounds.x_max, y_max: midY }}
           sunDirection={sunDirection}
           inputs={inputs}
         />
@@ -151,31 +169,30 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs
   }
 
   return (
-    <mesh 
-      geometry={geometry!} 
-      position={[midX, 0, -midY]} 
-      receiveShadow 
-      castShadow
-    >
-      <meshStandardMaterial 
-        color="#888888" 
-        wireframe={false} 
-        flatShading 
+    <mesh geometry={geometry!} position={[midX, 0, -midY]} receiveShadow castShadow>
+      <meshStandardMaterial
+        color="#888888"
+        wireframe={false}
+        flatShading
         onBeforeCompile={(shader) => {
-          shader.uniforms.uSunDirection = uniformsRef.current.uSunDirection || { value: sunDirection };
+          shader.uniforms.uSunDirection = uniformsRef.current.uSunDirection || {
+            value: sunDirection,
+          };
           shader.uniforms.uHeightTexture = { value: heightTexture };
-          shader.uniforms.uBounds = { value: new THREE.Vector4(bounds.x_min, bounds.y_min, bounds.x_max, bounds.y_max) };
+          shader.uniforms.uBounds = {
+            value: new THREE.Vector4(bounds.x_min, bounds.y_min, bounds.x_max, bounds.y_max),
+          };
           shader.uniforms.uLayerMode = uniformsRef.current.uLayerMode;
-          
+
           shader.vertexShader = `
             varying vec3 vTerrainWorldPos;
             ${shader.vertexShader}
           `.replace(
-            '#include <worldpos_vertex>',
+            "#include <worldpos_vertex>",
             `
             #include <worldpos_vertex>
             vTerrainWorldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;
-            `
+            `,
           );
 
           shader.fragmentShader = `
@@ -195,9 +212,9 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs
             
             ${shader.fragmentShader}
           `;
-          
+
           shader.fragmentShader = shader.fragmentShader.replace(
-            '#include <dithering_fragment>',
+            "#include <dithering_fragment>",
             `
             #include <dithering_fragment>
             
@@ -261,7 +278,7 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs
             }
             
             gl_FragColor.rgb = finalColor;
-            `
+            `,
           );
         }}
       />
@@ -274,17 +291,19 @@ export function TerrainQuadtree({ tileSource, sunDirection, inputs }: TerrainQua
 
   useEffect(() => {
     let canceled = false;
-    tileSource.getManifest().then(m => {
+    tileSource.getManifest().then((m) => {
       if (!canceled) setManifest(m);
     });
-    return () => { canceled = true; };
+    return () => {
+      canceled = true;
+    };
   }, [tileSource]);
 
   if (!manifest) return null;
 
   return (
     <group>
-      <TerrainNode 
+      <TerrainNode
         tileSource={tileSource}
         manifest={manifest}
         coord={{ level: 0, x: 0, y: 0 }}
@@ -292,7 +311,7 @@ export function TerrainQuadtree({ tileSource, sunDirection, inputs }: TerrainQua
           x_min: manifest.bounds_m.x_min_m,
           y_min: manifest.bounds_m.y_min_m,
           x_max: manifest.bounds_m.x_max_m,
-          y_max: manifest.bounds_m.y_max_m
+          y_max: manifest.bounds_m.y_max_m,
         }}
         sunDirection={sunDirection}
         inputs={inputs}

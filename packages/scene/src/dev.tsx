@@ -34,17 +34,17 @@ function DevApp() {
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <div style={{ flex: 1, position: "relative" }}>
-        <MoonScene 
-          sites={sites} 
-          tileSource={mockTileSource} 
-          inputs={inputsRef} 
-        />
+        <MoonScene sites={sites} tileSource={mockTileSource} inputs={inputsRef} />
       </div>
       <div style={{ flex: 1, borderLeft: "2px solid #333", backgroundColor: "#000" }}>
         {sites[0] && (
-          <FisheyeSky 
+          <FisheyeSky
             inputs={inputsRef}
-            location={{ lat_rad: sites[0].lat_deg * Math.PI / 180, lon_rad: sites[0].lon_deg * Math.PI / 180, elev_m: sites[0].elev_m }}
+            location={{
+              lat_rad: (sites[0].lat_deg * Math.PI) / 180,
+              lon_rad: (sites[0].lon_deg * Math.PI) / 180,
+              elev_m: sites[0].elev_m,
+            }}
           />
         )}
       </div>

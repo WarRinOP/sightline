@@ -4,7 +4,7 @@ import { MOON_REFERENCE_RADIUS_M } from "@sightline/contracts";
  * Converts a lunar Location to a 3D scene position (Vector3 array) in Moon-fixed coordinates.
  * X = R * cos(lat) * cos(lon)
  * Y = R * sin(lat)
- * Z = -R * cos(lat) * sin(lon)  // Note: ThreeJS usually uses Y-up, right-handed. 
+ * Z = -R * cos(lat) * sin(lon)  // Note: ThreeJS usually uses Y-up, right-handed.
  * We follow standard spherical to cartesian conversion.
  *
  * @param lat_rad Latitude in radians
@@ -15,7 +15,7 @@ import { MOON_REFERENCE_RADIUS_M } from "@sightline/contracts";
 export function locationToScenePosition(
   lat_rad: number,
   lon_rad: number,
-  elev_m: number = 0
+  elev_m: number = 0,
 ): [number, number, number] {
   const r = MOON_REFERENCE_RADIUS_M + elev_m;
   const x = r * Math.cos(lat_rad) * Math.cos(lon_rad);
@@ -25,6 +25,6 @@ export function locationToScenePosition(
   // If we map Z(ME) -> Y(Three), X(ME) -> X(Three), Y(ME) -> -Z(Three):
   const y = r * Math.sin(lat_rad); // Polar axis
   const z = -r * Math.cos(lat_rad) * Math.sin(lon_rad);
-  
+
   return [x, y, z];
 }
