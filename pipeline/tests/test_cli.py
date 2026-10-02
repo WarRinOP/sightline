@@ -5,8 +5,8 @@ import pytest
 from sightline_pipeline import __version__
 from sightline_pipeline.cli import FAILED, NOT_IMPLEMENTED, build_parser, main
 
-COMMANDS = ["fetch", "dem", "tiles", "ephem", "mock"]
-STUBS = ["dem", "tiles", "ephem", "mock"]
+COMMANDS = ["fetch", "sites", "ephem", "golden", "dem", "tiles", "mock"]
+STUBS = ["dem", "tiles", "mock"]
 
 
 def test_help_exits_zero_and_lists_every_command(capsys: pytest.CaptureFixture[str]) -> None:
@@ -43,6 +43,8 @@ def test_subcommand_options_parse() -> None:
     ]
     ns = p.parse_args(["ephem", "--start", "2026-01-01", "--end", "2032-12-31", "--step", "600"])
     assert (ns.start, ns.end, ns.step) == ("2026-01-01", "2032-12-31", 600)
+    assert p.parse_args(["ephem"]).start == "2026-01-01T00:01:00"
+    assert p.parse_args(["ephem"]).step == 3600
 
 
 def test_unknown_command_is_rejected() -> None:
@@ -90,3 +92,14 @@ datasets:
     )
     assert code == FAILED
     assert "no pinned sha256" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("command", ["sites", "ephem", "golden"])
+def test_pipeline_steps_fail_cleanly_when_the_data_is_missing(
+    command: str, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    code = main([command, "--raw-dir", str(tmp_path / "empty")])
+    assert code == FAILED
+    err = capsys.readouterr().err
+    assert f"sightline {command}:" in err
+    assert "missing" in err

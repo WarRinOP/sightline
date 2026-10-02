@@ -12,6 +12,8 @@ PIPELINE_DIR = Path(__file__).resolve().parents[1]
 REPO_ROOT = PIPELINE_DIR.parent
 DEFAULT_SOURCES_PATH = PIPELINE_DIR / "sources.yaml"
 DEFAULT_RAW_DIR = REPO_ROOT / "data" / "raw"
+DEFAULT_ENGINE_DATA_DIR = REPO_ROOT / "packages" / "engine" / "src" / "data"
+DEFAULT_GOLDEN_DIR = REPO_ROOT / "fixtures" / "golden"
 
 
 class Dataset(BaseModel):
@@ -29,13 +31,15 @@ class Dataset(BaseModel):
     license: str
     citation: str
     verified_at: date
+    # Human-readable page for the product, used as the citation link in catalogs.
+    product_url: str | None = None
     note: str | None = None
 
-    @field_validator("url")
+    @field_validator("url", "product_url")
     @classmethod
-    def _https_only(cls, v: str) -> str:
-        if urlparse(v).scheme != "https":
-            raise ValueError("url must be https")
+    def _https_only(cls, v: str | None) -> str | None:
+        if v is not None and urlparse(v).scheme != "https":
+            raise ValueError("urls must be https")
         return v
 
     @property
