@@ -78,6 +78,38 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 ## Session Log
 
+### Session 023 — 2026-10-03 — Review of Dev 2's PR #15, scene fixes (Claude Code)
+
+**Phase / tasks:** S1-06 (scene), S1-06a and S1-06c closed. Branch `dev1/S1-06-scene-fixes`, from the head of Dev 2's `dev2/integration` (their commits are kept). The team lead said go and restated the early-start authorisation (D-010 still has no written confirmation); Dev 3 has not started.
+
+**Done:**
+
+- Reviewed PR #15 (CI, `pnpm verify` on the branch, all scene code read, the preview page run in a real browser with and without Sun/Earth data). Most of the first review's items are fixed; see D-031.
+- Fixed the rest on top of Dev 2's work (D-031 item 3): the SIMULATED badge in `MoonScene`, ambient-only terrain when there is no Sun, the preview's latitude and longitude, camera near plane, shadow type, stale handle dependencies. Moved the tile cache, the child-tile fallback and the vertex heights into `tileCache.ts` and `tileMesh.ts`; added `simulated.ts` and `horizonRingPoints`; 14 new tests (17 in the scene).
+- D-031 amends D-030 (Dev 2's flat-plane direction recipe is the right one) and records the Stage 1 ownership change.
+
+**Verified by:**
+
+- `pnpm verify`: see the PR (run after these changes).
+- Scene tests 17 pass; seven deliberate mutations (vertex height from one sample, off-by-one sample, failures cached, cache shared between sources, `some` instead of `every`, ring built from sin/cos, manifest ignored in the badge rule) were each caught by a test.
+- Real browser (Vite preview, mock tiles): the SIMULATED badge shows in both panels; with data on, the Fisheye shows the Sun at the north rim at 5° and the Earth at east at 10°; the console has only a missing favicon and a three.js deprecation.
+- On Dev 2's branch before my changes: `pnpm verify` exit 0, `main` already merged, package files identical to `main`'s.
+- **NOT VERIFIED:** the scene with real tiles (600 km extent, level selection, holes, frame rate); the Hero sequence; the camera near plane's effect (an estimate: about 60 m of depth flicker at 10 km with near 0.1 m, about 1 m with 5 m); the terrain shadow noise at the terminator (the 8-step march) beyond looking at it; CI on this branch.
+
+**Decisions logged:** D-031
+
+**Blockers / risks:**
+
+- Three days to the freeze. Dev 3's work is reassigned to Dev 1 (S1-06b, S1-08 to S1-10).
+- The scene has not yet been run against real tiles.
+- Dev 2 should stop pushing to `dev2/integration` until this merges (otherwise conflicts).
+
+**Next 3 tasks:**
+
+1. Merge this PR; then S1-06b: wire the tile source, Sun/Earth and horizon into the web app.
+2. S1-08/S1-09: Lab page, site picker, time scrubber, timeline barcode.
+3. S1-10: Evidence page; then the video captures (S1-12).
+
 ### Session 022 — 2026-10-03 — Review of Dev 2's PR #13, scene dependencies, scene seam (Claude Code)
 
 **Phase / tasks:** S1-06 review (PR #13), S1-01c (dependencies), D-030. Branch `dev1/S1-01c-scene-deps` from `main`.

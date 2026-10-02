@@ -62,3 +62,30 @@ export function getLocalDirectionInScene(
 
   return dir.normalize();
 }
+
+/**
+ * Points of the horizon ring around a site, in scene coordinates relative to the site: one per mask
+ * entry (index i is azimuth i * step_rad clockwise from north), at `radius_m`, raised by the mask's
+ * elevation. Uses the same east/north/up as the Sun and Earth, so the ring and the Sun agree.
+ */
+export function horizonRingPoints(
+  mask_elevation_rad: readonly number[],
+  azimuth_step_rad: number,
+  lat_rad: number,
+  lon_rad: number,
+  radius_m: number,
+): THREE.Vector3[] {
+  const n = mask_elevation_rad.length;
+  const points: THREE.Vector3[] = [];
+  for (let i = 0; i <= n; i++) {
+    const idx = i % n;
+    const dir = getLocalDirectionInScene(
+      lat_rad,
+      lon_rad,
+      idx * azimuth_step_rad,
+      mask_elevation_rad[idx] ?? 0,
+    );
+    points.push(dir.multiplyScalar(radius_m));
+  }
+  return points;
+}

@@ -8,6 +8,7 @@ import { TerrainQuadtree } from "./TerrainQuadtree";
 import { DeepSpaceSky } from "./DeepSpaceSky";
 import { SitePin } from "./SitePin";
 import { Palette } from "./palette";
+import { useSimulated } from "./simulated";
 
 function SceneContent({
   sites,
@@ -71,7 +72,7 @@ function SceneContent({
         heroStartTime.current = performance.now();
       },
     }),
-    [camera],
+    [camera, sites, inputs],
   );
 
   useFrame(() => {
@@ -175,11 +176,7 @@ function SceneContent({
 
       {/* Real Terrain mesh */}
       <group>
-        <TerrainQuadtree
-          tileSource={tileSource}
-          sunDirection={sunDirection || new THREE.Vector3(0, 1, 0)}
-          inputs={inputs}
-        />
+        <TerrainQuadtree tileSource={tileSource} sunDirection={sunDirection} inputs={inputs} />
       </group>
 
       {/* Site pin */}
@@ -219,10 +216,15 @@ export const MoonScene = forwardRef<CameraHandle, Omit<MoonSceneProps, "ref">>(
     useEffect(() => {
       onReady?.();
     }, [onReady]);
+    const simulated = useSimulated(tileSource, inputs, horizon);
 
     return (
-      <div style={{ width: "100%", height: "100%", display: "block" }}>
-        <Canvas shadows camera={{ position: [0, 5000, 10000], fov: 45, near: 0.1, far: 500000 }}>
+      <div style={{ width: "100%", height: "100%", display: "block", position: "relative" }}>
+        {/* near = 5 m: with near 0.1 and far 500 km the depth buffer would flicker at 10 km. */}
+        <Canvas
+          shadows="percentage"
+          camera={{ position: [0, 5000, 10000], fov: 45, near: 5, far: 500000 }}
+        >
           <SceneContent
             sites={sites}
             tileSource={tileSource}
@@ -231,6 +233,23 @@ export const MoonScene = forwardRef<CameraHandle, Omit<MoonSceneProps, "ref">>(
             horizon={horizon}
           />
         </Canvas>
+        {simulated && (
+          <div
+            style={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              padding: "2px 8px",
+              border: `1px solid ${Palette.simulatedBadge}`,
+              color: Palette.simulatedBadge,
+              fontFamily: "sans-serif",
+              fontSize: 12,
+              letterSpacing: "0.08em",
+            }}
+          >
+            SIMULATED
+          </div>
+        )}
       </div>
     );
   },

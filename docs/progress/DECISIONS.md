@@ -458,6 +458,21 @@ Reported, not pass or fail: our longest continuous illumination and shadow perio
 
 ---
 
+### D-031 · 2026-10-03 · Accepted
+
+**Context:** Dev 2 answered the review of PR #13 with PR #15 (`dev2/integration`). Dev 3 has made no commits, and Stage 1 is due Oct 7 (code freeze Oct 6 noon). The team lead decided that Dev 1 takes the critical path, and that Dev 2's pull requests are fixed on a branch of Dev 1's and merged, instead of being sent back repeatedly.
+
+**Decision:**
+
+1. **Review of PR #15** (CI green, `pnpm verify` exit 0 on the branch, a real-browser run of Dev 2's preview page with mock tiles): the items of the first review are fixed except those below. The Sun and Earth are real inputs or nothing, the horizon ring and the Fisheye use the real mask and the same east/north/up, the pin is in tile-plane coordinates, the mesh and shadow lookup respect the border, missing child tiles no longer leave holes, the invented overlays are removed, per-tile materials fix the shared-uniform problem (confirmed in the three.js 0.186.1 source), and the cache is per source and drops failures.
+2. **Amends D-030 items 5 and 6.** Dev 2 replaced my MOON_ME rotation recipe with a flat stereographic one (up is +Y; north `(sin lon, 0, -cos lon)`; east `(cos lon, 0, sin lon)`; azimuth clockwise from north). That is right for this scene and mine was not: the terrain is drawn as heights over a flat plane, so the Sun's azimuth and elevation at the site must be applied in the site's own frame on that plane. My rotation would have tilted the Sun 0.2° against the drawn ground at Shackleton. (The projection is conformal, so azimuths are exact.) The limit in item 6 stays: away from the site the flat scene is an approximation.
+3. **Fixes made by Dev 1 on top of Dev 2's branch** (`dev1/S1-06-scene-fixes`, Dev 2's commits kept): the SIMULATED badge in `MoonScene` (shared rule `isSimulated`, also used by the Fisheye); terrain with no Sun is ambient-only (the shader had been given a default overhead Sun); the dev preview's latitude and longitude (an operator-precedence slip made them degrees/180); camera near plane 5 m instead of 0.1 m (depth precision at 10 km, estimated, not measured); `shadows="percentage"` (three removed the soft type); stale `useImperativeHandle` dependencies; and tests for the tile cache, the child-tile fallback, the mesh seams, the horizon ring and the badge rule (14 new, each shown to fail under a deliberate mutation). The cache, the child loading and the vertex heights moved out of the React component into `tileCache.ts` and `tileMesh.ts` so they can be tested.
+4. **Ownership for Stage 1.** Dev 1 builds the web app's Lab page, site picker, time scrubber, timeline barcode and Evidence page in `apps/web` (Dev 3's folder; Dev 3 has not started), and the scene integration (S1-06b). Dev 3 stays out of `app/page.tsx` and `app/live-readout.tsx`. Cut for Stage 1: Story Mode, the Analyst, the window finder, the Fisheye in the app if it costs time, and any Earth-link figure (S1-05h). Fallback if the 3D scene is not good by Oct 5 morning: a shaded-relief image from the real tiles, lit with the engine's Sun azimuth and elevation (2D canvas).
+
+**Not verified:** the scene with real tiles (the preview uses the 40 km mock); frame rate and level selection at 600 km; the Hero sequence; the near plane's effect (an estimate only).
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._

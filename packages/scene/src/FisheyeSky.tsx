@@ -4,7 +4,8 @@ import { OrthographicCamera, Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { FisheyeSkyProps, SceneInputs } from "./types";
 import { Palette } from "./palette";
-import type { HorizonMask, TileSource } from "@sightline/contracts";
+import type { HorizonMask, TileManifest, TileSource } from "@sightline/contracts";
+import { isSimulated } from "./simulated";
 
 function FisheyeContent({
   inputs,
@@ -19,11 +20,11 @@ function FisheyeContent({
   const earthRef = useRef<THREE.Mesh>(null);
   const dataLabelRef = useRef<THREE.Mesh>(null);
   const simBadgeRef = useRef<THREE.Mesh>(null);
-  const [isManifestSimulated, setIsManifestSimulated] = useState(false);
+  const [manifest, setManifest] = useState<TileManifest | null>(null);
 
   useEffect(() => {
     tileSource.getManifest().then((m) => {
-      setIsManifestSimulated(m.simulated);
+      setManifest(m);
     });
   }, [tileSource]);
 
@@ -35,8 +36,7 @@ function FisheyeContent({
       dataLabelRef.current.visible = !hasData;
     }
     if (simBadgeRef.current) {
-      simBadgeRef.current.visible =
-        sunEarth?.simulated === true || horizon?.simulated === true || isManifestSimulated === true;
+      simBadgeRef.current.visible = isSimulated(sunEarth, horizon, manifest);
     }
 
     if (sunRef.current) {

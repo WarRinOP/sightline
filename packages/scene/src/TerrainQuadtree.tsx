@@ -4,34 +4,8 @@ import * as THREE from "three";
 import type { TileSource, TileManifest, TileData, TileCoord } from "@sightline/contracts";
 import type { SceneInputs } from "./types";
 import { Palette } from "./palette";
-
-// --- Tile Cache ---
-// Cache tiles by coordinate and source to avoid re-fetching on remount, with LRU and failure eviction (Task 13 / H)
-const tileCache = new WeakMap<TileSource, Map<string, Promise<TileData>>>();
-
-function getCachedTile(source: TileSource, coord: TileCoord): Promise<TileData> {
-  let sourceCache = tileCache.get(source);
-  if (!sourceCache) {
-    sourceCache = new Map();
-    tileCache.set(source, sourceCache);
-  }
-  const key = `${coord.level}_${coord.x}_${coord.y}`;
-
-  if (!sourceCache.has(key)) {
-    const promise = source.getTile(coord).catch((e) => {
-      sourceCache!.delete(key);
-      throw e;
-    });
-    sourceCache.set(key, promise);
-
-    // Simple LRU: if over 1000 items, delete the oldest
-    if (sourceCache.size > 1000) {
-      const firstKey = sourceCache.keys().next().value;
-      if (firstKey) sourceCache.delete(firstKey);
-    }
-  }
-  return sourceCache.get(key)!;
-}
+import { getCachedTile, loadChildTiles } from "./tileCache";
+import { tileVertexHeightsM } from "./tileMesh";
 
 // --- Base Material ---
 const baseTerrainMaterial = new THREE.MeshStandardMaterial({
@@ -44,7 +18,9 @@ function createTileMaterial(heightTexture: THREE.Texture, bounds: THREE.Vector4)
   const mat = baseTerrainMaterial.clone();
   mat.customProgramCacheKey = () => "terrainQuadtree";
   mat.onBeforeCompile = (shader) => {
-    shader.uniforms.uSunDirection = { value: new THREE.Vector3(1, 0.5, 0) };
+    // No Sun until the app sends one (D-030): the shader draws ambient-only terrain, never a default Sun.
+    shader.uniforms.uSunEnabled = { value: 0 };
+    shader.uniforms.uSunDirection = { value: new THREE.Vector3(0, 1, 0) };
     shader.uniforms.uHeightTexture = { value: heightTexture };
     shader.uniforms.uBounds = { value: bounds };
     shader.uniforms.uLayerMode = { value: 0 };
@@ -63,6 +39,7 @@ function createTileMaterial(heightTexture: THREE.Texture, bounds: THREE.Vector4)
     );
 
     shader.fragmentShader = `
+      uniform float uSunEnabled;
       uniform vec3 uSunDirection;
       uniform sampler2D uHeightTexture;
       uniform vec4 uBounds; // x_min, y_min, x_max, y_max
@@ -110,6 +87,7 @@ function createTileMaterial(heightTexture: THREE.Texture, bounds: THREE.Vector4)
       }
       
       vec3 finalColor = gl_FragColor.rgb * (0.5 + 1.5 * lommelSeeliger) * shadowMask;
+      if (uSunEnabled < 0.5) finalColor = gl_FragColor.rgb * 0.3;
       
       // Apply overlays based on uLayerMode
       if (uLayerMode == 1) {
@@ -127,7 +105,7 @@ function createTileMaterial(heightTexture: THREE.Texture, bounds: THREE.Vector4)
 
 interface TerrainQuadtreeProps {
   tileSource: TileSource;
-  sunDirection: THREE.Vector3;
+  sunDirection: THREE.Vector3 | null;
   inputs: React.MutableRefObject<SceneInputs>;
 }
 
@@ -136,7 +114,7 @@ interface TerrainNodeProps {
   manifest: TileManifest;
   coord: TileCoord;
   bounds: { x_min: number; y_min: number; x_max: number; y_max: number };
-  sunDirection: THREE.Vector3;
+  sunDirection: THREE.Vector3 | null;
   inputs: React.MutableRefObject<SceneInputs>;
 }
 
@@ -186,26 +164,14 @@ function TerrainNode({
     geom.rotateX(-Math.PI / 2);
 
     const pos = geom.attributes.position as THREE.BufferAttribute;
-    if (pos) {
-      for (let i = 0; i < pos.count; i++) {
-        const col = i % vertices;
-        const row = vertices - 1 - Math.floor(i / vertices);
-
-        const idx00 = row * size_px + col;
-        const idx01 = row * size_px + col + 1;
-        const idx10 = (row + 1) * size_px + col;
-        const idx11 = (row + 1) * size_px + col + 1;
-
-        const h00 = heights[idx00] ?? 0;
-        const h01 = heights[idx01] ?? 0;
-        const h10 = heights[idx10] ?? 0;
-        const h11 = heights[idx11] ?? 0;
-
-        const hAvg = (h00 + h01 + h10 + h11) / 4;
-        pos.setY(i, offset_m + hAvg * scale_m);
-      }
-      geom.computeVertexNormals();
+    const vertexHeights = tileVertexHeightsM(tileData);
+    for (let i = 0; i < pos.count; i++) {
+      // The plane's first row is the tile's highest y (after the rotation), the heights start at the lowest.
+      const col = i % vertices;
+      const row = vertices - 1 - Math.floor(i / vertices);
+      pos.setY(i, vertexHeights[row * vertices + col] ?? 0);
     }
+    geom.computeVertexNormals();
 
     const data = new Float32Array(size_px * size_px);
     for (let i = 0; i < heights.length; i++) {
@@ -233,7 +199,9 @@ function TerrainNode({
     // Update layer mode and sun direction per frame if material is ready
     if (material && material.userData.shader) {
       const layerMode = inputs.current?.layers?.slope ? 1 : 0;
-      material.userData.shader.uniforms.uSunDirection.value.copy(sunDirection);
+      const u = material.userData.shader.uniforms;
+      u.uSunEnabled.value = sunDirection ? 1 : 0;
+      if (sunDirection) u.uSunDirection.value.copy(sunDirection);
       material.userData.shader.uniforms.uLayerMode.value = layerMode;
     }
 
@@ -251,24 +219,8 @@ function TerrainNode({
     if (shouldSubdivide && subdivisionState === 0) {
       setSubdivisionState(1); // loading
 
-      const nextLevel = coord.level + 1;
-      const c1 = { level: nextLevel, x: coord.x * 2, y: coord.y * 2 + 1 };
-      const c2 = { level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 + 1 };
-      const c3 = { level: nextLevel, x: coord.x * 2, y: coord.y * 2 };
-      const c4 = { level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 };
-
-      Promise.allSettled([
-        getCachedTile(tileSource, c1),
-        getCachedTile(tileSource, c2),
-        getCachedTile(tileSource, c3),
-        getCachedTile(tileSource, c4),
-      ]).then((results) => {
-        const allFulfilled = results.every((r) => r.status === "fulfilled");
-        if (allFulfilled) {
-          setSubdivisionState(2);
-        } else {
-          setSubdivisionState(3); // failed children
-        }
+      loadChildTiles(tileSource, coord).then((allLoaded) => {
+        setSubdivisionState(allLoaded ? 2 : 3); // 3: a child is missing, keep drawing this tile
       });
     } else if (!shouldSubdivide && (subdivisionState === 2 || subdivisionState === 3)) {
       setSubdivisionState(0);

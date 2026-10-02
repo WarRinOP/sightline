@@ -63,8 +63,8 @@ function DevApp() {
   const horizon: HorizonMask | null = hasData
     ? {
         location: {
-          lat_rad: (sites[0]?.lat_deg ?? 0 * Math.PI) / 180,
-          lon_rad: (sites[0]?.lon_deg ?? 0 * Math.PI) / 180,
+          lat_rad: ((sites[0]?.lat_deg ?? 0) * Math.PI) / 180,
+          lon_rad: ((sites[0]?.lon_deg ?? 0) * Math.PI) / 180,
           elev_m: sites[0]?.elev_m,
         },
         mast_height_m: 2,
