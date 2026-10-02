@@ -167,6 +167,16 @@ _To be written after P1-01 / P1-02._
 
 ---
 
+### D-017 · 2026-10-02 · Accepted
+
+**Context:** Dev 2 builds the 3D scene in `packages/scene` with `three`, `@react-three/fiber` and `@react-three/drei`, which are on the allowed list. `three` ships no TypeScript types, so `strict` TypeScript needs `@types/three`, which is not on the list (CLAUDE.md §7.5).
+
+**Decision:** Approve `@types/three` for `packages/scene`. Evidence (`npm view`, 2026-10-02): `@types/three` 0.186.0, license MIT; `three` 0.186.1, license MIT. The types package tracks the `three` minor version, so install the pair `three@0.186.x` with `@types/three@0.186.0`, exact-pinned. Dev 1 edits `package.json` and the lockfile (AGENTS.md §4); Dev 2 asks in an issue when ready (S1-01c).
+
+**Consequences:** No dependency is installed by this entry. Dev 2 may not install it themselves. Any other package for the scene still needs its own entry.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._
