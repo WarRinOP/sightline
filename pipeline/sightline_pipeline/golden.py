@@ -64,6 +64,10 @@ def enu_basis(lat_rad: float, lon_rad: float) -> tuple[Vec, Vec, Vec]:
 def az_el(v: Vec, lat_rad: float, lon_rad: float) -> tuple[float, float]:
     up, east, north = enu_basis(lat_rad, lon_rad)
     az = math.atan2(float(v @ east), float(v @ north)) % (2 * math.pi)
+    # A tiny negative angle (rounding noise on a vector pointing due north) rounds up to exactly
+    # 2π under `%`, which is outside [0, 2π); it is the same direction as 0.
+    if az >= 2 * math.pi:
+        az = 0.0
     return az, math.asin(float(v @ up) / float(np.linalg.norm(v)))
 
 

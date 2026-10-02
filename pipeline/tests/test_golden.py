@@ -35,6 +35,15 @@ def test_az_el_conventions() -> None:
     assert math.isclose(az_el(up, lat, lon)[1], math.pi / 2)
 
 
+def test_az_just_west_of_north_stays_below_two_pi() -> None:
+    # East component of -1.1e-16: atan2 gives about -1e-16 and `% 2π` used to round up to 2π,
+    # which broke the [0, 2π) convention (seen on a CI runner whose matmul rounded the other way).
+    lat, lon = -1.2, 2.1
+    _up, east, north = enu_basis(lat, lon)
+    az = az_el(north - 1e-16 * east, lat, lon)[0]
+    assert 0.0 <= az < 2 * math.pi
+
+
 def test_disk_fraction_limits_and_symmetry() -> None:
     r = 0.00465
     assert math.isclose(disk_fraction(0.1, 0.1, r), 0.5)
