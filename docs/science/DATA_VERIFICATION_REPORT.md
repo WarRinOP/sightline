@@ -248,6 +248,8 @@ The `75s_120m` variants exist in `…/extras/illumination/img/` (116,250,752 B e
 
 - Also, Barker et al. (2021) report site illumination for **2024-01-01 → 2026-01-01 at 1 m and 5 m above the surface** (Site01 ROIs 4–6 best). That's a second, recent validation target that matches our mast-height feature.
 
+- **Update 2026-10-02 (S1-05e, D-025):** this section holds no published percentages. Barker et al. (2021) Table 2 was read from the NTRS accepted manuscript: it is for seven Site 1 Regions of Interest chosen for nominal average illumination above 70 % at 1 m, and its values are the 1st percentile over 100 DEM error clones. It has no values for Shackleton or de Gerlache. The AVGVISIB label and readme do not give the simulation span or the observer height of the 2016 release (the 2011 paper's abstract says several 18.6-year cycles at 6 h for the original 240 m work). Comparison: `docs/science/METHODS.md` §7.
+
 ---
 
 ## 5. Draft `pipeline/sources.yaml`

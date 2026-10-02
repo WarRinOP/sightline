@@ -1,0 +1,351 @@
+{
+ "schema_version": 1,
+ "generated_by": "sightline benchmark 0.1.0",
+ "criteria_source": "docs/progress/DECISIONS.md D-025, fixed before the first run",
+ "paper": {
+  "dataset_id": "ntrs-barker2021-pdf",
+  "citation": "Barker, M.K., et al. (2021) Planetary and Space Science 203:105119, doi:10.1016/j.pss.2020.105119"
+ },
+ "map": {
+  "dataset_id": "pds-avgvisib-85s-60m",
+  "citation": "Mazarico, E., et al. (2011) Icarus 211:1066-1081, doi:10.1016/j.icarus.2010.10.030 (release 2016-08)"
+ },
+ "barker_table2": {
+  "start_utc": "2024-01-01T00:00:00",
+  "end_utc": "2026-01-01T00:00:00",
+  "steps": 17544,
+  "rows": [
+   {
+    "roi": 1,
+    "x_km": -11.5825,
+    "y_km": -12.4625,
+    "ground_m": 1958.32,
+    "ours_dz1_pct": 80.84,
+    "ours_dz1_limb_pct": 80.85,
+    "ours_dz1_lit_pct": 84.479,
+    "ours_dz1_lcip_days": 198.33,
+    "ours_dz1_lcsp_days": 12.04,
+    "paper_dz1_A": 68.03,
+    "paper_dz1_B": 49.3,
+    "paper_dz1_C": 85.84,
+    "paper_dz1_lcip_1_A_days": 63.35,
+    "paper_dz1_lcsp_99_A_days": 16.55,
+    "ours_dz5_pct": 91.207,
+    "ours_dz5_limb_pct": 91.21,
+    "ours_dz5_lit_pct": 94.266,
+    "ours_dz5_lcip_days": 232.42,
+    "ours_dz5_lcsp_days": 3.92,
+    "paper_dz5_A": 89.26,
+    "paper_dz5_B": 88.21,
+    "paper_dz5_C": 91.83,
+    "paper_dz5_lcip_1_A_days": 215.79,
+    "paper_dz5_lcsp_99_A_days": 5.29
+   },
+   {
+    "roi": 2,
+    "x_km": -11.4875,
+    "y_km": -12.5575,
+    "ground_m": 1958.08,
+    "ours_dz1_pct": 79.594,
+    "ours_dz1_limb_pct": 79.587,
+    "ours_dz1_lit_pct": 83.345,
+    "ours_dz1_lcip_days": 198.17,
+    "ours_dz1_lcsp_days": 13.62,
+    "paper_dz1_A": 70.32,
+    "paper_dz1_B": 55.57,
+    "paper_dz1_C": 85.75,
+    "paper_dz1_lcip_1_A_days": 113.8,
+    "paper_dz1_lcsp_99_A_days": 17.84,
+    "ours_dz5_pct": 90.451,
+    "ours_dz5_limb_pct": 90.461,
+    "ours_dz5_lit_pct": 93.365,
+    "ours_dz5_lcip_days": 232.96,
+    "ours_dz5_lcsp_days": 5.38,
+    "paper_dz5_A": 88.51,
+    "paper_dz5_B": 87.82,
+    "paper_dz5_C": 91.24,
+    "paper_dz5_lcip_1_A_days": 216.28,
+    "paper_dz5_lcsp_99_A_days": 7.31
+   },
+   {
+    "roi": 3,
+    "x_km": -11.3525,
+    "y_km": -12.5025,
+    "ground_m": 1956.45,
+    "ours_dz1_pct": 74.442,
+    "ours_dz1_limb_pct": 74.443,
+    "ours_dz1_lit_pct": 78.711,
+    "ours_dz1_lcip_days": 175.96,
+    "ours_dz1_lcsp_days": 16.08,
+    "paper_dz1_A": 67.51,
+    "paper_dz1_B": 57.6,
+    "paper_dz1_C": 77.31,
+    "paper_dz1_lcip_1_A_days": 117.86,
+    "paper_dz1_lcsp_99_A_days": 22.23,
+    "ours_dz5_pct": 87.076,
+    "ours_dz5_limb_pct": 87.088,
+    "ours_dz5_lit_pct": 91.65,
+    "ours_dz5_lcip_days": 232.96,
+    "ours_dz5_lcsp_days": 6.12,
+    "paper_dz5_A": 84.53,
+    "paper_dz5_B": 83.64,
+    "paper_dz5_C": 89.78,
+    "paper_dz5_lcip_1_A_days": 216.89,
+    "paper_dz5_lcsp_99_A_days": 8.41
+   },
+   {
+    "roi": 4,
+    "x_km": -11.2875,
+    "y_km": -12.1675,
+    "ground_m": 1956.39,
+    "ours_dz1_pct": 82.604,
+    "ours_dz1_limb_pct": 82.62,
+    "ours_dz1_lit_pct": 87.517,
+    "ours_dz1_lcip_days": 218.29,
+    "ours_dz1_lcsp_days": 6.75,
+    "paper_dz1_A": 69.61,
+    "paper_dz1_B": 52.19,
+    "paper_dz1_C": 86.81,
+    "paper_dz1_lcip_1_A_days": 136.49,
+    "paper_dz1_lcsp_99_A_days": 13.27,
+    "ours_dz5_pct": 88.86,
+    "ours_dz5_limb_pct": 88.874,
+    "ours_dz5_lit_pct": 93.08,
+    "ours_dz5_lcip_days": 233.42,
+    "ours_dz5_lcsp_days": 3.75,
+    "paper_dz5_A": 88.12,
+    "paper_dz5_B": 87.43,
+    "paper_dz5_C": 91.11,
+    "paper_dz5_lcip_1_A_days": 231.2,
+    "paper_dz5_lcsp_99_A_days": 4.0
+   },
+   {
+    "roi": 5,
+    "x_km": -11.1025,
+    "y_km": -11.9425,
+    "ground_m": 1950.93,
+    "ours_dz1_pct": 78.272,
+    "ours_dz1_limb_pct": 78.29,
+    "ours_dz1_lit_pct": 83.641,
+    "ours_dz1_lcip_days": 176.25,
+    "ours_dz1_lcsp_days": 8.46,
+    "paper_dz1_A": 70.38,
+    "paper_dz1_B": 56.25,
+    "paper_dz1_C": 84.47,
+    "paper_dz1_lcip_1_A_days": 142.17,
+    "paper_dz1_lcsp_99_A_days": 15.24,
+    "ours_dz5_pct": 86.747,
+    "ours_dz5_limb_pct": 86.761,
+    "ours_dz5_lit_pct": 90.789,
+    "ours_dz5_lcip_days": 220.5,
+    "ours_dz5_lcsp_days": 4.0,
+    "paper_dz5_A": 85.71,
+    "paper_dz5_B": 84.94,
+    "paper_dz5_C": 88.38,
+    "paper_dz5_lcip_1_A_days": 218.98,
+    "paper_dz5_lcsp_99_A_days": 4.52
+   },
+   {
+    "roi": 6,
+    "x_km": -10.8025,
+    "y_km": -11.7375,
+    "ground_m": 1948.35,
+    "ours_dz1_pct": 84.758,
+    "ours_dz1_limb_pct": 84.764,
+    "ours_dz1_lit_pct": 89.791,
+    "ours_dz1_lcip_days": 205.38,
+    "ours_dz1_lcsp_days": 5.21,
+    "paper_dz1_A": 71.15,
+    "paper_dz1_B": 56.56,
+    "paper_dz1_C": 86.74,
+    "paper_dz1_lcip_1_A_days": 81.01,
+    "paper_dz1_lcsp_99_A_days": 12.74,
+    "ours_dz5_pct": 88.035,
+    "ours_dz5_limb_pct": 88.053,
+    "ours_dz5_lit_pct": 92.02,
+    "ours_dz5_lcip_days": 221.33,
+    "ours_dz5_lcsp_days": 3.62,
+    "paper_dz5_A": 87.35,
+    "paper_dz5_B": 86.97,
+    "paper_dz5_C": 89.05,
+    "paper_dz5_lcip_1_A_days": 220.98,
+    "paper_dz5_lcsp_99_A_days": 4.16
+   },
+   {
+    "roi": 7,
+    "x_km": -10.2275,
+    "y_km": -11.5525,
+    "ground_m": 1928.7,
+    "ours_dz1_pct": 76.371,
+    "ours_dz1_limb_pct": 76.381,
+    "ours_dz1_lit_pct": 84.382,
+    "ours_dz1_lcip_days": 116.92,
+    "ours_dz1_lcsp_days": 6.08,
+    "paper_dz1_A": 67.36,
+    "paper_dz1_B": 53.72,
+    "paper_dz1_C": 83.44,
+    "paper_dz1_lcip_1_A_days": 100.23,
+    "paper_dz1_lcsp_99_A_days": 14.54,
+    "ours_dz5_pct": 83.214,
+    "ours_dz5_limb_pct": 83.23,
+    "ours_dz5_lit_pct": 87.437,
+    "ours_dz5_lcip_days": 145.88,
+    "ours_dz5_lcsp_days": 5.21,
+    "paper_dz5_A": 82.79,
+    "paper_dz5_B": 82.47,
+    "paper_dz5_C": 84.98,
+    "paper_dz5_lcip_1_A_days": 119.07,
+    "paper_dz5_lcsp_99_A_days": 5.42
+   }
+  ],
+  "criteria": {
+   "A1_floor": true,
+   "A2_ceiling": true,
+   "A3_median_at_1m_pct": 79.594,
+   "A3_median_at_least_70": true,
+   "passes": true
+  },
+  "limb_darkening_u_assumed": 0.6
+ },
+ "avgvisib": {
+  "orientation": {
+   "chosen": "identity",
+   "zero_minus_lit_mean_height_m": {
+    "identity": -1161.6,
+    "rot90": 65.2,
+    "rot180": -374.3,
+    "rot270": -131.1,
+    "flip_x": -147.7,
+    "flip_y": 122.9,
+    "transpose": -218.0,
+    "anti_transpose": -489.3
+   },
+   "margin_to_second_m": 672.3
+  },
+  "points_per_tile": 300,
+  "rays": 360,
+  "all_tiles": {
+   "points": 900,
+   "spearman_0m": 0.922,
+   "spearman_2m": 0.9503
+  },
+  "tiles": {
+   "shackleton-rim": {
+    "points": 300,
+    "map_mean": 0.1408,
+    "spearman_0m": 0.968,
+    "ours_mean_lit_0m": 0.1381,
+    "spearman_2m": 0.9739,
+    "ours_mean_lit_2m": 0.1503
+   },
+   "connecting-ridge": {
+    "points": 300,
+    "map_mean": 0.261,
+    "spearman_0m": 0.8511,
+    "ours_mean_lit_0m": 0.2579,
+    "spearman_2m": 0.8948,
+    "ours_mean_lit_2m": 0.2873
+   },
+   "de-gerlache-rim": {
+    "points": 300,
+    "map_mean": 0.2909,
+    "spearman_0m": 0.9103,
+    "ours_mean_lit_0m": 0.2822,
+    "spearman_2m": 0.9789,
+    "ours_mean_lit_2m": 0.3037
+   }
+  },
+  "sites_informational": {
+   "shackleton-rim": {
+    "map_pixel": 0.8519,
+    "map_3x3_min": 0.0626,
+    "map_3x3_max": 0.8519,
+    "ours_lit_0m": 0.8598,
+    "ours_mean_disk_0m": 0.8027,
+    "ours_lit_2m": 0.9071,
+    "ours_mean_disk_2m": 0.8595
+   },
+   "connecting-ridge": {
+    "map_pixel": 0.4387,
+    "map_3x3_min": 0.3667,
+    "map_3x3_max": 0.7695,
+    "ours_lit_0m": 0.3995,
+    "ours_mean_disk_0m": 0.3636,
+    "ours_lit_2m": 0.5266,
+    "ours_mean_disk_2m": 0.4758
+   },
+   "de-gerlache-rim": {
+    "map_pixel": 0.49,
+    "map_3x3_min": 0.331,
+    "map_3x3_max": 0.6127,
+    "ours_lit_0m": 0.2808,
+    "ours_mean_disk_0m": 0.2364,
+    "ours_lit_2m": 0.5983,
+    "ours_mean_disk_2m": 0.5364
+   }
+  },
+  "criteria": {
+   "rho_all_at_least": 0.8,
+   "rho_each_tile_at_least": 0.7,
+   "passes": true
+  }
+ },
+ "range_sensitivity_informational": {
+  "mean_disk_pct_at_1m_by_far_range": {
+   "50km": [
+    82.506,
+    79.594,
+    74.442,
+    84.463,
+    78.73,
+    88.452,
+    79.7
+   ],
+   "100km": [
+    82.414,
+    79.594,
+    74.442,
+    84.366,
+    78.73,
+    88.348,
+    79.7
+   ],
+   "150km": [
+    80.84,
+    79.594,
+    74.442,
+    82.717,
+    78.403,
+    85.026,
+    76.621
+   ],
+   "300km": [
+    80.84,
+    79.594,
+    74.442,
+    82.604,
+    78.272,
+    84.758,
+    76.371
+   ]
+  },
+  "max_abs_change_100km_to_300km_pp": 3.59
+ },
+ "engine_cross_check": {
+  "first_et": 820497729.18392,
+  "steps": 8761,
+  "mast_m": 2.0,
+  "shackleton-rim": {
+   "mean_disk_pct": 85.7615,
+   "lit_pct": 90.6746
+  },
+  "connecting-ridge": {
+   "mean_disk_pct": 45.5986,
+   "lit_pct": 51.0102
+  },
+  "de-gerlache-rim": {
+   "mean_disk_pct": 53.9638,
+   "lit_pct": 59.4681
+  }
+ }
+}

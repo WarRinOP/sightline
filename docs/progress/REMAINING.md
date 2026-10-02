@@ -36,7 +36,9 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
   - [~] **S1-05b** Tighten the known limits (METHODS §6). *Done 2026-10-02:* the mast dependence is exact (an envelope of lines per azimuth replaced a 13-height grid, D-024 item 3). *Open:* finer or per-bin-maximum rays; the Sun's disk against the mask across its width. *Dev 1, low priority.*
   - [x] **S1-05c** *(2026-10-02, D-024; PR #8)* Shackleton Rim moved to the crest of its rim ridge (highest 5 m pixel more than 1 km from the tile edge): 1739.1 m, 1.9 km from the old tile centre, which is on a steep wall.
   - [x] **S1-05d** *(2026-10-02, D-024; PR #8)* Real `getTimeline` for the three sites, with `longest_day_s` and `longest_day_start_et` added to the contract before the freeze. `findWindows` still refuses (M2-09).
-  - [ ] **S1-05e** **Validate the terrain results** against a published product (LOLA illumination or AVGVISIB, P1-04c, M2-13). Until then every illumination and visibility figure is "not yet validated". The most important open check. *Dev 1.*
+  - [x] **S1-05e** *(2026-10-02, D-025; PR #9)* Illumination benchmark. Method checked against Barker et al. (2021) Table 2 at its seven Site 1 regions (all pre-set criteria pass) and the pattern against the PDS AVGVISIB map (Spearman 0.95 over 900 points). The engine's illumination at the three sites is **not published**; cite it as "average visible fraction of the Sun's disk, computed with the method of Barker et al. (2021)". The 48.9 / 35.2 / 36.6 % are the lander profile's "lit", a different quantity. METHODS §7; `sightline benchmark`.
+  - [ ] **S1-05g** Dev 3: the home page now shows "average disk visible" and "any part visible" next to the lander-profile "Lit"; keep both labelled in the barcode and Evidence work (S1-09, S1-10). *Dev 3.*
+  - [ ] **S1-05h** Earth visibility and DSN link have no published reference compared yet (the AVGVISIB Earth map, `pds-avgvisib-85s-60m_earth`, is in the report but not fetched). Do before any link figure is cited. *Dev 1.*
   - [ ] **S1-05f** Dev 3: read `statistics.longest_day_s` and `longest_day_start_et` in the mission barcode (S1-09), and show what "lit" means (D-024 item 6). *Dev 3.*
 
 - [ ] **S1-06** Terrain scene, sun light from `getSunEarth`, pin, orbit camera, 20 s Hero capture. *Dev 2, Oct 1–5.*
@@ -117,7 +119,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
   - [ ] **P1-04b** Verify the Oct-2024 Artemis III region list and coordinates from NASA's source; map each region to a DEM tier (Cabeus B, Mons Mouton, Mons Mouton Plateau and Slater Plain have no 5 m site DEM).
 
-  - [ ] **P1-04c** Extract the AVGVISIB simulation time span and observer height from Mazarico et al. 2011 / the PDS readme.
+  - [~] **P1-04c** Extract the AVGVISIB simulation time span and observer height from Mazarico et al. 2011 / the PDS readme. *2026-10-02: not in the 2016 release's label or readme; the 2011 abstract says several 18.6-year cycles at 6 h for the original 240 m work (NTRS 20120010094). The paper's full text was not available. Open for the 2016 60 m release.*
 
   - [ ] **P1-04d** Verify the Barker et al. 2023 PSJ citation/DOI for PGDA #90.
 

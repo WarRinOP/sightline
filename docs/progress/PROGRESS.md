@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #8 (S1-05a, c, d); validation of the terrain results (S1-05e); Dev 3 and Dev 2 have not started |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #9 (S1-05e); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -27,12 +27,12 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| S1 Stage 1 sprint (Oct 1–7) | In progress | 88% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 92% |
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
 | M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden` built; kernels and 4 DEMs pinned) | 35% |
-| M2 Engine | In progress (time, frames, ephemeris, `getSunEarth`, terrain horizons for 3 sites and `getTimeline` real in a browser worker; windows not built; results not yet validated) | 45% |
+| M2 Engine | In progress (time, frames, ephemeris, `getSunEarth`, terrain horizons for 3 sites and `getTimeline` real in a browser worker; illumination method checked against Barker 2021 and AVGVISIB; windows not built; link not checked) | 50% |
 | M3 Visual Canvas | Not started | 0% |
 | M4 Command Center UI | Not started | 0% |
 | M5 Story & Analyst | Not started | 0% |
@@ -77,6 +77,43 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 018 — 2026-10-02 — S1-05e illumination benchmark (Claude Code)
+
+**Phase / tasks:** S1-05e (M2-13 in part, P1-04c in part). Branch `dev1/S1-05e-illumination-benchmark` from `main` after PR #8 merged. S1-05a and S1-05c were already ticked.
+
+**Done:**
+
+- Checked what the brief said exists. `DATA_VERIFICATION_REPORT.md` §4.2 has no published percentages. Barker et al. (2021) Table 2 is real but is for seven Site 1 Regions of Interest selected for nominal illumination above 70 % at 1 m, as the 1st percentile over 100 DEM error clones. So there is no published number for our three sites.
+- Fetched and pinned the paper (`ntrs-barker2021-pdf`) and the PDS AVGVISIB map (`pds-avgvisib-85s-60m`); transcribed Table 2 into `pipeline/benchmarks/barker2021_table2.json`; wrote `sightline benchmark` (`benchmark.py`) and fixed the pass criteria in D-025, **committed before the first run**.
+- Benchmark A (Barker's method at their seven centroids, 2024 to 2026, 1 m and 5 m) and B (900 random points against the AVGVISIB map): both pass.
+- Found that the headline 48.9 / 35.2 / 36.6 % are the lander profile's "lit" (Sun's centre above the horizontal), not the published "illumination". The comparable 2026 figures at 2 m are 85.8 / 45.6 / 54.0 % (mean visible fraction of the disk). The home page now shows both, labelled.
+- METHODS §7, D-025 (results and what may be cited), CITATIONS.md (new), a correction note in the data report, and an engine test that ties the benchmark to `getTimeline`.
+
+**Verified by:**
+
+- `pnpm verify` exit 0: contracts 41, engine 167, web 6, parity 34; build ok. Pipeline: `ruff check`, `ruff format --check`, `mypy --strict` (12 files) clean; `pytest` 111 passed (the real-DEM ones ran locally); `uv sync --locked` ok.
+- Benchmark A: ours at the seven centroids 74.4 to 84.8 % (1 m) and 83.2 to 91.2 % (5 m); the paper's A 67.4 to 71.2 % and 82.8 to 89.3 %. Criteria A1 (at least A minus 2.0), A2 (at most C plus 5.0) and A3 (median at 1 m at least 70 %: 79.6 %) all pass; ours is at least A and below C in every case. The 28 longest-run comparisons are all in the expected direction.
+- Benchmark B: map orientation chosen from terrain (`identity`; zero pixels 1,162 m below the others against 489 m for the runner-up). Spearman 0.950 over 900 points at 2 m (0.974, 0.895, 0.979 per tile), 0.922 at 0 m.
+- The benchmark is deterministic (two runs identical in every shared field). The engine's `getTimeline` and the benchmark's Python path agree to the printed digit on 2026 at the three sites (an engine test).
+- Unit tests: the limb-darkening lookup had a sign error, caught by a test against the uniform disk and fixed; the Sun path matches SPICE's golden cases within 1e-4°; the criteria bite individually.
+- Browser (`next start`, `playwright-cli`): the three sites show 85.8 / 90.7 / 49.9, 45.6 / 51.0 / 39.8 and 54.0 / 59.5 / 53.8 % (average disk, any part, link) and the lander row (48.9, 35.2, 36.6 % lit). Only console error: the missing favicon.
+- **Mistakes of mine:** the limb-darkening sign; I ran the benchmark once with a missing import that mypy had already flagged (3 minutes lost); the brief's premises (see above) were checked and corrected rather than followed; I wrote the Mazarico co-author list from memory and then checked it against NTRS (it was right).
+- **NOT VERIFIED:** the method at our three sites (no published value exists there); the DEM itself (both benchmarks use the same 5 m tiles as the paper); Earth visibility and the DSN link (no reference compared); the AVGVISIB span and observer height; the paper's limb-darkening law (my 0.6 coefficient is an assumption, used only for a sensitivity run); the full text of Mazarico et al. 2011 (not available); CI on this branch (first run is the PR); Safari, Firefox, keyboard and screen-reader use of the new rows.
+
+**Decisions logged:** D-025
+
+**Blockers / risks:**
+
+- Do not cite 48.9 / 35.2 / 36.6 % as illumination. Cite the mean visible fraction with its definition, the year and the mast, and "not published for these exact points".
+- Link and Earth visibility are unchecked (S1-05h).
+- Contracts freeze tomorrow; the contract was not changed in this branch.
+
+**Next 3 tasks:**
+
+1. Merge PR #9; tell Dev 3 about the two labelled rows (S1-05g) and `longest_day_s` before the freeze.
+2. S1-05h: compare Earth visibility with the AVGVISIB Earth map before any link figure is cited.
+3. S1-11 README draft and S1-12 video inputs, using the cleared wording from D-025 and METHODS §7.
 
 ### Session 017 — 2026-10-02 — S1-05a, S1-05c, S1-05d: three horizons, the crest, the timeline (Claude Code)
 

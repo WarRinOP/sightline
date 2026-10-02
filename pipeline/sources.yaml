@@ -5,6 +5,35 @@
 schema_version: 1
 
 datasets:
+  # ---- Benchmarks: published products the engine's terrain results are compared with (S1-05e) ----
+  - id: ntrs-barker2021-pdf
+    group: benchmark
+    url: https://ntrs.nasa.gov/api/citations/20205009660/downloads/Mike%20Barker_%20Paper_%20Improved%20Lola.pdf
+    role: benchmark-paper
+    product_url: https://ntrs.nasa.gov/citations/20205009660
+    expected_bytes: 9853591
+    expected_content_type: application/pdf
+    sha256: 99bf83472a2ccc87df3764fd87459a612e9dfa8620969107f758933ea6dc9af3
+    md5: null
+    license: "NASA Technical Reports Server, distribution PUBLIC (accepted manuscript). Values are quoted with citation."
+    citation: "Barker, M.K., et al. (2021) Planetary and Space Science 203:105119, doi:10.1016/j.pss.2020.105119"
+    verified_at: 2026-10-02
+    note: "Accepted manuscript. Table 2 (page 8) is transcribed into pipeline/benchmarks/barker2021_table2.json."
+
+  - id: pds-avgvisib-85s-60m
+    group: benchmark
+    url: https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/extras/illumination/release_2016/img/avgvisib_85s_060m_201608.img
+    role: benchmark-illumination-map
+    product_url: https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/extras/illumination/readme_illumination_2016.txt
+    expected_bytes: 51166728
+    expected_content_type: application/octet-stream
+    sha256: 82dadf321dee28f1947c1fed81858d4cf50fe8eb2aa405aae114e8ab21c1efe1
+    md5: null
+    license: "NASA PDS Geosciences Node extras; not supported by the PDS or the LOLA team (readme). Credit requested."
+    citation: "Mazarico, E., et al. (2011) Icarus 211:1066-1081, doi:10.1016/j.icarus.2010.10.030 (release 2016-08)"
+    verified_at: 2026-10-02
+    note: "int16 little-endian, 5058 x 5058, 60 m/px, scaling 0.00004, covers 85S to the pole. Fraction of timesteps sunlit by any part of the solar disc. The simulation span and observer height of this release are not in its label or readme."
+
   # ---- SPICE: the 8-kernel essential set (DECISIONS D-008), 65,010,769 bytes in total ----
   - id: naif-lsk
     group: spice
