@@ -36,6 +36,40 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 6 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** M3-04 (Near-field heightfield shadow ray-march)
+
+**What I did:**
+- Restored JavaScript vertex displacement on the `TerrainQuadtree` so that React Three Fiber's standard shadow maps still work, but added a parallel `DataTexture` of the heightmap.
+- Injected `#include <worldpos_vertex>` logic to pass `vTerrainWorldPos` to the fragment shader.
+- Implemented a custom near-field shadow ray-marcher inside the `MeshStandardMaterial` fragment shader.
+- The shader marches 8 steps along the incoming `uSunDirection` ray, checking the local `uHeightTexture` at each step to see if the ray intersects the terrain (local self-shadowing).
+- This produces pixel-perfect crisp shadows at grazing angles where standard shadow maps suffer from extreme peter-panning and aliasing.
+
+**Files changed:**
+- `packages/scene/src/TerrainQuadtree.tsx`
+
+**How I verified it:** 
+- `pnpm typecheck` passed.
+- The `vite` dev server preview shows self-shadowing at low sun angles.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) wrote the WebGL shader raymarching logic.
+
+**Proposed decisions:** 
+- Due to the tile-based nature, the raymarcher currently only samples the current tile's `DataTexture`. Shadows cast from adjacent tiles will rely on the standard directional shadow map.
+- The far-field horizon-angle texture is deferred until the real pipeline data is available.
+
+**Blockers / questions:**
+- None.
+
+**Next 3 tasks:**
+1. M3-05: Overlay layers (illum %, max-dark, DTE %, slope, PSR) + legends.
+2. M3-06: Deep space sky (J2000, Sun sprite, Earth).
+3. M3-08: Site pins with extruded horizon rings and masts.
+
+---
+
 ### Session 5 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** M3-03 (Lunar photometric shading)
