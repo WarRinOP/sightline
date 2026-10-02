@@ -21,6 +21,7 @@ export const Palette = {
   skySun: "#FFC857",
   skyEarth: "#4CC9F0",
   skyCenterPin: "#FF0000",
+  simulatedBadge: "#C77DFF",
 
   // DeepSpaceSky
   stars: "#FFFAFA",

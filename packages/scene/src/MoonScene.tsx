@@ -1,6 +1,6 @@
-import { useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useRef, useState, forwardRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { MoonSceneProps, CameraHandle } from "./types";
 import { locationToScenePosition, getLocalDirectionInScene } from "./math";
@@ -14,10 +14,14 @@ function SceneContent({
   tileSource,
   inputs,
   cameraRef,
+  horizon,
 }: Omit<MoonSceneProps, "ref" | "onReady" | "onPickLocation"> & {
   cameraRef?: React.Ref<CameraHandle>;
+  horizon: import("@sightline/contracts").HorizonMask | null;
 }) {
-  const [sunDirection, setSunDirection] = useState(new THREE.Vector3(1, 0.5, 0));
+  const [sunDirection, setSunDirection] = useState<THREE.Vector3 | null>(null);
+  const [earthDirection, setEarthDirection] = useState<THREE.Vector3 | null>(null);
+  const [hasData, setHasData] = useState(true);
   const pinGroupRef = useRef<THREE.Group>(null);
   const controlsRef = useRef<React.ElementRef<typeof OrbitControls>>(null);
 
@@ -85,17 +89,32 @@ function SceneContent({
           pinGroupRef.current.position.copy(targetPos);
         }
 
-        // Update Sun direction based on inputs
-        if (inputs.current.sun) {
+        // Update Sun/Earth directions based on inputs
+        if (inputs.current.sun_earth) {
+          if (!hasData) setHasData(true);
           const newSunDir = getLocalDirectionInScene(
             lat_rad,
             lon_rad,
-            inputs.current.sun.az_rad,
-            inputs.current.sun.el_rad,
+            inputs.current.sun_earth.sun_azimuth_rad,
+            inputs.current.sun_earth.sun_elevation_rad,
           );
-          if (newSunDir.distanceTo(sunDirection) > 0.001) {
+          if (!sunDirection || newSunDir.distanceTo(sunDirection) > 0.001) {
             setSunDirection(newSunDir);
           }
+
+          const newEarthDir = getLocalDirectionInScene(
+            lat_rad,
+            lon_rad,
+            inputs.current.sun_earth.earth_azimuth_rad,
+            inputs.current.sun_earth.earth_elevation_rad,
+          );
+          if (!earthDirection || newEarthDir.distanceTo(earthDirection) > 0.001) {
+            setEarthDirection(newEarthDir);
+          }
+        } else {
+          if (hasData) setHasData(false);
+          if (sunDirection) setSunDirection(null);
+          if (earthDirection) setEarthDirection(null);
         }
       }
     }
@@ -141,20 +160,26 @@ function SceneContent({
       <color attach="background" args={[Palette.sceneBackground]} />
 
       {/* Deep Space Sky */}
-      <DeepSpaceSky sunDirection={sunDirection} />
+      <DeepSpaceSky sunDirection={sunDirection} earthDirection={earthDirection} />
 
       {/* Sun Light */}
-      <directionalLight
-        position={sunDirection.clone().multiplyScalar(100)}
-        intensity={1.5}
-        castShadow
-        shadow-mapSize={[1024, 1024]}
-      />
+      {sunDirection && (
+        <directionalLight
+          position={sunDirection.clone().multiplyScalar(100)}
+          intensity={1.5}
+          castShadow
+          shadow-mapSize={[1024, 1024]}
+        />
+      )}
       <ambientLight intensity={0.1} />
 
       {/* Real Terrain mesh */}
       <group>
-        <TerrainQuadtree tileSource={tileSource} sunDirection={sunDirection} inputs={inputs} />
+        <TerrainQuadtree
+          tileSource={tileSource}
+          sunDirection={sunDirection || new THREE.Vector3(0, 1, 0)}
+          inputs={inputs}
+        />
       </group>
 
       {/* Site pin */}
@@ -163,8 +188,19 @@ function SceneContent({
           label={
             sites.find((s) => s.id === inputs.current?.selected_site_id)?.name || "Target Site"
           }
-          horizonMask={inputs.current?.horizon_mask}
+          horizonMask={horizon}
         />
+        {!hasData && (
+          <Text
+            position={[0, 80, 0]}
+            fontSize={20}
+            color={Palette.pinText}
+            outlineWidth={2}
+            outlineColor={Palette.pinTextOutline}
+          >
+            No Sun/Earth data
+          </Text>
+        )}
       </group>
 
       <OrbitControls
@@ -178,16 +214,24 @@ function SceneContent({
   );
 }
 
-export function MoonScene({ sites, tileSource, inputs, ref, onReady }: MoonSceneProps) {
-  useEffect(() => {
-    onReady?.();
-  }, [onReady]);
+export const MoonScene = forwardRef<CameraHandle, Omit<MoonSceneProps, "ref">>(
+  ({ sites, tileSource, inputs, horizon, onReady }, ref) => {
+    useEffect(() => {
+      onReady?.();
+    }, [onReady]);
 
-  return (
-    <div style={{ width: "100%", height: "100%", display: "block" }}>
-      <Canvas shadows camera={{ position: [0, 5000, 10000], fov: 45, near: 0.1, far: 500000 }}>
-        <SceneContent sites={sites} tileSource={tileSource} inputs={inputs} cameraRef={ref} />
-      </Canvas>
-    </div>
-  );
-}
+    return (
+      <div style={{ width: "100%", height: "100%", display: "block" }}>
+        <Canvas shadows camera={{ position: [0, 5000, 10000], fov: 45, near: 0.1, far: 500000 }}>
+          <SceneContent
+            sites={sites}
+            tileSource={tileSource}
+            inputs={inputs}
+            cameraRef={ref}
+            horizon={horizon}
+          />
+        </Canvas>
+      </div>
+    );
+  },
+);

@@ -5,42 +5,59 @@ import * as THREE from "three";
 import { Palette } from "./palette";
 
 interface DeepSpaceSkyProps {
-  sunDirection: THREE.Vector3;
-  earthDirection?: THREE.Vector3;
+  sunDirection: THREE.Vector3 | null;
+  earthDirection: THREE.Vector3 | null;
 }
 
-export function DeepSpaceSky({
-  sunDirection,
-  earthDirection = new THREE.Vector3(0, 0.5, 1).normalize(),
-}: DeepSpaceSkyProps) {
-  const sunRef = useRef<THREE.Mesh>(null);
+const SUN_ANGULAR_RADIUS = 0.2666 * (Math.PI / 180);
+const EARTH_ANGULAR_RADIUS = 0.95 * (Math.PI / 180);
+
+export function DeepSpaceSky({ sunDirection, earthDirection }: DeepSpaceSkyProps) {
+  const sunGroupRef = useRef<THREE.Group>(null);
   const earthRef = useRef<THREE.Mesh>(null);
 
-  useFrame(() => {
-    // Keep Sun and Earth positioned at "infinity" relative to camera, but here we just place them far away.
-    // In a real skybox, they would follow the camera or be rendered in a background pass.
-    if (sunRef.current) {
-      // 20000 km away
-      sunRef.current.position.copy(sunDirection).multiplyScalar(20000);
+  useFrame(({ camera }) => {
+    const D = 100000; // 100km inside far plane
+
+    if (sunGroupRef.current) {
+      if (sunDirection) {
+        sunGroupRef.current.visible = true;
+        sunGroupRef.current.position
+          .copy(camera.position)
+          .add(sunDirection.clone().multiplyScalar(D));
+      } else {
+        sunGroupRef.current.visible = false;
+      }
     }
+
     if (earthRef.current) {
-      earthRef.current.position.copy(earthDirection).multiplyScalar(15000);
-      // Make earth look at origin
-      earthRef.current.lookAt(0, 0, 0);
+      if (earthDirection) {
+        earthRef.current.visible = true;
+        earthRef.current.position
+          .copy(camera.position)
+          .add(earthDirection.clone().multiplyScalar(D));
+        earthRef.current.lookAt(camera.position);
+      } else {
+        earthRef.current.visible = false;
+      }
     }
   });
 
+  const sunRadius = 100000 * Math.tan(SUN_ANGULAR_RADIUS);
+  const earthRadius = 100000 * Math.tan(EARTH_ANGULAR_RADIUS);
+
   return (
     <>
-      <Stars radius={10000} depth={500} count={5000} factor={4} saturation={0} fade speed={0.5} />
+      <Stars radius={200000} depth={500} count={5000} factor={4} saturation={0} fade speed={0.5} />
 
       {/* Sun */}
-      <mesh ref={sunRef}>
-        <sphereGeometry args={[500, 32, 32]} />
-        <meshBasicMaterial color={Palette.stars} />
-        {/* Simple bloom hack using a slightly larger transparent sphere */}
+      <group ref={sunGroupRef}>
         <mesh>
-          <sphereGeometry args={[700, 32, 32]} />
+          <sphereGeometry args={[sunRadius, 32, 32]} />
+          <meshBasicMaterial color={Palette.stars} />
+        </mesh>
+        <mesh>
+          <sphereGeometry args={[sunRadius * 1.4, 32, 32]} />
           <meshBasicMaterial
             color={Palette.sunInner}
             transparent
@@ -50,7 +67,7 @@ export function DeepSpaceSky({
           />
         </mesh>
         <mesh>
-          <sphereGeometry args={[1200, 32, 32]} />
+          <sphereGeometry args={[sunRadius * 2.4, 32, 32]} />
           <meshBasicMaterial
             color={Palette.sunOuter}
             transparent
@@ -59,12 +76,11 @@ export function DeepSpaceSky({
             depthWrite={false}
           />
         </mesh>
-      </mesh>
+      </group>
 
       {/* Earth */}
       <mesh ref={earthRef}>
-        <sphereGeometry args={[200, 32, 32]} />
-        {/* Earth phase is naturally created by the sunDirectional light hitting this standard material */}
+        <sphereGeometry args={[earthRadius, 32, 32]} />
         <meshStandardMaterial color={Palette.earth} roughness={0.7} metalness={0.1} />
       </mesh>
     </>

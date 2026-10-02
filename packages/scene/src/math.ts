@@ -34,30 +34,23 @@ export function getLocalDirectionInScene(
   az_rad: number,
   el_rad: number,
 ): THREE.Vector3 {
-  // Local Up in ME
-  const upMeX = Math.cos(lat_rad) * Math.cos(lon_rad);
-  const upMeY = Math.cos(lat_rad) * Math.sin(lon_rad);
-  const upMeZ = Math.sin(lat_rad);
+  // In the polar stereographic projection (South Pole at origin, XZ plane):
+  // South pole is at x=0, z=0.
+  // North (increasing latitude) points radially outward.
+  // x = rho * sin(lon), z = -rho * cos(lon)
+  // So North direction is (sin(lon), 0, -cos(lon))
+  const north = new THREE.Vector3(Math.sin(lon_rad), 0, -Math.cos(lon_rad)).normalize();
 
-  // Local North in ME
-  const northMeX = -Math.sin(lat_rad) * Math.cos(lon_rad);
-  const northMeY = -Math.sin(lat_rad) * Math.sin(lon_rad);
-  const northMeZ = Math.cos(lat_rad);
+  // East (increasing longitude) is 90 degrees clockwise from North?
+  // Wait, E x N = U.
+  // At lon=0, N=(0,0,-1). E=(1,0,0). (1,0,0) x (0,0,-1) = (0,1,0) = U.
+  // E = (cos(lon), 0, sin(lon))
+  const east = new THREE.Vector3(Math.cos(lon_rad), 0, Math.sin(lon_rad)).normalize();
 
-  // Local East in ME
-  const eastMeX = -Math.sin(lon_rad);
-  const eastMeY = Math.cos(lon_rad);
-  const eastMeZ = 0;
+  // Up is +Y
+  const up = new THREE.Vector3(0, 1, 0);
 
-  // Convert to Scene coordinates
-  // Scene X = ME Y
-  // Scene Y = ME -Z
-  // Scene Z = ME -X
-  const up = new THREE.Vector3(upMeY, -upMeZ, -upMeX);
-  const north = new THREE.Vector3(northMeY, -northMeZ, -northMeX);
-  const east = new THREE.Vector3(eastMeY, -eastMeZ, -eastMeX);
-
-  // Azimuth is clockwise from North in ENU
+  // Azimuth is clockwise from North
   const dEast = Math.sin(az_rad) * Math.cos(el_rad);
   const dNorth = Math.cos(az_rad) * Math.cos(el_rad);
   const dUp = Math.sin(el_rad);

@@ -2,31 +2,37 @@ import { useMemo } from "react";
 import * as THREE from "three";
 import { Text } from "@react-three/drei";
 import { Palette } from "./palette";
+import { getLocalDirectionInScene } from "./math";
 
 interface SitePinProps {
   label: string;
-  horizonMask?: number[] | null;
+  horizonMask?: import("@sightline/contracts").HorizonMask | null;
 }
 
 export function SitePin({ label, horizonMask }: SitePinProps) {
   const ringGeometry = useMemo(() => {
-    if (!horizonMask || horizonMask.length === 0) return null;
+    if (!horizonMask || horizonMask.mask_elevation_rad.length === 0) return null;
 
     const radius = 400; // Ring radius in meters
     const curvePoints: THREE.Vector3[] = [];
-    for (let i = 0; i <= 360; i++) {
-      const az = (i % 360) * (Math.PI / 180);
-      const el = (horizonMask[i % 360] || 0) * (Math.PI / 180);
 
-      const x = Math.sin(az) * radius;
-      const z = Math.cos(az) * radius;
-      const y = Math.tan(el) * radius; // Height above the horizontal plane at that radius
+    const mask = horizonMask.mask_elevation_rad;
+    const step = horizonMask.azimuth_step_rad;
+    const lat = horizonMask.location.lat_rad;
+    const lon = horizonMask.location.lon_rad;
 
-      curvePoints.push(new THREE.Vector3(x, y, z));
+    // Build the closed curve
+    for (let i = 0; i <= mask.length; i++) {
+      const idx = i % mask.length;
+      const az = idx * step;
+      const el = mask[idx] ?? 0;
+
+      const dir = getLocalDirectionInScene(lat, lon, az, el);
+      curvePoints.push(dir.multiplyScalar(radius));
     }
 
     const curve = new THREE.CatmullRomCurve3(curvePoints, true);
-    return new THREE.TubeGeometry(curve, 360, 5, 8, true);
+    return new THREE.TubeGeometry(curve, mask.length, 5, 8, true);
   }, [horizonMask]);
 
   return (
