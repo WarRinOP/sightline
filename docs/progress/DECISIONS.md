@@ -289,6 +289,26 @@ The 5 m and 80 m products agree with each other where both cover the point (abou
 
 ---
 
+### D-023 · 2026-10-02 · Accepted
+
+**Context:** S1-05 gives the engine a terrain horizon for one site so that "lit" and "Earth visible" are no longer flat-ground answers. The team lead's brief proposed raymarching over the Site04 DEM at 360 azimuths with `atan((z − z_obs)/r) − r/(2R)` and a `probeLit` returning `{is_lit, sun_elevation_rad, mask_elevation_rad}`.
+
+**Decision:**
+
+1. **Computed in the pipeline, loaded by the engine.** `sightline horizon` (Python, `horizon.py`) writes `horizon_shackleton-rim.json`; `packages/engine/src/horizon/` loads and evaluates it. The engine has no DEM tile loader yet (M2-04) and a 41 MB tile does not belong in a browser, so the brief's "precomputed mask" is followed. The Python ray-marcher is the only implementation; a TypeScript one with parity against it is still M2-05.
+2. **1440 azimuths (0.25°), not 360.** The contract exports `HORIZON_AZIMUTH_SAMPLES = 1440` and MASTER_PLAN says 0.25°; the brief said "e.g. 360". Contracts are unchanged.
+3. **Exact sphere geometry in place of the brief's `− r/(2R)` form.** They agree to O((r/R)³) (a test compares them on random terrain, 5e-5 rad). M2-05's acceptance asks for "exact curvature".
+4. **Two DEMs, not one.** The 5 m tile only reaches about 8 km (11 km at the corners), so a mask from it alone ignores terrain beyond. The 80 m map (already downloaded, same CRS, checked) supplies everything the tile does not cover out to 300 km. Terrain beyond that or outside both rasters is unseen (METHODS §6).
+5. **Mast height is a grid, interpolated.** The mask depends on mast height, so the file holds 13 heights from 0 to 20 m (the contract's maximum). My first comment said linear interpolation "errs towards shadow"; that was wrong (the angle is concave in height for ground above the eye) and was removed. The measured error is in METHODS §6: at most 2.2e-5° wherever the mask is below 3°, up to 0.31° where it is above 3°.
+6. **`probeLit` keeps the contract's result** `{epoch_et, lit, sun_disk_fraction, simulated}` rather than the brief's `{is_lit, sun_elevation_rad, mask_elevation_rad}`: `packages/contracts` freezes tomorrow, and `lit` is "any part of the Sun's disk above the mask". `getSunEarth` uses the mask at the Sun's and Earth's azimuths for the disk fraction and `earth_visible` (and so `dsn_visible`), for the one site that has a mask; every other site keeps the flat horizon.
+7. **`getHorizon` and `probeLit` refuse other places** with `NotAvailableError` (a location matches if it is within 2 m and 1 m of height of the mask's site); `getTimeline` and `findWindows` refuse everywhere until M2-08. Two existing engine tests that assumed Shackleton Rim has a flat horizon were pointed at Connecting Ridge, which has none.
+8. **UI (Dev 3's `live-readout.tsx`, at the team lead's direction as in D-022):** the two tiles show real values, tagged "Real terrain · not yet validated", when `getHorizon` resolves for the chosen site, and "—" otherwise. The note says the tile centre is on a steep crater wall.
+9. **A numerical bug of mine, found by a test:** the first `elevation_angle` subtracted two numbers near 1.7e6 m, which cost 1.7e-12 rad at small angles; rewritten as `(z − h) − (R+z)·2 sin²(a/2)`. Two of my first tests were also wrong about the physics (from a mast the highest ground is at the horizon distance `√(2Rh)`, not the farthest sample) and were corrected, not the code.
+
+**Consequences:** the Shackleton Rim tile centre now has terrain-aware light and Earth visibility. Measured for 2026, hourly, 2 m mast: Sun above the mask 11.0% of the time (58.0% to 60.1% on flat ground), Earth 0% (45% on flat ground), because the tile centre sits on a roughly 32° wall. Not validated against published maps (M2-13). A better demo observer (the crest, or a rim point from the Artemis III region list) is a catalog decision for the team lead (D-019, option B). Connecting Ridge and de Gerlache Rim need only the same command on their tiles (S1-05a).
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._

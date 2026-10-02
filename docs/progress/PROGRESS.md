@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #5 (S1-04) and PR #6 (S1-03a); Dev 3 and Dev 2 have not started |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #7 (S1-05); Dev 3 and Dev 2 have not started |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -27,12 +27,12 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| S1 Stage 1 sprint (Oct 1–7) | In progress | 70% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 80% |
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
 | M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden` built; kernels and 4 DEMs pinned) | 35% |
-| M2 Engine | In progress (time, frames, ephemeris, `getSunEarth` real and running in a browser worker; horizon not started) | 20% |
+| M2 Engine | In progress (time, frames, ephemeris, `getSunEarth` real in a browser worker; terrain horizon v0 for one site; timeline and windows not built) | 30% |
 | M3 Visual Canvas | Not started | 0% |
 | M4 Command Center UI | Not started | 0% |
 | M5 Story & Analyst | Not started | 0% |
@@ -77,6 +77,42 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 016 — 2026-10-02 — S1-05 terrain horizon v0 (Claude Code)
+
+**Phase / tasks:** S1-05 (and the parts of M2-05 and M1-07 it covers). Branch `dev1/S1-05-horizon-v0`, from `main` after PR #5 and #6 merged. S1-05 was marked `[~]` when started, after the team lead restated the early-start permission (CLAUDE.md §2.1; D-010 still has no written confirmation, P0-02).
+
+**Done:**
+
+- `sightline horizon` (`pipeline/sightline_pipeline/horizon.py`): great-circle rays on the 1737.4 km sphere, bilinear DEM sampling, exact curvature, 1440 azimuths, 13 mast heights (0 to 20 m); the 5 m Site04 tile to 12 km, the 80 m south-polar map to 300 km where the tile has no data. Writes `packages/engine/src/data/horizon_shackleton-rim.json` (205 KB, 3.5 s to run).
+- Engine: `packages/engine/src/horizon/` (`HorizonProfile`, `parseHorizonFile`); `computeSky` takes an optional terrain horizon; `SightlineEngineClient` answers `getHorizon`, `probeLit` and a terrain-aware `getSunEarth` for the Shackleton Rim tile centre and refuses `getHorizon` and `probeLit` elsewhere; `getTimeline` and `findWindows` refuse everywhere (M2-08).
+- Home page: the Sun disk and Link tiles show real values, tagged "Real terrain · not yet validated", for Shackleton Rim, and "—" for the other two sites (Dev 3's file, at the team lead's direction; D-023 item 8).
+- D-023, METHODS §6, AI disclosure, REMAINING (S1-05 done; S1-05a, b, c added).
+
+**Verified by:**
+
+- `pnpm verify` exit 0: contracts 41, engine 117 (17 new in `horizon.test.ts`), web 6 (one extended), parity 34; build ok. Pipeline: `ruff check`, `ruff format --check`, `mypy --strict` (11 files) clean; `pytest` 88 passed (14 new in `test_horizon.py`); `uv sync --locked` ok.
+- Real DEMs: my stereographic formula agrees with PROJ to 4.7e-10 m on 2,000 random points for both files' CRS; the site's height reads 769.68 m in the 5 m tile and 770.49 m in the 80 m map (catalog 769.7); the terrain around the centre rises 31 m in 50 m to the east and falls the same to the west (a roughly 32° wall), and the mask peaks at 32.7° there (`atan(31/50)` = 31.8°).
+- Analytic tests on synthetic terrain (these run in CI): sphere closed form; the 2 m-mast mask equals the flat-horizon dip `acos(R/(R+h))`; a 100 m wall; azimuth convention against independent 3-D vectors, including the seam at north; bowl floor against rim; mast monotonic (Δθ ≤ 0); brute-force scalar implementation with the textbook formula agrees within 5e-5 rad. Real-tile tests (skipped in CI without the DEMs): the crest sees a lower mean mask than the floor; the file regenerates; interpolation error below 0.001° where the mask is below 3°.
+- Engine over 2026 (hourly, 2 m mast): Sun above the mask 10.95% of the time (flat horizon 60.1%), Earth above it 0% (flat 45.2%). Engine output, not validated.
+- Browser (`next start`, `playwright-cli`): Shackleton Rim shows the two tiles with values and the tag "Real terrain · not yet validated"; Connecting Ridge shows "—" and "Not computed yet". The only console error is the missing favicon.
+- **Mistakes of mine, found by tests:** a numerical cancellation in the elevation formula (1.7e-12 rad); two wrong physics assumptions in my first tests; an unsupported comment that mast interpolation "errs towards shadow" (it does not; replaced by measured errors); and my guess that the TypeScript azimuth wrap had the same 2π bug as the Python one was wrong (only the Python did, fixed in PR #5). Two existing engine tests that assumed Shackleton Rim has a flat horizon were repointed at Connecting Ridge.
+- **NOT VERIFIED:** the mask against any independent horizon or illumination product (no LOLA illumination map or Horizons-style reference was used; M2-13); CI on this branch (first run is the PR); the real-DEM tests on Linux (they skip in CI); Safari and Firefox; keyboard and screen-reader use of the new tiles; that 0.25° rays do not miss narrow ridges (a known limit); the 300 km far field's effect (no run without it).
+
+**Decisions logged:** D-023
+
+**Blockers / risks:**
+
+- The Shackleton Rim tile centre is mid-wall: the Sun is lit 11% of 2026 and Earth is never visible there. That is the terrain, but it is a poor demo observer (S1-05c needs the team lead).
+- The result is unvalidated. Say "terrain horizon from LOLA, not yet validated" in the README and video, not "illumination".
+- Contracts freeze Oct 3 (tomorrow); no contract change was needed. `ProbeLitResult` kept its fields (D-023 item 6).
+- Dev 2 and Dev 3 still have no commits.
+
+**Next 3 tasks:**
+
+1. Merge PR #7; S1-05a (the same horizon for Connecting Ridge and de Gerlache Rim).
+2. Team lead: S1-05c, choose the demo observer; then M2-13-style check of the mask against a published illumination value.
+3. S1-11 README draft and S1-12 video inputs (real numbers on screen: directions, Horizons residuals, terrain horizon labelled unvalidated).
 
 ### Session 015 — 2026-10-02 — PR #5, S1-04a dropped, S1-03a real engine in the app (Claude Code)
 

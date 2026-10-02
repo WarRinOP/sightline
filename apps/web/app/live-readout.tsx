@@ -26,6 +26,8 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
   const [epoch_et, setEpochEt] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
   const [real, setReal] = useState<SunEarthState | null>(null);
+  // Per site: does the engine have a terrain horizon, and is it simulated? Asked, not assumed.
+  const [terrain, setTerrain] = useState<Record<string, { simulated: boolean } | null>>({});
 
   // Start the engine worker. StrictMode mounts twice in development; the first one is terminated.
   useEffect(() => {
@@ -90,7 +92,25 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
     };
   }, [engine, epoch_et, location]);
 
+  useEffect(() => {
+    if (!engine || !location || terrain[siteId] !== undefined) return;
+    let cancelled = false;
+    engine.client.getHorizon(location, 0).then(
+      (mask) => {
+        if (!cancelled) setTerrain((t) => ({ ...t, [siteId]: { simulated: mask.simulated } }));
+      },
+      () => {
+        // NotAvailableError: no terrain horizon for this site yet.
+        if (!cancelled) setTerrain((t) => ({ ...t, [siteId]: null }));
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [engine, location, siteId, terrain]);
+
   const provenance = engine?.client.provenance;
+  const siteTerrain = terrain[siteId];
   // The tag comes from the data, never from a constant: a simulated ephemeris shows the purple one.
   const realTag = provenance?.simulated ? "Simulated" : "Real · NAIF SPICE";
 
@@ -184,15 +204,43 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
           >
             Light and link at this site
           </h3>
-          <Tag simulated={false} text="Not computed yet" />
+          {siteTerrain === undefined ? null : siteTerrain ? (
+            <Tag
+              simulated={siteTerrain.simulated}
+              text={siteTerrain.simulated ? "Simulated" : "Real terrain · not yet validated"}
+            />
+          ) : (
+            <Tag simulated={false} text="Not computed yet" />
+          )}
         </div>
         <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Readout label="Sun disk visible" value="—" />
-          <Readout label="Link to Earth" value="—" />
+          <Readout
+            label="Sun disk visible"
+            value={
+              siteTerrain && real
+                ? `${(real.sun_disk_fraction * 100).toFixed(0)} %`
+                : siteTerrain === undefined
+                  ? "…"
+                  : "—"
+            }
+          />
+          <Readout
+            label="Link to Earth"
+            value={
+              siteTerrain && real
+                ? real.dsn_visible
+                  ? "yes"
+                  : "no"
+                : siteTerrain === undefined
+                  ? "…"
+                  : "—"
+            }
+          />
         </dl>
         <p className="text-xs text-text-3">
-          These need the terrain horizon (task S1-05 / M2-05), so no number is shown rather than one
-          that ignores the terrain or contradicts the directions above.
+          {siteTerrain
+            ? "Judged against the terrain horizon from NASA LOLA elevation data (5 m tile, 80 m map to 300 km), mast 0 m, as seen from the tile centre. This tile centre is on a steep crater wall, not on the rim crest. Not yet checked against published illumination maps. Link means Earth is above the terrain and at least one DSN complex sees it."
+            : "These need a terrain horizon, which exists only for Shackleton Rim so far (task S1-05), so no number is shown rather than one that ignores the terrain."}
         </p>
       </div>
     </section>

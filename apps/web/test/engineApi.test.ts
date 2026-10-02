@@ -83,6 +83,20 @@ describe("engine API behind the worker", () => {
       name: "NotAvailableError",
     });
 
+    // The terrain horizon of the one site that has one crosses the boundary intact, and the
+    // other sites are still refused with the error's name.
+    const rim = BUNDLED_SITES.find((s) => s.id === "shackleton-rim");
+    if (!rim) throw new Error("the bundled catalog has no Shackleton Rim");
+    const mask = await remote.getHorizon(siteLocation(rim), 2);
+    expect(mask.mask_elevation_rad).toHaveLength(1440);
+    expect(mask.simulated).toBe(false);
+    expect(await remote.probeLit(siteLocation(rim), epoch_et, 2)).toEqual(
+      await direct.probeLit(siteLocation(rim), epoch_et, 2),
+    );
+    await expect(remote.getHorizon(location, 2)).rejects.toMatchObject({
+      name: "NotAvailableError",
+    });
+
     remote[Comlink.releaseProxy]();
     port1.close();
     port2.close();

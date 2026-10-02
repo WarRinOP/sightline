@@ -81,6 +81,16 @@ and Earth directions for the three preset sites. The numbers on the page are the
 (the same code the SPICE and Horizons comparisons test); the AI chose the layout and the wording
 of the labels, and a test checks that the worker returns exactly what the engine returns.
 
+### The terrain horizon (S1-05, 2026-10-02)
+
+The AI wrote the ray-marching code that turns NASA LOLA elevation data (the 5 m Site04 tile and the
+80 m south-polar map) into a horizon mask for one site, the engine code that reads it, and the
+tests. The elevation numbers are NASA's; the AI wrote none of them. The mask is a command's output
+(`sightline horizon`) and the tests rebuild it and compare. The AI also made two physics mistakes
+in its first tests and one wrong claim in a code comment about interpolation; tests exposed them
+and they are recorded in `docs/progress/DECISIONS.md` (D-023). The result has not been validated
+against published illumination maps.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list
