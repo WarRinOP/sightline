@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #9 (S1-05e); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #10 (README and script); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -27,7 +27,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| S1 Stage 1 sprint (Oct 1–7) | In progress | 92% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 95% |
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
@@ -77,6 +77,39 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 019 — 2026-10-02 — S1-11 README, S1-12 video script (Claude Code)
+
+**Phase / tasks:** S1-11, S1-12 (draft). Branch `dev1/S1-11-readme-and-pitch` from `main` after PR #9 merged; S1-05e ticked.
+
+**Done:**
+
+- Rewrote `README.md`: hook, why it is hard, the three sites' results with definitions, a verification table with what it does not show, a Mermaid architecture diagram, "what works today" against "not built yet", run instructions, honesty and data credits, team. Every number is copied from the repo's generated files.
+- Wrote `docs/submission/DEMO_SCRIPT.md`: rules, a table of the only numbers that may be spoken, a five-part storyboard with narration (474 words, about 190 s), a capture checklist, and open items for the team lead.
+- D-026 records where the brief's wording was replaced and why.
+
+**Verified by:**
+
+- `pnpm verify` exit 0 (docs-only branch; contracts 41, engine 167, web 6, parity 34; build ok). Prettier clean on README and docs.
+- Every figure in the README table and the script's number table checked against `fixtures/golden/horizons_residuals.json`, `illumination_benchmark.json` and `sites.json` by a script (Sun 3.257e-8° = 0.117 milliarcsecond, Earth 2.648e-5° = 95.3 milliarcseconds, ratio 755; Spearman 0.9503; site figures).
+- All relative links in the README and the script resolve (script check).
+- `pnpm dev` serves the page at `http://localhost:3000` (HTTP 200, title and the Shackleton Rim crest entry present), as the README says.
+- The narration was counted with a script (the first estimate, 526 words, was wrong).
+- **NOT VERIFIED:** how GitHub renders the Mermaid diagram (not run; the syntax was checked by eye only); that a person can read the narration in the time (2.5 words a second is an assumption, not a recording); the team's agreement with the wording; the Stage 1 date, format and registration (open); the README on a clean clone (not run; `pnpm install` was not repeated from empty).
+
+**Decisions logged:** D-026
+
+**Blockers / risks:**
+
+- `next dev` rewrites `apps/web/AGENTS.md` (Dev 3's file) on every start; do not commit it (D-026 item 9).
+- The README says team registration is still to be completed and the early start is unconfirmed; change them when the facts change.
+- The video needs captures and a voice-over from people; nothing is recorded.
+
+**Next 3 tasks:**
+
+1. Merge PR #10; the team edits the script; record the captures (S1-12).
+2. Tell Dev 3 about the labelled rows and `longest_day_s` before the contracts freeze.
+3. S1-05h (Earth-link check) and S1-13/S1-14 (tag `v0.1-stage1`, submission).
 
 ### Session 018 — 2026-10-02 — S1-05e illumination benchmark (Claude Code)
 

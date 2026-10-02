@@ -111,6 +111,14 @@ including a finding that the headline "lit" figures were a different quantity fr
 "illumination". The paper's numbers are the authors'; the map is NASA's. The benchmark supports the
 method, not a validation at the three sites, and the documents say so.
 
+### README and video script (S1-11, S1-12, 2026-10-02)
+
+The AI drafted the README and the 240-second video script from the repository's own results, at the
+team lead's request. It kept the team lead's structure but replaced wording the results do not
+support (for example "sub-milliarcsecond" for Earth, "validation" for a consistency check, and a
+"100-kilometre shadows" claim with no source); the changes are listed in D-026. The script is a
+draft for the team to edit and record; the voice-over and the screen captures are made by people.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list
