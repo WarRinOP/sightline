@@ -18,6 +18,7 @@ from sightline_pipeline.sources import (
     DEFAULT_SOURCES_PATH,
     load_sources,
 )
+from sightline_pipeline.tiles import DEFAULT_ENGINE_TILES_DIR, DEFAULT_PROBE_PATH, DEFAULT_TILES_DIR
 
 OK = 0
 FAILED = 1
@@ -26,7 +27,6 @@ NOT_IMPLEMENTED = 2
 # subcommands that are still stubs -> (help text, task that implements it)
 _COMMANDS: dict[str, tuple[str, str]] = {
     "dem": ("parse PDS3 labels and DEM images into a memmap plus metadata", "M1-03"),
-    "tiles": ("build the terrain tile pyramid", "M1-04"),
     "mock": ("write synthetic data with simulated: true", "M1-09"),
 }
 
@@ -62,6 +62,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("horizons", "ask JPL Horizons for the Sun and Earth at the 3 sites (3 sites x 50 epochs)"),
         ("horizon", "compute the terrain horizon masks of the catalog sites from the DEMs"),
         ("benchmark", "compare the terrain illumination with Barker 2021 and the AVGVISIB map"),
+        ("tiles", "build the sparse terrain tile pyramid from the 80 m map and the 5 m site DEMs"),
     ):
         p = sub.add_parser(name, help=help_text, description=help_text)
         p.add_argument("--sources", type=Path, default=DEFAULT_SOURCES_PATH, help=argparse.SUPPRESS)
@@ -83,6 +84,16 @@ def build_parser() -> argparse.ArgumentParser:
             p.add_argument(
                 "--out", type=Path, default=DEFAULT_GOLDEN_DIR / "illumination_benchmark.json"
             )
+            p.add_argument("--sites", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "sites.json")
+        if name == "tiles":
+            p.add_argument("--out-dir", type=Path, default=DEFAULT_TILES_DIR, help="full pyramid")
+            p.add_argument(
+                "--engine-dir",
+                type=Path,
+                default=DEFAULT_ENGINE_TILES_DIR,
+                help="committed subset (levels 0-3 and the tiles under the catalog sites)",
+            )
+            p.add_argument("--probe-out", type=Path, default=DEFAULT_PROBE_PATH)
             p.add_argument("--sites", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "sites.json")
         if name == "horizon":
             p.add_argument("--out-dir", type=Path, default=DEFAULT_ENGINE_DATA_DIR)
@@ -162,6 +173,7 @@ def _run_pipeline_step(args: argparse.Namespace) -> int:
     from sightline_pipeline.horizon import mask_from_hulls, write_horizons
     from sightline_pipeline.horizons import HorizonsError, write_reference
     from sightline_pipeline.sites import write_sites
+    from sightline_pipeline.tiles import build_tiles
 
     try:
         sources = load_sources(args.sources)
@@ -191,6 +203,27 @@ def _run_pipeline_step(args: argparse.Namespace) -> int:
             print(f"wrote {path} ({path.stat().st_size:,} B)")
             print(f"Barker Table 2: {a}")
             print(f"AVGVISIB: orientation {doc['avgvisib']['orientation']['chosen']}, {b}")
+        elif args.command == "tiles":
+            summary = build_tiles(
+                args.raw_dir,
+                sources,
+                args.sites,
+                args.out_dir,
+                args.engine_dir,
+                args.probe_out,
+                progress=lambda m: print(m, file=sys.stderr, flush=True),
+            )
+            for level, st in summary["stats"].items():
+                print(
+                    f"level {level:>2}: {st.count:>6} tiles {st.bytes / 1e6:>8.1f} MB"
+                    f"  coarser than 0.1 m: {st.coarse_scale} (max scale {st.max_scale_m:g} m)"
+                )
+            print(f"wrote {summary['out_dir']}")
+            print(
+                f"wrote {summary['engine_dir']} ({summary['committed_tiles']} tiles, "
+                f"{summary['committed_bytes']:,} B)"
+            )
+            print(f"wrote {summary['probe_path']} ({summary['probes']} probes)")
         elif args.command == "horizon":
             for path in write_horizons(
                 args.raw_dir,
@@ -245,7 +278,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "fetch":
         return _run_fetch(args)
-    if args.command in ("sites", "ephem", "golden", "horizons", "horizon", "benchmark"):
+    if args.command in ("sites", "ephem", "golden", "horizons", "horizon", "benchmark", "tiles"):
         return _run_pipeline_step(args)
     task = _COMMANDS[args.command][1]
     print(

@@ -9,13 +9,13 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run"
+    "test": "vitest run test/ --passWithNoTests"
   },
   "dependencies": {
-    "@react-three/drei": "^10.7.9",
-    "@react-three/fiber": "^9.8.1",
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.1",
     "@sightline/contracts": "workspace:*",
-    "three": "~0.186.1"
+    "three": "0.186.1"
   },
   "peerDependencies": {
     "react": "^19.0.0"

@@ -356,3 +356,30 @@ comparison to a published number for the same place, or any claim about Earth vi
 published reference was used for it: the AVGVISIB Earth-visibility map in `sources.yaml` was not
 fetched or compared).
 
+
+## 8. Terrain tiles (M1-04)
+
+`sightline tiles` turns the 80 m map and the three 5 m DEMs into a quadtree of 64 x 64 sample tiles
+(D-027). The pyramid is for drawing and for the future TypeScript horizon marcher (M2-04, M2-05);
+the horizon masks of §6 are still computed from the rasters themselves.
+
+- **Grid.** Root square ±304 km around the pole (polar stereographic, R = 1737.4 km, x along the
+  DEM's x, y along its y). Level L has 2^L x 2^L tiles; each has 62 interior samples a side and one
+  border sample each side. Spacing = 608 km / 2^L / 62: 76.6 m at level 7, 4.79 m at level 11. A
+  sample is at the centre of its cell. Row 0 is the lowest y.
+- **Sources.** Levels 0 to 7 from `pgda90-ldem-80s-80m` everywhere; levels 8 to 11 from
+  `pgda78-site04/01/11-surf`, only where the whole window (border included) is inside the DEM.
+  Level 7 and level 11 are bilinear resamples of the raster; each coarser level is the mean of the
+  2 x 2 samples below it, which is the mean of the raster's bilinear heights over the cell.
+- **Overlap.** Site04 and Site01 overlap and differ by up to 10.7 m there (99th percentile 1.3 m); a
+  tile is built from the DEM whose centre is nearer. Tiles from different DEMs can disagree on a
+  shared border by that much.
+- **Encoding.** `height = offset + scale * count`, count uint16, offset the tile's lowest sample,
+  scale 0.1 m unless the tile's relief exceeds 6,553.5 m (62 tiles at levels 0 to 5; up to 0.21 m).
+  Error at most scale / 2.
+- **Check.** 500 interior samples of the committed tiles against the raw rasters (an independent
+  implementation; `fixtures/golden/tiles_probe.json`): at most 0.050 m where the scale is 0.1 m;
+  0.103 m at level 0. Neighbouring tiles agree on shared samples to the mean of their two scales.
+- **Not checked.** Nothing computed from the tiles (horizons, shading) has been compared with the
+  raster results; the tiles do not extend beyond the 80 m map (the ±304 km square), and a 5 m level
+  stops short of each DEM's edge (a tile whose window leaves the DEM is dropped).

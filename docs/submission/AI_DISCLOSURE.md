@@ -21,14 +21,15 @@ from the deterministic engine or from a cited source. Where data is synthetic, i
 | 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5` | Dev 1 (team lead), supervising | S1-02 (DEM part) | `sources.yaml` entries for two PGDA DEMs and their download; a read-only check of three site coordinates against the DEM files (the check found they do not match, so none were used) | Sizes and content types by `HEAD`; hashes by `shasum`; rasters opened and sampled with `rasterio` in a scratch environment; results in `docs/progress/PROGRESS.md` (session 012) and D-019 |
 | 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5`, with the SPICE toolkit (`spiceypy`) | Dev 1 (team lead), supervising | S1-03 | The pipeline steps `sites`, `ephem` and `golden`; the engine's time, frames, ephemeris reader, sky geometry and real engine client; their unit and parity tests; `docs/science/METHODS.md`. It also found, by testing, that two of its own assertions were wrong and corrected them | Parity of every output with SPICE (Sun and Earth direction within 3e-5°, time within 1 µs, DSN elevation within 0.19°), regeneration tests that rebuild the committed data, `pnpm verify` and the pipeline checks; results in `docs/progress/PROGRESS.md` (session 013) and D-020 |
 | 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5`, querying the JPL Horizons web service | Dev 1 (team lead), supervising | S1-04 | The `sightline horizons` command (query, parser, cache, checks), its tests, the engine-versus-Horizons test and residuals file, the residuals schema, and the documentation. It found and corrected two bugs of its own: a separation formula that could not report angles below 8.5e-7 degrees, and a wrong first explanation of the Earth gap | Horizons' own echo of the site, Moon shape and orientation is checked on every request; 300 residuals against a tolerance written before any residual existed; two negative controls; results in `docs/progress/PROGRESS.md` (session 014), D-021 and `docs/science/METHODS.md` §5.1 |
+| 2026-10-02 | Antigravity (Google; "Gemini Pro 3.1" as written in Dev 2's log) | Dev 2 (Aktaruzzaman) | S1-06, S1-07, M3-03 to M3-10 (scene) | The 3D scene code in `packages/scene` (terrain quadtree, shading, shadows, overlays, sky, site pin, Hero camera, Fisheye preview). **Not merged:** under review in PR #13; the review found invented science (overlay proxies, a made-up horizon ring) and geometry errors, so the code is being reworked | `pnpm typecheck` run by Dev 2; the team lead's review on 2026-10-02 ran lint, typecheck and tests on the branch and read the code (D-029, D-030, PROGRESS session 022) |
 
 Earlier Claude Code sessions (2026-10-01) wrote planning and documentation only: the master plan,
 the work split, the data-source verification report and the contributor rules. No application code.
 
 **Dev 2 and Dev 3 use Antigravity.** Their sessions are recorded in their own logs
 (`docs/progress/logs/DEV2_LOG.md`, `docs/progress/logs/DEV3_LOG.md`, "AI tool used" field) and
-should be copied into the table above before each submission. No entries existed at the time of
-writing.
+should be copied into the table above before each submission. Dev 2's entry above was copied by
+Dev 1 from the log; Dev 3 had no entries at the time of writing.
 
 ### What the AI-written science code does and does not claim (S1-01)
 
@@ -118,6 +119,17 @@ team lead's request. It kept the team lead's structure but replaced wording the 
 support (for example "sub-milliarcsecond" for Earth, "validation" for a consistency check, and a
 "100-kilometre shadows" claim with no source); the changes are listed in D-026. The script is a
 draft for the team to edit and record; the voice-over and the screen captures are made by people.
+
+### Terrain tile pyramid and loader (M1-04, 2026-10-02)
+
+The AI wrote the tile builder (`pipeline/sightline_pipeline/tiles.py`), the TypeScript loader
+(`packages/engine/src/real/lolaTiles.ts`) and their tests at the team lead's direction. Before
+starting it checked the brief against the rasters and reported that the first layout (4 levels)
+could not serve the sources; the team lead chose another. It found, by tests, that the 5 m DEMs
+overlap and disagree by up to 10.7 m (its first build let the last file win) and that the coarsest
+tiles do not fit 16 bits at 0.1 m; both are in D-027. It ran deliberate mutations against its own
+tests. The elevation data are NASA's (LOLA, PGDA). The tiles are a derived format, not a new
+measurement.
 
 ## AI inside the product
 

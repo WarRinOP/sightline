@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #10 (README and script); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #12 (tile serving) awaiting review and merge; message to Dev 3 about the contract additions (not sent); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -31,7 +31,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
-| M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden` built; kernels and 4 DEMs pinned) | 35% |
+| M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden`, `horizons`, `horizon`, `benchmark`, `tiles` built; kernels and 4 DEMs pinned; tile pyramid not yet served or published) | 50% |
 | M2 Engine | In progress (time, frames, ephemeris, `getSunEarth`, terrain horizons for 3 sites and `getTimeline` real in a browser worker; illumination method checked against Barker 2021 and AVGVISIB; windows not built; link not checked) | 50% |
 | M3 Visual Canvas | Not started | 0% |
 | M4 Command Center UI | Not started | 0% |
@@ -77,6 +77,107 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 022 — 2026-10-03 — Review of Dev 2's PR #13, scene dependencies, scene seam (Claude Code)
+
+**Phase / tasks:** S1-06 review (PR #13), S1-01c (dependencies), D-030. Branch `dev1/S1-01c-scene-deps` from `main`.
+
+**Done:**
+
+- Reviewed PR #13 (Dev 2, 18 commits, 14 files): checked the branch out in a temporary worktree and ran `pnpm lint`, `pnpm typecheck`, `pnpm test` and `prettier --check`; read all scene code and the log. Recommendation, accepted by the team lead: **do not merge as it stands**; the detailed fix list was sent to Dev 2.
+- Findings: lint fails (10 errors, CI `web` red) and Prettier fails on 8 files; dependencies and the lockfile were edited against D-017; the site pin is at y = -1,739,126 m while the terrain group is at +1,737,400 m (3.5 million metres apart), so the pin, `flyTo` and the Hero camera aim at the wrong place; a missing child tile leaves a hole (the parent stops drawing); the mesh ignores the 1-sample border (64/62 stretch); the PSR, illumination and direct-to-Earth overlays and the Site pin's horizon ring and the Fisheye's sky are invented, not engine data; the Sun is a fixed vector; hex colours outside a palette file; the PR description is the empty template.
+- Installed the scene dependencies on `main`'s branch, exact-pinned, with licence check (D-029).
+- Specified how the scene receives the real Sun, Earth and horizon, the scene frame, and the direction recipe, with a hand check against Shackleton (D-030).
+- AI disclosure row for Dev 2's Antigravity use; REMAINING updated (S1-06a, b, c).
+
+**Verified by:**
+
+- `pnpm verify`: see the PR for the exact outcome (run after these changes).
+- Dev 2's branch (in the worktree): lint exit 1 with the 10 errors listed above; typecheck passes for all packages; tests pass (contracts 41, engine 167, scene 1, web 6); a trial merge with `main` has no conflicts.
+- Pin position computed with `node` from the scene's own `locationToScenePosition`: (-6099, -1,739,126, 2690) m, against the tile-plane position (-2688, -6093) m.
+- `pnpm view` for the four 3D packages (versions and MIT licence); `pnpm licenses list --prod` for the scene closure.
+- **NOT VERIFIED:** the scene in a browser (not run; the worktree was removed after the checks), including whether the default camera far plane of 1000 m clips the terrain (R3F default, to be confirmed by Dev 2); the direction recipe in D-030 has only been checked by hand for one site, not in code; `pnpm install --frozen-lockfile` with Dev 2's lockfile merged into this one (not tried).
+
+**Decisions logged:** D-029, D-030
+
+**Blockers / risks:**
+
+- The Oct 3 contracts freeze is today; nothing in `packages/contracts` changed for this (D-030 is in the scene's own types).
+- Dev 2 has about 3 days of fixes; the Hero capture for the video (S1-12, Oct 5 to 6) depends on them.
+- Dev 3 has not committed anything yet either.
+
+**Next 3 tasks:**
+
+1. Re-review PR #13 when Dev 2 pushes (S1-06c).
+2. S1-05h (Earth-link check) and S1-13/S1-14 (tag `v0.1-stage1`, submission).
+3. Tell Dev 3 about S1-06b and the `sites` prop; then M2-04.
+
+### Session 021 — 2026-10-02 — M1-04b serve the tiles to the browser (Claude Code)
+
+**Phase / tasks:** M1-04 ticked (PR #11 merged; the per-tile scale was approved), M1-04a decided, M1-04b done. Branch `dev1/M1-04b-serve-tiles` from `main`.
+
+**Done:**
+
+- Routes `/api/tiles/<level>/<x>/<y>.bin`, `/api/tiles/manifest.json`, `/api/tiles/coverage.json` in `apps/web/app/api/tiles/` (D-028): the committed tiles are built into the site, other tiles are read from `data/processed/tiles/` when it exists, a 404 otherwise; plain-decimal path checks.
+- Engine loader: default `baseUrl` is now `/api/tiles`; new `fetchTileCoverage()`.
+- 9 new web tests (route bytes equal the fixture bytes, the loader works through the route, path-safety cases, directory fallback order, a guard against two dynamic segments side by side).
+
+**Verified by:**
+
+- `pnpm verify` exit 0 (see the PR for the counts).
+- `next build` then `next start`: the home page 200; `/api/tiles/3/2/4.bin` (committed) and `/api/tiles/6/10/20.bin` (only in the full pyramid) are byte-identical to the files (`cmp`); `/api/tiles/11/0/0.bin`, `..%2f` forms, a missing `.bin`, a wrong name and an extra segment are all 404; `manifest.json` and `coverage.json` 200.
+- A real browser (`playwright-cli` on `next start`): `fetch('/api/tiles/7/61/61.bin')` returns 200, 8,224 bytes, magic `SLT1`, level 7, x 61, y 61, scale 0.1; the served coverage lists 20 rectangles (the full pyramid, because it exists on this machine).
+- **Mistake of mine:** the first version put `[name]` beside `[level]`; the build and all tests passed and the server then returned 500 for every page. Found by `curl` against `next start`; fixed and guarded (D-028 item 5). Also Turbopack warned that it was tracing 31,875 files; fixed with `turbopackIgnore`.
+- **NOT VERIFIED:** a Vercel deploy (working directory, output tracing of the committed tiles); the scene or any page actually calling `createLolaTileSource()` (nothing in the app uses it yet); CI on this branch (first run is the PR); `next dev` (not started, because it rewrites `apps/web/AGENTS.md`).
+
+**Decisions logged:** D-028
+
+**Blockers / risks:**
+
+- A deployed site has only the 100 committed tiles until the pyramid is published (M1-08).
+- Still unsent: the message to Dev 3 and the note to Dev 2 on how to call the tile source; the contracts freeze is tomorrow.
+
+**Next 3 tasks:**
+
+1. Merge this PR; send Dev 2 (how to call `createLolaTileSource()`) and Dev 3 (`longest_day_s`, the labelled rows, `/api/tiles`).
+2. S1-05h: the Earth-link check against the AVGVISIB Earth map.
+3. S1-13 (tag `v0.1-stage1`), S1-14 (submission); then M2-04.
+
+### Session 020 — 2026-10-02 — M1-04 real tile pyramid and `LolaTileSource` (Claude Code)
+
+**Phase / tasks:** M1-04 (and the engine loader Dev 2 asked for). Branch `dev1/M1-04-real-tiles` from `main` after PR #10 merged. The team lead restated the early-start authorisation (D-010 still has no written confirmation) and chose layout A (D-027).
+
+**Done:**
+
+- `sightline tiles` (`pipeline/sightline_pipeline/tiles.py`): a sparse 12-level pyramid of 64 x 64 sample tiles with a 1-sample border, bounds ±304 km. Levels 0 to 7 from the 80 m map, 8 to 11 from the three 5 m DEMs. 31,873 tiles (262 MB) in `data/processed/tiles/` (gitignored), plus `manifest.json` and `coverage.json`. The build takes about 8 seconds.
+- Committed with the engine: 100 tiles (832,657 bytes with their manifest and coverage), `fixtures/golden/tiles_probe.json` (500 probes against the raw rasters).
+- `LolaTileSource` and `createLolaTileSource()` (`packages/engine/src/real/lolaTiles.ts`, exported from the engine): manifest with `simulated: false`, `getTile` returning contract-valid `TileData`, `hasTile`, `tileHeightRange`, errors for tiles outside the pyramid or missing.
+- Checked the brief first and reported that four levels cannot serve the sources; the team lead chose layout A. Two more findings while building (both in D-027): the 5 m DEMs of Site04 and Site01 overlap and differ by up to 10.7 m, and the relief of the coarsest tiles does not fit uint16 at 0.1 m (62 tiles at levels 0 to 5 carry a coarser scale, up to 0.21 m).
+
+**Verified by:**
+
+- `uv run --project pipeline sightline tiles`: 31,873 tiles; the committed subset, the full pyramid and the probe file are byte-identical across two builds (checksums compared, also after the mutation runs).
+- `pnpm verify` exit 0: contracts 41, engine 181 (14 new), web 6, parity 34; build ok.
+- Pipeline: `ruff check pipeline`, `ruff format --check pipeline`, `mypy sightline_pipeline` (13 files, strict) clean; `pytest` 131 passed (20 new tile tests, several against the real DEMs); `uv sync --locked` ok.
+- Probe error against the raw rasters (independent implementation): at most 0.0497 m wherever the scale is 0.1 m (levels 6 to 11 and the fine tiles above), 0.1026 m at level 0 (scale 0.21, bound 0.105).
+- Mutation checks, each caught by the tests: decoder ignoring the offset, flipping rows, wrong byte order, doubling the scale; builder with the overlap rule reversed, rows flipped, tiles transposed.
+- **Mistakes of mine:** my first build wrote the overlapping tiles twice (the last DEM won; found by a file-count test); I assumed "PGDA" was in the manifest's citation (it is the Barker citation); I computed the level-11 spacing as 4.7881 m in a test (it is 4.78831); a first seam test used the wrong tolerance for neighbours with different scales. `git stash` was used briefly to check that 4 mypy errors in `tests/` (`test_horizon.py`, `test_benchmark.py`) pre-exist on `main`; they are outside the `mypy sightline_pipeline` command and were not touched.
+- **NOT VERIFIED:** CI on this branch (first run is the PR); the loader in a browser (only a stubbed `fetch` was tested); that Dev 2's scene can use it; the full pyramid served from anywhere; anything computed from the tiles (horizon, shading) against the raster results; the coarse levels' error as a statement about the Moon.
+
+**Decisions logged:** D-027
+
+**Blockers / risks:**
+
+- Levels 0 to 5 do not meet the 0.05 m round-trip figure (M1-04a); the contracts freeze is tomorrow, so any contract change for it must be decided now.
+- The app cannot read tiles in a browser until they are served (M1-04b: Dev 3 `apps/web/public/tiles` or R2).
+- Tiles from different 5 m DEMs can disagree on a shared border (up to the overlap's difference).
+- Local macOS note, not in the repo: the venv's `.pth` files get the `hidden` flag, which Python 3.13 skips, so `sightline` fails to import until `chflags nohidden pipeline/.venv/lib/python3.13/site-packages/*.pth` is run.
+
+**Next 3 tasks:**
+
+1. Review and merge PR #11; tell Dev 2 how to call `createLolaTileSource` and Dev 3 about the labelled rows, `longest_day_s` and the tile serving (M1-04b) before the freeze.
+2. S1-05h: the Earth-link check against the AVGVISIB Earth map before any link figure is cited.
+3. S1-13 (tag `v0.1-stage1`) and S1-14 (submission), then M2-04 (TypeScript tile cache and bilinear sampling).
 
 ### Session 019 — 2026-10-02 — S1-11 README, S1-12 video script (Claude Code)
 
