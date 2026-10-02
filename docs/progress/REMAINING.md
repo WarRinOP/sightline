@@ -72,7 +72,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [~] **P0-11** Read the reference papers in MASTER_PLAN Appendix C (learning only). The science lead reads all; others skim Mazarico 2011 and Barker 2021. *(2026-10-01: data products for these papers were located and documented in `docs/science/DATA_VERIFICATION_REPORT.md`; the papers themselves are still to read.)*
 
-- [ ] **P0-12** Network plan (D-009): create a Cloudflare R2 bucket (and a US-region cloud VM or CI runner if available). Run a throughput test from the team's usual network to NAIF, PDS, PGDA, GitHub, the npm registry and PyPI, and paste the results into PROGRESS.md. **High priority:** measured ~3–35 KB/s to US origins from the current network.
+- [ ] **P0-12** Network plan (D-009): create a Cloudflare R2 bucket (and a US-region cloud VM or CI runner if available). Run a throughput test from the team's usual network to NAIF, PDS, PGDA, GitHub, the npm registry and PyPI, and paste the results into PROGRESS.md. **High priority:** measured ~3–35 KB/s to US origins from the current network. *Update 2026-10-02 (D-018): NAIF about 1 MB/s and PGDA about 130 KB/s measured; the relay and R2 are not needed for Stage 1. Keep the R2 mirror for the final deploy (M1-08).*
 
 - [ ] **P0-14** 🚨 **URGENT, by Oct 7 (same day as the Stage 1 submission):** register the team on https://www.nasaspaceappsbd.com/registration (team name, leader name/mobile/email, **region**, up to 6 members with name/email/mobile, **team group photo**). Pick the region where we will attend in person (nine regions; Dhaka's main venue is AIUB). Screenshot the confirmation into PROGRESS.md.
 
