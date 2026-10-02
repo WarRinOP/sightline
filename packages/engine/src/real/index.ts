@@ -7,3 +7,16 @@ export {
   createSightlineEngineClient,
   parseSiteCatalog,
 } from "./sightlineEngine";
+export {
+  BUNDLED_TILE_COVERAGE,
+  BUNDLED_TILE_MANIFEST,
+  LolaTileSource,
+  TileNotAvailableError,
+  createLolaTileSource,
+  parseCoverage,
+  parseTileBytes,
+  tileHeightRange,
+  type LolaTileSourceOptions,
+  type TileCoverage,
+  type TileRect,
+} from "./lolaTiles";

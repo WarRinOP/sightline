@@ -6,7 +6,7 @@ from sightline_pipeline import __version__
 from sightline_pipeline.cli import FAILED, NOT_IMPLEMENTED, build_parser, main
 
 COMMANDS = ["fetch", "sites", "ephem", "golden", "horizons", "dem", "tiles", "mock"]
-STUBS = ["dem", "tiles", "mock"]
+STUBS = ["dem", "mock"]
 
 
 def test_help_exits_zero_and_lists_every_command(capsys: pytest.CaptureFixture[str]) -> None:

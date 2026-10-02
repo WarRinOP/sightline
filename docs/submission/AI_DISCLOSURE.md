@@ -119,6 +119,17 @@ support (for example "sub-milliarcsecond" for Earth, "validation" for a consiste
 "100-kilometre shadows" claim with no source); the changes are listed in D-026. The script is a
 draft for the team to edit and record; the voice-over and the screen captures are made by people.
 
+### Terrain tile pyramid and loader (M1-04, 2026-10-02)
+
+The AI wrote the tile builder (`pipeline/sightline_pipeline/tiles.py`), the TypeScript loader
+(`packages/engine/src/real/lolaTiles.ts`) and their tests at the team lead's direction. Before
+starting it checked the brief against the rasters and reported that the first layout (4 levels)
+could not serve the sources; the team lead chose another. It found, by tests, that the 5 m DEMs
+overlap and disagree by up to 10.7 m (its first build let the last file win) and that the coarsest
+tiles do not fit 16 bits at 0.1 m; both are in D-027. It ran deliberate mutations against its own
+tests. The elevation data are NASA's (LOLA, PGDA). The tiles are a derived format, not a new
+measurement.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list

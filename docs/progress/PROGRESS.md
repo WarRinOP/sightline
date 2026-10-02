@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #10 (README and script); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #11 (tile pyramid and loader) awaiting review and merge; message to Dev 3 about the contract additions (not sent); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -31,7 +31,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
-| M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden` built; kernels and 4 DEMs pinned) | 35% |
+| M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden`, `horizons`, `horizon`, `benchmark`, `tiles` built; kernels and 4 DEMs pinned; tile pyramid not yet served or published) | 50% |
 | M2 Engine | In progress (time, frames, ephemeris, `getSunEarth`, terrain horizons for 3 sites and `getTimeline` real in a browser worker; illumination method checked against Barker 2021 and AVGVISIB; windows not built; link not checked) | 50% |
 | M3 Visual Canvas | Not started | 0% |
 | M4 Command Center UI | Not started | 0% |
@@ -77,6 +77,42 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 020 — 2026-10-02 — M1-04 real tile pyramid and `LolaTileSource` (Claude Code)
+
+**Phase / tasks:** M1-04 (and the engine loader Dev 2 asked for). Branch `dev1/M1-04-real-tiles` from `main` after PR #10 merged. The team lead restated the early-start authorisation (D-010 still has no written confirmation) and chose layout A (D-027).
+
+**Done:**
+
+- `sightline tiles` (`pipeline/sightline_pipeline/tiles.py`): a sparse 12-level pyramid of 64 x 64 sample tiles with a 1-sample border, bounds ±304 km. Levels 0 to 7 from the 80 m map, 8 to 11 from the three 5 m DEMs. 31,873 tiles (262 MB) in `data/processed/tiles/` (gitignored), plus `manifest.json` and `coverage.json`. The build takes about 8 seconds.
+- Committed with the engine: 100 tiles (832,657 bytes with their manifest and coverage), `fixtures/golden/tiles_probe.json` (500 probes against the raw rasters).
+- `LolaTileSource` and `createLolaTileSource()` (`packages/engine/src/real/lolaTiles.ts`, exported from the engine): manifest with `simulated: false`, `getTile` returning contract-valid `TileData`, `hasTile`, `tileHeightRange`, errors for tiles outside the pyramid or missing.
+- Checked the brief first and reported that four levels cannot serve the sources; the team lead chose layout A. Two more findings while building (both in D-027): the 5 m DEMs of Site04 and Site01 overlap and differ by up to 10.7 m, and the relief of the coarsest tiles does not fit uint16 at 0.1 m (62 tiles at levels 0 to 5 carry a coarser scale, up to 0.21 m).
+
+**Verified by:**
+
+- `uv run --project pipeline sightline tiles`: 31,873 tiles; the committed subset, the full pyramid and the probe file are byte-identical across two builds (checksums compared, also after the mutation runs).
+- `pnpm verify` exit 0: contracts 41, engine 181 (14 new), web 6, parity 34; build ok.
+- Pipeline: `ruff check pipeline`, `ruff format --check pipeline`, `mypy sightline_pipeline` (13 files, strict) clean; `pytest` 131 passed (20 new tile tests, several against the real DEMs); `uv sync --locked` ok.
+- Probe error against the raw rasters (independent implementation): at most 0.0497 m wherever the scale is 0.1 m (levels 6 to 11 and the fine tiles above), 0.1026 m at level 0 (scale 0.21, bound 0.105).
+- Mutation checks, each caught by the tests: decoder ignoring the offset, flipping rows, wrong byte order, doubling the scale; builder with the overlap rule reversed, rows flipped, tiles transposed.
+- **Mistakes of mine:** my first build wrote the overlapping tiles twice (the last DEM won; found by a file-count test); I assumed "PGDA" was in the manifest's citation (it is the Barker citation); I computed the level-11 spacing as 4.7881 m in a test (it is 4.78831); a first seam test used the wrong tolerance for neighbours with different scales. `git stash` was used briefly to check that 4 mypy errors in `tests/` (`test_horizon.py`, `test_benchmark.py`) pre-exist on `main`; they are outside the `mypy sightline_pipeline` command and were not touched.
+- **NOT VERIFIED:** CI on this branch (first run is the PR); the loader in a browser (only a stubbed `fetch` was tested); that Dev 2's scene can use it; the full pyramid served from anywhere; anything computed from the tiles (horizon, shading) against the raster results; the coarse levels' error as a statement about the Moon.
+
+**Decisions logged:** D-027
+
+**Blockers / risks:**
+
+- Levels 0 to 5 do not meet the 0.05 m round-trip figure (M1-04a); the contracts freeze is tomorrow, so any contract change for it must be decided now.
+- The app cannot read tiles in a browser until they are served (M1-04b: Dev 3 `apps/web/public/tiles` or R2).
+- Tiles from different 5 m DEMs can disagree on a shared border (up to the overlap's difference).
+- Local macOS note, not in the repo: the venv's `.pth` files get the `hidden` flag, which Python 3.13 skips, so `sightline` fails to import until `chflags nohidden pipeline/.venv/lib/python3.13/site-packages/*.pth` is run.
+
+**Next 3 tasks:**
+
+1. Review and merge PR #11; tell Dev 2 how to call `createLolaTileSource` and Dev 3 about the labelled rows, `longest_day_s` and the tile serving (M1-04b) before the freeze.
+2. S1-05h: the Earth-link check against the AVGVISIB Earth map before any link figure is cited.
+3. S1-13 (tag `v0.1-stage1`) and S1-14 (submission), then M2-04 (TypeScript tile cache and bilinear sampling).
 
 ### Session 019 — 2026-10-02 — S1-11 README, S1-12 video script (Claude Code)
 
