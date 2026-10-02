@@ -5,6 +5,7 @@ import type { TileSource, TileManifest, TileData, TileCoord } from "@sightline/c
 
 interface TerrainQuadtreeProps {
   tileSource: TileSource;
+  sunDirection: THREE.Vector3;
 }
 
 interface TerrainNodeProps {
@@ -12,9 +13,10 @@ interface TerrainNodeProps {
   manifest: TileManifest;
   coord: TileCoord;
   bounds: { x_min: number; y_min: number; x_max: number; y_max: number };
+  sunDirection: THREE.Vector3;
 }
 
-function TerrainNode({ tileSource, manifest, coord, bounds }: TerrainNodeProps) {
+function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: TerrainNodeProps) {
   const { camera } = useThree();
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [isSubdivided, setIsSubdivided] = useState(false);
@@ -97,24 +99,28 @@ function TerrainNode({ tileSource, manifest, coord, bounds }: TerrainNodeProps) 
           tileSource={tileSource} manifest={manifest} 
           coord={{ level: nextLevel, x: coord.x * 2, y: coord.y * 2 + 1 }}
           bounds={{ x_min: bounds.x_min, y_min: midY, x_max: midX, y_max: bounds.y_max }} 
+          sunDirection={sunDirection}
         />
         {/* Top Right (y max, x max) */}
         <TerrainNode 
           tileSource={tileSource} manifest={manifest} 
           coord={{ level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 + 1 }}
           bounds={{ x_min: midX, y_min: midY, x_max: bounds.x_max, y_max: bounds.y_max }} 
+          sunDirection={sunDirection}
         />
         {/* Bottom Left (y min, x min) */}
         <TerrainNode 
           tileSource={tileSource} manifest={manifest} 
           coord={{ level: nextLevel, x: coord.x * 2, y: coord.y * 2 }}
           bounds={{ x_min: bounds.x_min, y_min: bounds.y_min, x_max: midX, y_max: midY }} 
+          sunDirection={sunDirection}
         />
         {/* Bottom Right (y min, x max) */}
         <TerrainNode 
           tileSource={tileSource} manifest={manifest} 
           coord={{ level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 }}
           bounds={{ x_min: midX, y_min: bounds.y_min, x_max: bounds.x_max, y_max: midY }} 
+          sunDirection={sunDirection}
         />
       </group>
     );
@@ -127,12 +133,43 @@ function TerrainNode({ tileSource, manifest, coord, bounds }: TerrainNodeProps) 
       receiveShadow 
       castShadow
     >
-      <meshStandardMaterial color="#888888" wireframe={false} flatShading />
+      <meshStandardMaterial 
+        color="#888888" 
+        wireframe={false} 
+        flatShading 
+        onBeforeCompile={(shader) => {
+          // Add uniform for sun direction
+          shader.uniforms.uSunDirection = { value: new THREE.Vector3(1, 0.5, 0).normalize() };
+          
+          shader.fragmentShader = `
+            uniform vec3 uSunDirection;
+            ${shader.fragmentShader}
+          `;
+          
+          shader.fragmentShader = shader.fragmentShader.replace(
+            '#include <dithering_fragment>',
+            `
+            #include <dithering_fragment>
+            
+            // Lommel-Seeliger reflectance: I / (I + E)
+            vec3 viewDir = normalize(vViewPosition);
+            float cosE = max(0.01, dot(geometryNormal, viewDir));
+            float cosI = max(0.01, dot(geometryNormal, uSunDirection));
+            
+            float lommelSeeliger = cosI / (cosI + cosE);
+            
+            // Adjust the final color
+            // This flattens the lighting and gives it the characteristic "dusty" lunar look
+            gl_FragColor.rgb = gl_FragColor.rgb * (0.5 + 1.5 * lommelSeeliger);
+            `
+          );
+        }}
+      />
     </mesh>
   );
 }
 
-export function TerrainQuadtree({ tileSource }: TerrainQuadtreeProps) {
+export function TerrainQuadtree({ tileSource, sunDirection }: TerrainQuadtreeProps) {
   const [manifest, setManifest] = useState<TileManifest | null>(null);
 
   useEffect(() => {
@@ -157,6 +194,7 @@ export function TerrainQuadtree({ tileSource }: TerrainQuadtreeProps) {
           x_max: manifest.bounds_m.x_max_m,
           y_max: manifest.bounds_m.y_max_m
         }}
+        sunDirection={sunDirection}
       />
     </group>
   );
