@@ -11,13 +11,19 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "dependencies": {
-    "@sightline/contracts": "workspace:*"
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
+    "@sightline/contracts": "workspace:*",
+    "three": "~0.186.1"
   },
   "peerDependencies": {
     "react": "^19.0.0"
   },
   "devDependencies": {
     "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.186.0",
+    "react-dom": "19.3.0",
     "typescript": "6.0.3"
   }
 }
