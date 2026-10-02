@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #4 merge; S1-04 PR; Dev 3 handover (S1-10, S1-03a) |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); merge of PR #5 (S1-04) and PR #6 (S1-03a); Dev 3 and Dev 2 have not started |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -27,12 +27,12 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| S1 Stage 1 sprint (Oct 1–7) | In progress | 60% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 70% |
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
 | M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden` built; kernels and 4 DEMs pinned) | 35% |
-| M2 Engine | In progress (time, frames, ephemeris, `getSunEarth` real; horizon not started) | 20% |
+| M2 Engine | In progress (time, frames, ephemeris, `getSunEarth` real and running in a browser worker; horizon not started) | 20% |
 | M3 Visual Canvas | Not started | 0% |
 | M4 Command Center UI | Not started | 0% |
 | M5 Story & Analyst | Not started | 0% |
@@ -77,6 +77,38 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 015 — 2026-10-02 — PR #5, S1-04a dropped, S1-03a real engine in the app (Claude Code)
+
+**Phase / tasks:** S1-04 close-out, S1-04a (dropped), S1-03a. Branch `dev1/S1-03a-wire-real-engine`, stacked on `dev1/S1-04-horizons-validation`. S1-03a was marked `[~]` when started. The team lead approved S1-04 and told this session to proceed (D-010 still has no written confirmation, P0-02).
+
+**Done:**
+
+- Merged `main` (PR #4) into the S1-04 branch, pushed it and opened **PR #5** (https://github.com/WarRinOP/sightline/pull/5) with the residuals table and the notice for Dev 3 (`Location.elev_m`, `HorizonsResidualsSchema`, contracts freeze Oct 3). D-021 gets item 9: S1-04a dropped (the 2.65e-5° Earth gap is 755 times inside the limit).
+- PR #5's first CI run failed in `pipeline`: `az_el` in the golden code returned exactly 2π for a vector a hair west of north. Reproduced, fixed (a result at or above 2π becomes 0), test added that fails on the old code. The TypeScript equivalent was never affected.
+- S1-03a (D-022): `apps/web/workers/` (`engineApi.ts`, `engine.worker.ts`, `engineBridge.ts` with `connectEngine()`), `comlink` 4.4.2 added, `/` shows real Sun and Earth elevation and azimuth for the 3 sites, with a data-driven badge. Sun disk and Link to Earth show "—" and a "Not computed yet" tag. The page says the sites are tile centres, not landing points.
+
+**Verified by:**
+
+- `pnpm verify` exit 0 on the merged S1-03a branch (contracts 41, engine 100, web 6, parity 34; build ok). Pipeline: `ruff check`, `ruff format --check`, `mypy --strict` clean; `pytest` 75 passed; `uv sync --locked` ok.
+- PR #5 CI, first run: `web` pass, `pipeline` **fail** (`test_az_el_conventions`, 6.283185307179586 against 0.0). Python reproduction: with `north - 1e-16·east` the old `az_el` returns exactly 2π; the new test fails on the old code and passes on the new.
+- Browser (`next start`, `playwright-cli`): the worker loads the 2.1 MB ephemeris, the readout renders and advances, the badge reads "Real · NAIF SPICE". Connecting Ridge at 2026-10-07 08:44:13 UTC showed Sun +1.67° at 2.7°, Earth −1.25° at 141.8°; a separate Node call into the engine for the same time gave Sun 1.667° at 2.715°, Earth −1.252° at 141.847°. Only console error: the missing favicon (S1-01d).
+- First version showed mock values under a SIMULATED tag for the two terrain-dependent fields. The browser then showed "Link to Earth: yes" while the real Earth was at −1.25°, so it was replaced by "—" (D-022 item 4; this departs from the brief and is easy to reverse).
+- **NOT VERIFIED:** PR #5 CI after the fix and PR #6 CI (pushed after this entry); keyboard use and a screen reader on the new page (read from markup only); reduced-motion start-paused (code only); Safari and Firefox (only the Playwright default browser); the page against a production data host (the ephemeris is a bundled asset); the cause of the CI runner's different rounding (inferred, not measured).
+
+**Decisions logged:** D-021 item 9; D-022
+
+**Blockers / risks:**
+
+- PR #5 and PR #6 await the team lead's merge. PR #6 contains PR #5's commits until #5 is merged.
+- Dev 2 and Dev 3 have not committed anything; the contracts freeze is Oct 3. Dev 3 should take over `live-readout.tsx` (S1-03c).
+- Terrain (M2-05) is the only thing between the app and a real light/link number. 4 days to the Oct 6 freeze.
+
+**Next 3 tasks:**
+
+1. Merge PR #5, then PR #6; tell Dev 3 about `connectEngine` and S1-03c.
+2. S1-05 horizon v0 on Site04 (needs the team lead to restate the early-start permission, CLAUDE.md §2.1).
+3. S1-11 README draft and S1-12 video script inputs: which numbers on screen are real (directions, Horizons residuals).
 
 ### Session 014 — 2026-10-02 — PR #4, then S1-04 JPL Horizons validation (Claude Code)
 
