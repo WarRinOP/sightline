@@ -32,6 +32,9 @@ importers:
       '@sightline/engine':
         specifier: workspace:*
         version: link:../../packages/engine
+      comlink:
+        specifier: 4.4.2
+        version: 4.4.2
       next:
         specifier: 16.3.8
         version: 16.3.8(@types/node@24.19.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -60,6 +63,9 @@ importers:
       typescript:
         specifier: 6.0.3
         version: 6.0.3
+      vitest:
+        specifier: 5.0.3
+        version: 5.0.3(@types/node@24.19.1)(vite@8.3.2(@types/node@24.19.1)(jiti@2.7.0))
 
   packages/contracts:
     dependencies:
@@ -760,6 +766,9 @@ packages:
 
   client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+
+  comlink@4.4.2:
+    resolution: {integrity: sha512-OxGdvBmJuNKSCMO4NTl1L47VRp6xn2wG4F/2hYzB6tiCb709otOxtEYCSvK80PtjODfXXZu8ds+Nw5kVCjqd2g==}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -1917,6 +1926,8 @@ snapshots:
   chai@6.3.0: {}
 
   client-only@0.0.1: {}
+
+  comlink@4.4.2: {}
 
   cross-spawn@7.0.6:
     dependencies:

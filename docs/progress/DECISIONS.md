@@ -273,6 +273,22 @@ The 5 m and 80 m products agree with each other where both cover the point (abou
 
 ---
 
+### D-022 · 2026-10-02 · Accepted
+
+**Context:** S1-03a puts the real engine behind the app. The team lead asked for a Comlink worker bridge in `apps/web/workers/` and for the readout on `/` to show real Sun and Earth positions, with the SIMULATED badge kept for anything not computed. The readout and page are Dev 3's files (`apps/web/app`); Dev 3 has no commits yet.
+
+**Decision:**
+
+1. **Edits to Dev 3's files, at the team lead's direction.** `apps/web/app/page.tsx` and `live-readout.tsx` change on this branch (the only files outside `workers/` and `test/`). Dev 3 owns them from here on; the worker bridge stays Dev 1's.
+2. **Shape of the bridge.** `workers/engineApi.ts` (pure, testable in Node) builds the engine from the ephemeris bytes on first use; `workers/engine.worker.ts` supplies the loader (the `.bin` is emitted as a static asset by the bundler from `packages/engine/src/data/`, so there is one copy) and calls `Comlink.expose` before any await so no message is lost while the file loads; `workers/engineBridge.ts` exports `connectEngine()`, which resolves to an ordinary `EngineClient` (with `provenance` read once, because a property cannot be read synchronously across a worker) plus the ephemeris span and `terminate()`. Dev 3 should import `connectEngine`, not construct workers.
+3. **Dependencies.** `comlink` 4.4.2 (on the CLAUDE.md §7.4 list; `pnpm view comlink version license` gave 4.4.2, Apache-2.0) in `apps/web`; `vitest` 5.0.3, the version the other workspaces use, as a dev dependency of `apps/web` for the bridge test.
+4. **Deviation from the brief: the terrain-dependent tiles show "—", not mock values.** The brief said to keep the SIMULATED badge for uncalculated fields. I first did that (mock engine at the same epoch and site) and the browser showed "Link to Earth: yes" while the real Earth was at −1.25°, below the horizon: two contradicting numbers in one view. Showing no number for "Sun disk visible" and "Link to Earth" is the honest form of "uncalculated" (CLAUDE.md §7.7), and the tile carries a neutral "Not computed yet" tag. The badge is data-driven (`provenance.simulated`), so a simulated engine still gets the purple one. To bring mock values back, import `createMockEngineClient` in `live-readout.tsx` and render its `sun_disk_fraction` and `dsn_visible` under a `simulated` `Tag`; the team lead may reverse this.
+5. **The opening epoch is the viewer's current UTC time** when the ephemeris covers it (2026), else its first sample. Play steps 2 h per tick and wraps at the end of the file.
+
+**Consequences:** The home page no longer shows a page-wide SIMULATED badge, because nothing on it is simulated; it says what is real, what is not shown and that the sites are tile centres, not landing points (D-019). The ephemeris is fetched by the browser (2.1 MB, cached by hash). The terrain methods still reject with `NotAvailableError`, which keeps its `name` across Comlink (tested). M2-05 replaces the "not computed" tiles with real values.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._

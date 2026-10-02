@@ -74,6 +74,13 @@ wrote the code that asks, parses and compares; the numbers it compares come from
 SPICE. The comparison file (`fixtures/golden/horizons_residuals.json`) is rebuilt by a command and
 the tests fail if the committed copy differs from what the engine produces.
 
+### The engine in the browser (S1-03a, 2026-10-02)
+
+The AI wrote the worker that runs the engine off the main thread and the page that shows the Sun
+and Earth directions for the three preset sites. The numbers on the page are the engine's output
+(the same code the SPICE and Horizons comparisons test); the AI chose the layout and the wording
+of the labels, and a test checks that the worker returns exactly what the engine returns.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list
