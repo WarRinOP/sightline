@@ -78,6 +78,40 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 ## Session Log
 
+### Session 022 — 2026-10-03 — Review of Dev 2's PR #13, scene dependencies, scene seam (Claude Code)
+
+**Phase / tasks:** S1-06 review (PR #13), S1-01c (dependencies), D-030. Branch `dev1/S1-01c-scene-deps` from `main`.
+
+**Done:**
+
+- Reviewed PR #13 (Dev 2, 18 commits, 14 files): checked the branch out in a temporary worktree and ran `pnpm lint`, `pnpm typecheck`, `pnpm test` and `prettier --check`; read all scene code and the log. Recommendation, accepted by the team lead: **do not merge as it stands**; the detailed fix list was sent to Dev 2.
+- Findings: lint fails (10 errors, CI `web` red) and Prettier fails on 8 files; dependencies and the lockfile were edited against D-017; the site pin is at y = -1,739,126 m while the terrain group is at +1,737,400 m (3.5 million metres apart), so the pin, `flyTo` and the Hero camera aim at the wrong place; a missing child tile leaves a hole (the parent stops drawing); the mesh ignores the 1-sample border (64/62 stretch); the PSR, illumination and direct-to-Earth overlays and the Site pin's horizon ring and the Fisheye's sky are invented, not engine data; the Sun is a fixed vector; hex colours outside a palette file; the PR description is the empty template.
+- Installed the scene dependencies on `main`'s branch, exact-pinned, with licence check (D-029).
+- Specified how the scene receives the real Sun, Earth and horizon, the scene frame, and the direction recipe, with a hand check against Shackleton (D-030).
+- AI disclosure row for Dev 2's Antigravity use; REMAINING updated (S1-06a, b, c).
+
+**Verified by:**
+
+- `pnpm verify`: see the PR for the exact outcome (run after these changes).
+- Dev 2's branch (in the worktree): lint exit 1 with the 10 errors listed above; typecheck passes for all packages; tests pass (contracts 41, engine 167, scene 1, web 6); a trial merge with `main` has no conflicts.
+- Pin position computed with `node` from the scene's own `locationToScenePosition`: (-6099, -1,739,126, 2690) m, against the tile-plane position (-2688, -6093) m.
+- `pnpm view` for the four 3D packages (versions and MIT licence); `pnpm licenses list --prod` for the scene closure.
+- **NOT VERIFIED:** the scene in a browser (not run; the worktree was removed after the checks), including whether the default camera far plane of 1000 m clips the terrain (R3F default, to be confirmed by Dev 2); the direction recipe in D-030 has only been checked by hand for one site, not in code; `pnpm install --frozen-lockfile` with Dev 2's lockfile merged into this one (not tried).
+
+**Decisions logged:** D-029, D-030
+
+**Blockers / risks:**
+
+- The Oct 3 contracts freeze is today; nothing in `packages/contracts` changed for this (D-030 is in the scene's own types).
+- Dev 2 has about 3 days of fixes; the Hero capture for the video (S1-12, Oct 5 to 6) depends on them.
+- Dev 3 has not committed anything yet either.
+
+**Next 3 tasks:**
+
+1. Re-review PR #13 when Dev 2 pushes (S1-06c).
+2. S1-05h (Earth-link check) and S1-13/S1-14 (tag `v0.1-stage1`, submission).
+3. Tell Dev 3 about S1-06b and the `sites` prop; then M2-04.
+
 ### Session 021 — 2026-10-02 — M1-04b serve the tiles to the browser (Claude Code)
 
 **Phase / tasks:** M1-04 ticked (PR #11 merged; the per-tile scale was approved), M1-04a decided, M1-04b done. Branch `dev1/M1-04b-serve-tiles` from `main`.
