@@ -32,6 +32,14 @@ def kernel_path(raw_dir: Path, ds: Dataset) -> Path:
     return raw_dir / ds.id / ds.filename
 
 
+def ensure_kernels_present(raw_dir: Path, sources: Sources) -> None:
+    """Fail fast, before any web request, if a kernel file has not been fetched."""
+    for ds in kernel_datasets(sources):
+        path = kernel_path(raw_dir, ds)
+        if not path.exists():
+            raise FileNotFoundError(f"{path} is missing: run `sightline fetch --only spice`")
+
+
 @contextmanager
 def loaded_kernels(raw_dir: Path, sources: Sources) -> Iterator[list[Dataset]]:
     """Verify and load the kernels, then unload them on exit (SPICE state is global)."""

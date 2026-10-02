@@ -73,7 +73,7 @@ def disk_fraction(sun_el_rad: float, horizon_rad: float, sun_radius_rad: float) 
     return 0.5 + (d * math.sqrt(1 - d * d) + math.asin(d)) / math.pi
 
 
-def _case(
+def reference_case(
     site: dict[str, Any], mast_m: float, et: float, moon_km: float, sun_km: float
 ) -> dict[str, Any]:
     lat, lon = math.radians(site["lat_deg"]), math.radians(site["lon_deg"])
@@ -133,7 +133,7 @@ def write_golden(
         # Offsets are not whole hours, so the engine's interpolation is exercised between records.
         epochs = [e0 + (k + 0.37) * (e1 - e0) / EPOCH_COUNT for k in range(EPOCH_COUNT)]
         cases = [
-            _case(site, 0.0 if k % 2 == 0 else 2.0, et, moon_km, sun_km)
+            reference_case(site, 0.0 if k % 2 == 0 else 2.0, et, moon_km, sun_km)
             for site in [*sites, POLE_POINT]
             for k, et in enumerate(epochs)
         ]

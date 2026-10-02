@@ -162,3 +162,15 @@ datasets:
     citation: "Barker, M.K., et al. (2021) Planetary and Space Science 203:105119, doi:10.1016/j.pss.2020.105119"
     verified_at: 2026-10-02
     note: "PGDA product 78, Site11 (named 'de Gerlache rim' by PGDA). 5 m/px, south-polar stereographic, MOON_ME of DE421. Size from HEAD on 2026-10-02."
+
+# Web services (queried, not downloaded). Code refers to them by id.
+apis:
+  - id: jpl-horizons-api
+    url: https://ssd.jpl.nasa.gov/api/horizons.api
+    role: validation-ephemeris
+    signature_version: "1.2"
+    min_interval_s: 1.0
+    license: "NASA/JPL public service; credit requested (terms not separately checked)"
+    citation: "JPL Horizons On-Line Ephemeris System, NASA/JPL Solar System Dynamics"
+    verified_at: 2026-10-02
+    note: "API doc v1.3 (2025-06) at the ssd-api.jpl.nasa.gov host. No numeric rate limit is published; HTTP 503 means overload. Errors can come back as HTTP 200, so the $$SOE/$$EOE block must be present."
