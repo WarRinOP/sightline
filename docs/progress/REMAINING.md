@@ -27,7 +27,8 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
   - [ ] **S1-03a** Wire `SightlineEngineClient` into the app: load `ephemeris_2026_3600s.bin` in the worker (Dev 1, `apps/web/workers/`) and let Dev 3 choose the client (real sky for the readout, mock for anything terrain-dependent, with the badge from `provenance`). *Dev 1 + Dev 3.*
   - [ ] **S1-03b** Extend the ephemeris to 2026–2032 at 10-minute steps and publish it (R2, M1-05, M1-08); decide whether 1-hour steps with Hermite are enough (the parity says yes for Sun and Earth). *Dev 1.*
 
-- [ ] **S1-04** Horizons check: 3 sites × 50 epochs; residuals saved as JSON. *Dev 1, Oct 4–5.*
+- [x] **S1-04** Horizons check: 3 sites × 50 epochs; residuals saved as JSON. *Dev 1, Oct 4–5.* *Done 2026-10-02 on `dev1/S1-04-horizons-validation` (D-021; no PR yet):* `sightline horizons` queried JPL Horizons (12 requests, 6 answers per body and site, cached); `fixtures/golden/horizons_reference.json` and `horizons_residuals.json` written; `packages/engine/test/horizons.test.ts` asserts the 0.02° tolerance (largest gap 2.65e-5°, Sun 3.3e-8°, Earth 2.6e-5°) with two negative controls.
+  - [ ] **S1-04a** Optional: apply stellar aberration along the site's line of sight in `computeSky` (the Earth gap of 2.7e-5° would fall to about 1e-6°); needs the observer's velocity in the ephemeris file or an equivalent. *Dev 1, low priority.*
 
 - [ ] **S1-05** Horizon v0 on one real site. *Dev 1, Oct 4–6 (stretch).*
 
@@ -39,7 +40,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **S1-09** Mission barcode from the timeline. *Dev 3, Oct 3–6.*
 
-- [ ] **S1-10** Evidence page v0: validation table from Dev 1's JSON. *Dev 3, Oct 5–6.*
+- [ ] **S1-10** Evidence page v0: validation table from Dev 1's JSON. *Dev 3, Oct 5–6.* *Source ready 2026-10-02: `fixtures/golden/horizons_residuals.json`; parse it with `HorizonsResidualsSchema` from `@sightline/contracts` (summary per body and site, 300 rows, tolerance 0.02°). Show it as Sun and Earth directions, not illumination.*
 
 - [ ] **S1-11** README: problem, concept, architecture, verified data sources, roadmap, team, "Use of AI" statement, data credits. *Non-dev + Dev 1 review, Oct 4–6.*
 
@@ -159,7 +160,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [~] **M1-06** `sightline sites`: Artemis III regions + CLPS sites, each with `source_url`. *Built 2026-10-02 (S1-03, D-019/D-020) for the 3 PGDA tile centres only, with the product-page `source_url`. Artemis III regions and CLPS sites are still open (P1-04b).*
 
-- [~] **M1-07** `sightline golden`: reference az/el, reference horizons (slow numpy), Horizons API cross-check. *Built 2026-10-02 (S1-03): `time.json` (15 cases) and `sun_earth.json` (144 cases) from SPICE. Reference horizons and the Horizons check (S1-04) are still open.*
+- [~] **M1-07** `sightline golden`: reference az/el, reference horizons (slow numpy), Horizons API cross-check. *Built 2026-10-02: `time.json` (15 cases) and `sun_earth.json` (144 cases) from SPICE (S1-03); the Horizons cross-check is `sightline horizons` (S1-04). Reference horizons (terrain) are still open.*
 
 - [ ] **M1-08** `sightline publish`: versioned upload to R2 + `manifest.json` (provenance).
 

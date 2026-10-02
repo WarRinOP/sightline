@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #3 merge; S1-03 PR; Horizons check (S1-04) |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #4 merge; S1-04 PR; Dev 3 handover (S1-10, S1-03a) |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -27,7 +27,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 | Phase / Milestone | Status | % |
 |---|---|---|
-| S1 Stage 1 sprint (Oct 1–7) | In progress | 50% |
+| S1 Stage 1 sprint (Oct 1–7) | In progress | 60% |
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
@@ -77,6 +77,43 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 014 — 2026-10-02 — PR #4, then S1-04 JPL Horizons validation (Claude Code)
+
+**Phase / tasks:** S1-03 close-out (PR #4), S1-04. Branch `dev1/S1-04-horizons-validation`, stacked on `dev1/S1-03-real-ephemeris`. S1-04 was marked `[~]` in REMAINING when started.
+
+**Done:**
+
+- PR #3 was merged by the team lead. Merged `main` into the S1-03 branch, ticked S1-03, extended the AI disclosure, pushed, and opened **PR #4** (https://github.com/WarRinOP/sightline/pull/4).
+- `sightline horizons`: asks JPL Horizons for the Sun and Earth at the 3 sites and 50 epochs, checks Horizons' echo of the site and the Moon, caches the answers, writes `fixtures/golden/horizons_reference.json` (Horizons plus the SPICE route for the same cases).
+- `packages/engine/test/horizons.test.ts` computes the engine's residuals, asserts the tolerance, and writes or checks `fixtures/golden/horizons_residuals.json`. `HorizonsResidualsSchema` added to the contracts.
+- Measured the cause of the Earth gap (D-021). Corrected D-020 item 5 and METHODS §3, which had blamed light time.
+
+**Verified by:**
+
+- PR #4 CI: `web` pass (34 s), `pipeline` pass (35 s) on Linux, Python 3.12; the kernel fetch took seconds (9.46 MB/s) and `pytest` gave 51 passed, 2 skipped (the two DEM-dependent tests). This confirmed on Linux the regeneration tests that were unverified in session 013.
+- Horizons API doc read for `TLIST`, `TIME_TYPE`, `TLIST_TYPE`, `CSV_FORMAT`, `EXTRA_PREC`. A 3-epoch probe returned the expected format. Full requests: **a 50-epoch request returns HTTP 502 (URL 2,249 characters); 25 epochs (1,324) works**, so the command batches by 25: 12 requests in 16 s, serial, 1 s apart; `signature.version` 1.2.
+- Horizons' own echo for each site: geodetic coordinates equal ours, `Center cylindric` Dxy 7.07418 km and Dz -1738.16 km (= (1737.4+0.7697)·cos and sin of the latitude, so a sphere and planetocentric), radii 1737.4 on all axes, `MEAN_ME` (high precision), refraction NO.
+- The residuals (engine minus Horizons, 300 rows, 0.02° acceptance limit written in the report on 2026-10-01): **Sun separation max 3.3e-8°, mean 1.0e-8, rms 1.4e-8; Earth separation max 2.6e-5°, mean 1.6e-5, rms 1.8e-5; Earth elevation max 2.6e-5°, Earth azimuth on the sky max 5.9e-7°.** Largest gap 2.65e-5°, 755 times inside the limit. The three sites are alike (Earth 2.64e-5 to 2.65e-5). Horizons versus SPICE: Sun at most 1.0e-8°, Earth at most 4.8e-7°. Raw Horizons and SPICE values differ in the 7th to 10th decimal and none are identical.
+- Negative controls (in the test): a 10-minute time shift and a 0.01° longitude error both break the tolerance.
+- Attribution of the Earth gap, at exact sample times (no interpolation): geometry with no correction is exactly 0; light time only: Earth 3.1e-6°, Sun 1e-12°; light time plus aberration: Earth 2.7e-5°, Sun 2.3e-8°.
+- `pnpm verify` exit 0: prettier clean; typecheck clean; tests contracts 41, engine 99 (10 of them in `horizons.test.ts`); parity 34; build ok. Pipeline: `ruff check`, `ruff format --check`, `mypy --strict` (10 files) clean; `pytest` 74 passed; `uv sync --locked` ok.
+- **Two bugs of mine, found and fixed.** (1) The first separation used `acos(u·v)`, which cannot return less than 8.5377e-7° (`acos(1−2⁻⁵³)`); the same "max 8.54e-7" appeared for both bodies and in three comparisons, which gave it away. I confirmed the floor numerically and moved to `atan2(|u×v|, u·v)` in Python and TypeScript; the figures above are the corrected ones, and the S1-03 parity numbers were never affected. (2) My first explanation of the Earth gap (Moon-centre light time) was wrong: SPICE told to use centre light time still differed by 2.7e-5°. Two parse checks of mine (altitude `.7697`, "sphere" wording) also failed on the first live answer.
+- **NOT VERIFIED:** the mechanism behind the aberration term (the numbers match "aberration times Earth's parallax" but I did not test that separately); the S1-04 branch on GitHub CI (not pushed); the Horizons comparison for any mast height other than 0, any epoch outside 2026-01-02 to 2026-12-30, or any body other than the Sun and Earth; Horizons' behaviour on repeat (answers are cached; a refresh with `--refresh` was not run, so it is untested whether Horizons returns identical numbers on a second day); it validates directions, not illumination.
+
+**Decisions logged:** D-021; D-020 item 5 corrected
+
+**Blockers / risks:**
+
+- PR #4 awaits the team lead's merge; the S1-04 branch is stacked on it.
+- The 2.6e-5° Earth gap is 0.1 arcsecond and harmless, but anyone reading the residuals file will see the Earth worse than the Sun; METHODS §5.1 explains why. S1-04a would remove it.
+- The horizon is still flat ground; the Evidence page must present this as direction accuracy, not as illumination accuracy.
+
+**Next 3 tasks:**
+
+1. Merge PR #4; push `dev1/S1-04-horizons-validation` and open its PR (needs your word to push).
+2. Tell Dev 3 where the validation table comes from (`horizons_residuals.json`, `HorizonsResidualsSchema`) and about `Location.elev_m` (S1-10, S1-03a).
+3. S1-05 horizon v0 on one real site (needs the Site04 DEM, already downloaded), or S1-03a wiring the real client into the app.
 
 ### Session 013 — 2026-10-02 — PR #3, then S1-03 real ephemeris, time, frames, getSunEarth (Claude Code)
 
