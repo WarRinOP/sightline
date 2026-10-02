@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import math
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -58,6 +59,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("ephem", "sample Sun, Earth and DSN states in MOON_ME from SPICE"),
         ("golden", "write the reference fixtures the engine's parity tests use"),
         ("horizons", "ask JPL Horizons for the Sun and Earth at the 3 sites (3 sites x 50 epochs)"),
+        ("horizon", "compute the terrain horizon mask of the Shackleton Rim site from the DEMs"),
     ):
         p = sub.add_parser(name, help=help_text, description=help_text)
         p.add_argument("--sources", type=Path, default=DEFAULT_SOURCES_PATH, help=argparse.SUPPRESS)
@@ -75,6 +77,11 @@ def build_parser() -> argparse.ArgumentParser:
             )
             p.add_argument("--step", type=int, default=3600, metavar="SECONDS", help="sample step")
             p.add_argument("--out-dir", type=Path, default=DEFAULT_ENGINE_DATA_DIR)
+        if name == "horizon":
+            p.add_argument(
+                "--out", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "horizon_shackleton-rim.json"
+            )
+            p.add_argument("--sites", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "sites.json")
         if name in ("golden", "horizons"):
             p.add_argument("--out-dir", type=Path, default=DEFAULT_GOLDEN_DIR)
             p.add_argument("--sites", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "sites.json")
@@ -139,6 +146,7 @@ def _run_pipeline_step(args: argparse.Namespace) -> int:
     # Imported here so `--help` and `fetch` work without loading SPICE and GDAL.
     from sightline_pipeline.ephem import write_ephemeris
     from sightline_pipeline.golden import write_golden
+    from sightline_pipeline.horizon import write_horizon
     from sightline_pipeline.horizons import HorizonsError, write_reference
     from sightline_pipeline.sites import write_sites
 
@@ -163,6 +171,22 @@ def _run_pipeline_step(args: argparse.Namespace) -> int:
             )
             for p in paths:
                 print(f"wrote {p} ({p.stat().st_size:,} B)")
+        elif args.command == "horizon":
+            path = write_horizon(
+                args.raw_dir,
+                sources,
+                args.sites,
+                args.out,
+                progress=lambda m: print(m, file=sys.stderr, flush=True),
+            )
+            doc = json.loads(path.read_text(encoding="utf-8"))
+            print(f"wrote {path} ({path.stat().st_size:,} B)")
+            for h, row in zip(doc["mast_heights_m"], doc["mask_elevation_rad"], strict=True):
+                deg = [math.degrees(v) for v in row]
+                print(
+                    f"mast {h:>4g} m: mask min {min(deg):6.3f}  mean {sum(deg) / len(deg):6.3f}  "
+                    f"max {max(deg):6.3f} deg"
+                )
         elif args.command == "horizons":
             with make_client() as client:
                 path = write_reference(
@@ -198,7 +222,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "fetch":
         return _run_fetch(args)
-    if args.command in ("sites", "ephem", "golden", "horizons"):
+    if args.command in ("sites", "ephem", "golden", "horizons", "horizon"):
         return _run_pipeline_step(args)
     task = _COMMANDS[args.command][1]
     print(

@@ -17,6 +17,7 @@ export {
   type EnuBasis,
   type Vec3,
 } from "./frames";
+export { HorizonProfile, parseHorizonFile, type HorizonFile } from "./horizon";
 export * from "./real";
 export { computeSky, diskFraction, type SkyDetails, type SkyOptions } from "./sky";
 export * from "./time";
