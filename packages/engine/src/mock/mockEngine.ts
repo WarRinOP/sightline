@@ -4,7 +4,6 @@ import {
   WindowRequestSchema,
   type EngineClient,
   type HorizonMask,
-  type LanderProfile,
   type Location,
   type ProbeLitResult,
   type ProvenanceRecord,
@@ -12,7 +11,6 @@ import {
   type StepState,
   type SunEarthState,
   type TimelineResponse,
-  type TimelineStatistics,
   type WindowResult,
   type WindowSearchResponse,
   type TimelineRequest,
@@ -22,6 +20,7 @@ import { MOCK_PROVENANCE } from "./constants";
 import { mockEarth, mockSun, solarDiskFraction } from "./mockSky";
 import { MOCK_SITES } from "./mockSites";
 import { mockHorizonElevationRad } from "./mockTerrain";
+import { isLit, stepKind, summarizeSteps } from "../timeline";
 
 const TWO_PI = 2 * Math.PI;
 const AZIMUTH_STEP_RAD = TWO_PI / HORIZON_AZIMUTH_SAMPLES;
@@ -38,75 +37,6 @@ export function maskElevationAt(
   const a = mask_elevation_rad[((i % n) + n) % n] ?? 0;
   const b = mask_elevation_rad[(((i + 1) % n) + n) % n] ?? 0;
   return a + (b - a) * frac;
-}
-
-/** Does this step count as sunlit for `profile`? "Any sliver" when the minimum fraction is 0. */
-function isLit(profile: LanderProfile, sun_elevation_rad: number, disk_fraction: number): boolean {
-  return (
-    sun_elevation_rad >= profile.min_sun_elev_rad &&
-    disk_fraction > 0 &&
-    disk_fraction >= profile.min_sun_disk_fraction
-  );
-}
-
-function stepKind(lit: boolean, link: boolean): StepState["kind"] {
-  if (lit && link) return "both";
-  if (lit) return "sun";
-  return link ? "earth" : "dark";
-}
-
-/**
- * Statistics over a series of steps spaced `step_s` apart. A night is a maximal run of unlit
- * steps and lasts steps × step_s.
- */
-export function summarizeSteps(
-  steps: readonly StepState[],
-  step_s: number,
-  battery_capacity_s: number,
-): TimelineStatistics {
-  let lit = 0;
-  let comms = 0;
-  let both = 0;
-  let longest_s = 0;
-  let longest_start_et: number | null = null;
-  let over_battery = 0;
-  let run = 0;
-  let run_start_et = 0;
-
-  const closeRun = () => {
-    if (run === 0) return;
-    const run_s = run * step_s;
-    if (run_s > longest_s) {
-      longest_s = run_s;
-      longest_start_et = run_start_et;
-    }
-    if (run_s > battery_capacity_s) over_battery += 1;
-    run = 0;
-  };
-
-  for (const s of steps) {
-    if (s.lit) lit += 1;
-    if (s.dsn_visible) comms += 1;
-    if (s.lit && s.dsn_visible) both += 1;
-    if (s.lit) {
-      closeRun();
-    } else {
-      if (run === 0) run_start_et = s.epoch_et;
-      run += 1;
-    }
-  }
-  closeRun();
-
-  const n = steps.length;
-  return {
-    step_count: n,
-    illuminated_ratio: lit / n,
-    comms_ratio: comms / n,
-    both_ratio: both / n,
-    longest_night_s: longest_s,
-    longest_night_start_et: longest_start_et,
-    nights_over_battery: over_battery,
-  };
 }
 
 /**
