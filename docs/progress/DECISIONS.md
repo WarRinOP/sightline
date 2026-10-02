@@ -368,6 +368,26 @@ Reported, not pass or fail: our longest continuous illumination and shadow perio
 
 ---
 
+### D-026 · 2026-10-02 · Accepted
+
+**Context:** S1-11 (README) and S1-12 (video script) were briefed by the team lead with some wording that the repository's own results do not support.
+
+**Decision:**
+
+1. **Parity wording.** The brief said "sub-milliarcsecond parity" with Horizons. True for the Sun (3.3e-8° = 0.12 milliarcsecond); not for Earth (2.65e-5° = 0.095 arcsecond = 95 milliarcseconds). The README and script give the numbers in degrees and arcseconds, with the limit (0.02°, 755 times larger) and the reason for Earth's gap.
+2. **"Validation" wording.** Barker et al. (2021) is described as a check "consistent with their published values, by criteria fixed before the run" (D-025), never "validated". The AVGVISIB result is "rank correlation 0.95", with the caveat that the map's span and height are unknown. Nothing is "validated at the sites".
+3. **The architecture diagram** shows what exists: Python pipeline (where the ray-marching happens) to committed data files to the TypeScript engine in a Web Worker to a Next.js page. The brief's "React/R3F UI" and "1440-bin raymarcher in the engine" are not what is built; the 3D scene is a stub and the raymarching is in the pipeline. The diagram marks the 3D scene, Evidence page and window finder as not built.
+4. **SIMULATED badge.** The README states that the mock engine exists and must carry the badge, and that the current page shows no simulated data, so it has none. It does not claim every unbuilt feature "carries a SIMULATED badge": unbuilt features are listed as not built and uncomputed values are blank.
+5. **Script facts.** "100-kilometre shadows" has no source here and is replaced by arithmetic (1 km of relief at 1.5° casts 38 km). "Crater wall drop-offs" are shown from the decision log (the old Shackleton tile centre, D-023), labelled as not in the app. "115-day day" is the lander-profile day (Sun's centre above the horizontal) and is said as such. The Link figures are left out of the narration because no published reference has been compared (S1-05h).
+6. **Structure.** The script follows the team lead's split (problem 0:00 to 0:40, engine to 1:30, demo to 2:30, evidence to 3:30, roadmap to 4:00), which differs from MASTER_PLAN §4.3's. The narration is counted: 474 words, about 190 seconds at 2.5 words a second.
+7. **Public statements kept from the old README:** the early start is unconfirmed (D-010); team registration is still open (P0-14); the Stage 1 date and format are as reported by the team lead and unconfirmed (S1-00). The team may change these once the facts do.
+8. **Folders.** `docs/submission/` belongs to the non-developer teammates; `DEMO_SCRIPT.md` is written there at the team lead's direction and is theirs to edit.
+9. **Side effect noticed:** `next dev` (Next.js 16.3) appends a block to `apps/web/AGENTS.md` (Dev 3's rules file) on every start. It was not committed. Dev 3 should not commit it; `agentRules: false` in `apps/web/next.config.ts` would stop it (Dev 3's folder, so left alone).
+
+**Consequences:** The README and script can be read against the data files line by line. Numbers stay in sync because they are copied from generated files; if a result changes, the README table and the script's number table must be updated together.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._
