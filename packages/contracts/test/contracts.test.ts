@@ -5,6 +5,7 @@ import {
   EphemerisHeaderSchema,
   HORIZON_AZIMUTH_SAMPLES,
   HorizonMaskSchema,
+  HorizonsResidualsSchema,
   LanderProfileSchema,
   LocationSchema,
   MAX_TIMELINE_STEPS,
@@ -379,5 +380,61 @@ describe("AnalystClaim", () => {
 
   it("rejects grounded: true with no citations", () => {
     expect(AnalystClaimSchema.safeParse({ ...claim, citations: [] }).success).toBe(false);
+  });
+});
+
+describe("HorizonsResiduals", () => {
+  const stat = { max_abs: 2e-5, mean: -1e-6, rms: 1e-5 };
+  const body = { az_on_sky_deg: stat, el_deg: stat, separation_deg: stat };
+  const row = {
+    site_id: "shackleton-rim",
+    utc: "2026-01-02T00:00:00.000",
+    body: "sun",
+    horizons: { az_deg: 192.2, el_deg: 1.1 },
+    engine: { az_deg: 192.2, el_deg: 1.1 },
+    residual: { az_on_sky_deg: 0, el_deg: 0, separation_deg: 1e-5 },
+  };
+  const report = {
+    schema_version: 1,
+    generated_by: "test",
+    reference: {
+      file: "horizons_reference.json",
+      api_version: "1.2",
+      targets: { sun: "10", earth: "399" },
+      epoch_count: 50,
+      site_ids: ["shackleton-rim"],
+      notes: [],
+    },
+    engine: { provenance: simProvenance, mast_height_m: 0 },
+    tolerance_deg: 0.02,
+    passes: true,
+    summary: { sun: body, earth: body, overall_separation_deg: stat },
+    by_site: { "shackleton-rim": { sun: body, earth: body } },
+    horizons_vs_spice_separation_deg: { sun: { max: 1e-6, mean: 1e-7, rms: 3e-7 } },
+    cases: [row],
+  };
+
+  it("accepts a consistent report", () => {
+    expect(HorizonsResidualsSchema.safeParse(report).success).toBe(true);
+  });
+
+  it("rejects passes: true when a case exceeds the tolerance", () => {
+    const bad = {
+      ...report,
+      cases: [{ ...row, residual: { ...row.residual, separation_deg: 0.5 } }],
+    };
+    expect(HorizonsResidualsSchema.safeParse(bad).success).toBe(false);
+    expect(HorizonsResidualsSchema.safeParse({ ...bad, passes: false }).success).toBe(true);
+  });
+
+  it("rejects an unknown body, a negative separation and a missing summary", () => {
+    expect(
+      HorizonsResidualsSchema.safeParse({ ...report, cases: [{ ...row, body: "moon" }] }).success,
+    ).toBe(false);
+    const neg = { ...row, residual: { ...row.residual, separation_deg: -1 } };
+    expect(HorizonsResidualsSchema.safeParse({ ...report, cases: [neg] }).success).toBe(false);
+    const incomplete: Partial<typeof report> = { ...report };
+    delete incomplete.summary;
+    expect(HorizonsResidualsSchema.safeParse(incomplete).success).toBe(false);
   });
 });
