@@ -332,6 +332,28 @@ The 5 m and 80 m products agree with each other where both cover the point (abou
 
 ---
 
+### D-025 · 2026-10-02 · Proposed (criteria fixed before the first run; results follow in the same entry)
+
+**Context:** S1-05e asks whether the engine's illumination can be cited. The brief said `DATA_VERIFICATION_REPORT.md` §4.2 holds published percentages and that Barker et al. (2021) Table 2 reports "average illumination for 2024–2026 at 1 m and 5 m". Checked: §4.2 holds **no** percentages (it lists the AVGVISIB map files and a second-hand note about Barker). Barker Table 2 is real (read from the NTRS accepted manuscript, SHA-256 pinned as `ntrs-barker2021-pdf`) but it is narrower than described: it is for seven Regions of Interest (RoIs) at Site 1 that were *selected* for nominal average illumination above 70% at 1 m, and its values are the **1st percentile over 100 DEM error clones**, not nominal values at a point. It gives no values for Shackleton or de Gerlache, and none at our Connecting Ridge tile centre. The other product, the PDS AVGVISIB map (`pds-avgvisib-85s-60m`), is a long-term average whose span and observer height for the 2016 release are not stated in its label or readme (the 2011 paper's abstract says several 18.6-year cycles at 6 h for the original 240 m work). So the 48.9 / 35.2 / 36.6 % figures cannot be compared with a published number for the same place; what can be compared is the method (at Barker's RoI centroids) and the spatial pattern (against AVGVISIB).
+
+**Method match with Barker (section 5 of the paper):** hourly steps; Sun's disk divided horizontally at the horizon elevation at the disk centre's azimuth (ours does the same); 5 m DEM near, 80 m DEM beyond (theirs 5 m below 5 km, 80 m to 100 km, 240 m beyond; ours 5 m to 12 km, 80 m to 300 km); MOON_ME of DE421 (ours DE440's `MOON_ME`, within 3e-7 rad). Differences: they use 720 rays 0.5° apart (ours 1440), a limb-darkened Sun at 550 nm (ours a uniform disk), and 100 error clones.
+
+**Criteria, fixed before any benchmark was computed.**
+
+*Benchmark A (quantitative).* The engine's method, run over 2024-01-01T00:00:00 UTC to 2026-01-01T00:00:00 UTC (hourly, end excluded) with the Sun from SPICE, at the seven RoI centroids of Table 2, at Δz = 1 m and 5 m above the nominal 5 m DEM height, giving the mean visible fraction of the Sun's disk (%). Pass if all three hold:
+
+- A1 (floor): ours is at least the paper's A value minus 2.0 percentage points, at 1 m and at 5 m, for every RoI. (A is a 1st percentile over clones; the paper says the nominal DEM "tends to be better than the mean/median of the clones". The 2 points allow for the Sun model and ray count.)
+- A2 (ceiling): ours is at most the paper's C value plus 5.0 points for every RoI, at 1 m and 5 m. (C is the best pixel of the RoI at every hourly step.)
+- A3 (the RoIs' own definition): the median over the seven centroids of ours at 1 m is at least 70.0%. (The RoIs are the connected pixels with nominal average illumination above 70% at 1 m.)
+
+Reported, not pass or fail: our longest continuous illumination and shadow periods against the paper's LCIP-1 and LCSP-99 (expected direction: ours at least the LCIP-1 and at most the LCSP-99).
+
+*Benchmark B (spatial).* 300 random points in each of the three site tiles (more than 1 km from the tile edge), the engine's any-part-of-the-disk lit fraction over the same two years against the AVGVISIB value at the 60 m pixel containing the point. The map's orientation is fixed independently of illumination (its zero-valued pixels must sit on low ground in the 80 m DEM), not by maximizing the correlation. Pass: Spearman rank correlation at least 0.8 over all 900 points for our 2 m mast, and at least 0.7 in each tile. The map's observer height is unknown, so 0 m and 2 m are both reported and the better is not chosen after the fact: 2 m is the pass criterion.
+
+*Decision rule.* Cleared for the README and video only if A1 to A3 and B pass; the claim allowed is then "agrees with the published method's results at Barker's RoIs and with the published map's pattern", never "validated at the sites". If anything fails, the cause is found, not the tolerance changed.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._
