@@ -27,8 +27,8 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
   - [ ] **S1-03a** Wire `SightlineEngineClient` into the app: load `ephemeris_2026_3600s.bin` in the worker (Dev 1, `apps/web/workers/`) and let Dev 3 choose the client (real sky for the readout, mock for anything terrain-dependent, with the badge from `provenance`). *Dev 1 + Dev 3.*
   - [ ] **S1-03b** Extend the ephemeris to 2026–2032 at 10-minute steps and publish it (R2, M1-05, M1-08); decide whether 1-hour steps with Hermite are enough (the parity says yes for Sun and Earth). *Dev 1.*
 
-- [x] **S1-04** Horizons check: 3 sites × 50 epochs; residuals saved as JSON. *Dev 1, Oct 4–5.* *Done 2026-10-02 on `dev1/S1-04-horizons-validation` (D-021; no PR yet):* `sightline horizons` queried JPL Horizons (12 requests, 6 answers per body and site, cached); `fixtures/golden/horizons_reference.json` and `horizons_residuals.json` written; `packages/engine/test/horizons.test.ts` asserts the 0.02° tolerance (largest gap 2.65e-5°, Sun 3.3e-8°, Earth 2.6e-5°) with two negative controls.
-  - [ ] **S1-04a** Optional: apply stellar aberration along the site's line of sight in `computeSky` (the Earth gap of 2.7e-5° would fall to about 1e-6°); needs the observer's velocity in the ephemeris file or an equivalent. *Dev 1, low priority.*
+- [x] **S1-04** Horizons check: 3 sites × 50 epochs; residuals saved as JSON. *Dev 1, Oct 4–5.* *Done 2026-10-02 on `dev1/S1-04-horizons-validation` (D-021; PR #5):* `sightline horizons` queried JPL Horizons (12 requests, 6 answers per body and site, cached); `fixtures/golden/horizons_reference.json` and `horizons_residuals.json` written; `packages/engine/test/horizons.test.ts` asserts the 0.02° tolerance (largest gap 2.65e-5°, Sun 3.3e-8°, Earth 2.6e-5°) with two negative controls.
+  - [-] **S1-04a** ~~Optional: apply stellar aberration along the site's line of sight in `computeSky`~~ Dropped 2026-10-02 (D-021 item 9): the Earth gap (2.65e-5°) is 755 times inside the 0.02° requirement; the time is kept for the Oct 6 delivery.
 
 - [ ] **S1-05** Horizon v0 on one real site. *Dev 1, Oct 4–6 (stretch).*
 
