@@ -2,10 +2,11 @@
 
 import argparse
 import json
-import math
 import sys
 from collections.abc import Sequence
 from pathlib import Path
+
+import numpy as np
 
 from sightline_pipeline import __version__
 from sightline_pipeline.ephem import DEFAULT_END_UTC, DEFAULT_START_UTC
@@ -59,7 +60,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("ephem", "sample Sun, Earth and DSN states in MOON_ME from SPICE"),
         ("golden", "write the reference fixtures the engine's parity tests use"),
         ("horizons", "ask JPL Horizons for the Sun and Earth at the 3 sites (3 sites x 50 epochs)"),
-        ("horizon", "compute the terrain horizon mask of the Shackleton Rim site from the DEMs"),
+        ("horizon", "compute the terrain horizon masks of the catalog sites from the DEMs"),
     ):
         p = sub.add_parser(name, help=help_text, description=help_text)
         p.add_argument("--sources", type=Path, default=DEFAULT_SOURCES_PATH, help=argparse.SUPPRESS)
@@ -78,10 +79,15 @@ def build_parser() -> argparse.ArgumentParser:
             p.add_argument("--step", type=int, default=3600, metavar="SECONDS", help="sample step")
             p.add_argument("--out-dir", type=Path, default=DEFAULT_ENGINE_DATA_DIR)
         if name == "horizon":
-            p.add_argument(
-                "--out", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "horizon_shackleton-rim.json"
-            )
+            p.add_argument("--out-dir", type=Path, default=DEFAULT_ENGINE_DATA_DIR)
             p.add_argument("--sites", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "sites.json")
+            p.add_argument(
+                "--only",
+                action="append",
+                default=[],
+                metavar="SITE_ID",
+                help="a site id (repeatable)",
+            )
         if name in ("golden", "horizons"):
             p.add_argument("--out-dir", type=Path, default=DEFAULT_GOLDEN_DIR)
             p.add_argument("--sites", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "sites.json")
@@ -146,7 +152,7 @@ def _run_pipeline_step(args: argparse.Namespace) -> int:
     # Imported here so `--help` and `fetch` work without loading SPICE and GDAL.
     from sightline_pipeline.ephem import write_ephemeris
     from sightline_pipeline.golden import write_golden
-    from sightline_pipeline.horizon import write_horizon
+    from sightline_pipeline.horizon import mask_from_hulls, write_horizons
     from sightline_pipeline.horizons import HorizonsError, write_reference
     from sightline_pipeline.sites import write_sites
 
@@ -172,21 +178,24 @@ def _run_pipeline_step(args: argparse.Namespace) -> int:
             for p in paths:
                 print(f"wrote {p} ({p.stat().st_size:,} B)")
         elif args.command == "horizon":
-            path = write_horizon(
+            for path in write_horizons(
                 args.raw_dir,
                 sources,
                 args.sites,
-                args.out,
+                args.out_dir,
+                args.only or None,
                 progress=lambda m: print(m, file=sys.stderr, flush=True),
-            )
-            doc = json.loads(path.read_text(encoding="utf-8"))
-            print(f"wrote {path} ({path.stat().st_size:,} B)")
-            for h, row in zip(doc["mast_heights_m"], doc["mask_elevation_rad"], strict=True):
-                deg = [math.degrees(v) for v in row]
-                print(
-                    f"mast {h:>4g} m: mask min {min(deg):6.3f}  mean {sum(deg) / len(deg):6.3f}  "
-                    f"max {max(deg):6.3f} deg"
-                )
+            ):
+                doc = json.loads(path.read_text(encoding="utf-8"))
+                print(f"wrote {path} ({path.stat().st_size:,} B)")
+                for h in (0.0, 2.0, 20.0):
+                    deg = np.degrees(mask_from_hulls(doc, h))
+                    print(
+                        f"  mast {h:>4g} m: mask min {deg.min():6.3f}  "
+                        f"mean {deg.mean():6.3f}  max {deg.max():6.3f} deg"
+                    )
+                n_lines = len(doc["hull_a"])
+                print(f"  {n_lines} envelope lines for {doc['azimuth_samples']} azimuths")
         elif args.command == "horizons":
             with make_client() as client:
                 path = write_reference(
