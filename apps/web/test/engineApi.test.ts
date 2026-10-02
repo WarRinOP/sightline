@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { MessageChannel } from "node:worker_threads";
 import * as Comlink from "comlink";
 import { describe, expect, it } from "vitest";
-import { siteLocation } from "@sightline/contracts";
+import { DEFAULT_LANDER_PROFILE, siteLocation } from "@sightline/contracts";
 import {
   BUNDLED_EPHEMERIS_META,
   BUNDLED_SITES,
@@ -22,6 +22,15 @@ const epoch_et = utcIsoToEt("2026-10-07T08:44:13");
 const site = BUNDLED_SITES[1];
 if (!site) throw new Error("the bundled catalog is empty");
 const location = siteLocation(site);
+// Every catalog site has a terrain horizon; a point about 100 m away from one does not.
+const nowhere = { ...location, lat_rad: location.lat_rad + 6e-5 };
+const yearRequest = {
+  location,
+  profile: DEFAULT_LANDER_PROFILE,
+  start_et: BUNDLED_EPHEMERIS_META.header.start_et,
+  end_et: BUNDLED_EPHEMERIS_META.header.start_et + 3 * 86_400,
+  step_s: 3600,
+};
 
 describe("engine API behind the worker", () => {
   it("reports real provenance and the ephemeris span", async () => {
@@ -44,8 +53,11 @@ describe("engine API behind the worker", () => {
 
   it("refuses the terrain methods instead of answering with flat-ground numbers", async () => {
     const api = createEngineApi(loadBytes);
-    await expect(api.getHorizon(location, 0)).rejects.toMatchObject({ name: "NotAvailableError" });
-    await expect(api.probeLit(location, epoch_et)).rejects.toMatchObject({
+    await expect(api.getHorizon(nowhere, 0)).rejects.toMatchObject({ name: "NotAvailableError" });
+    await expect(api.probeLit(nowhere, epoch_et)).rejects.toMatchObject({
+      name: "NotAvailableError",
+    });
+    await expect(api.getTimeline({ ...yearRequest, location: nowhere })).rejects.toMatchObject({
       name: "NotAvailableError",
     });
   });
@@ -78,22 +90,21 @@ describe("engine API behind the worker", () => {
     expect(await remote.getSunEarth(epoch_et, location, 0)).toEqual(
       await direct.getSunEarth(epoch_et, location, 0),
     );
-    // The error crosses the boundary with its name, so callers can tell it from a crash.
-    await expect(remote.getTimeline({} as never)).rejects.toMatchObject({
-      name: "NotAvailableError",
-    });
-
-    // The terrain horizon of the one site that has one crosses the boundary intact, and the
-    // other sites are still refused with the error's name.
-    const rim = BUNDLED_SITES.find((s) => s.id === "shackleton-rim");
-    if (!rim) throw new Error("the bundled catalog has no Shackleton Rim");
-    const mask = await remote.getHorizon(siteLocation(rim), 2);
+    // The terrain horizon, the probe and the timeline cross the boundary intact...
+    const mask = await remote.getHorizon(location, 2);
     expect(mask.mask_elevation_rad).toHaveLength(1440);
     expect(mask.simulated).toBe(false);
-    expect(await remote.probeLit(siteLocation(rim), epoch_et, 2)).toEqual(
-      await direct.probeLit(siteLocation(rim), epoch_et, 2),
+    expect(await remote.probeLit(location, epoch_et, 2)).toEqual(
+      await direct.probeLit(location, epoch_et, 2),
     );
-    await expect(remote.getHorizon(location, 2)).rejects.toMatchObject({
+    expect(await remote.getTimeline(yearRequest)).toEqual(await direct.getTimeline(yearRequest));
+
+    // ...and a place with no terrain horizon is refused with the error's name, so callers can
+    // tell a refusal from a crash.
+    await expect(remote.getHorizon(nowhere, 2)).rejects.toMatchObject({
+      name: "NotAvailableError",
+    });
+    await expect(remote.findWindows({} as never)).rejects.toMatchObject({
       name: "NotAvailableError",
     });
 

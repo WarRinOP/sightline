@@ -51,6 +51,9 @@ export const TimelineStatisticsSchema = z.object({
   longest_night_start_et: EpochEtSchema.nullable(),
   /** Unlit runs longer than `profile.battery_capacity_s`. */
   nights_over_battery: z.number().int().nonnegative(),
+  /** Longest run of lit steps, in seconds (steps × step_s); 0 when no step is lit. */
+  longest_day_s: z.number().nonnegative(),
+  longest_day_start_et: EpochEtSchema.nullable(),
 });
 export type TimelineStatistics = z.infer<typeof TimelineStatisticsSchema>;
 

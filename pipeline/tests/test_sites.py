@@ -11,15 +11,17 @@ from sightline_pipeline.sites import (
     DEFAULT_SITES_PATH,
     SITE_SPECS,
     build_sites,
+    rim_crest,
     tile_centre,
 )
 from sightline_pipeline.sources import DEFAULT_RAW_DIR, load_sources
 from tests.conftest import needs_site_dems
 
 STEREO = "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +x_0=0 +y_0=0 +R=1737400 +units=m +no_defs"
-# Team-lead decision on D-019, option A: the centre of each PGDA #78 tile.
+# D-019 option A: the centre of each PGDA #78 tile; D-024 (team lead, 2026-10-02): Shackleton Rim
+# is the crest of its rim ridge instead, the highest 5 m pixel more than 1 km from the tile edge.
 CONFIRMED = {
-    "shackleton-rim": (-89.767, 188.130),
+    "shackleton-rim": (-89.7804, 203.803),
     "connecting-ridge": (-89.463, 222.510),
     "de-gerlache-rim": (-88.683, 292.068),
 }
@@ -76,6 +78,28 @@ def test_tile_centre_rejects_odd_sizes_and_missing_data(tmp_path: Path) -> None:
         tile_centre(hole)
 
 
+def test_rim_crest_is_the_highest_pixel_away_from_the_edge(tmp_path: Path) -> None:
+    # 8 x 8 pixels of 500 m, margin 1000 m = 2 pixels: only the central 4 x 4 may be chosen.
+    data = np.zeros((8, 8), dtype="float32")
+    data[0, 3] = 900.0  # higher, but on the edge: ignored
+    data[3, 5] = 300.0  # the winner
+    data[4, 2] = 250.0
+    path = tmp_path / "crest.tif"
+    write_tile(path, data, left=9000.0, top=2000.0, res=500.0)
+    lat, lon, h = rim_crest(path)
+    assert h == 300.0
+    # Pixel (row 3, col 5): x = 9000 + 5.5 * 500 = 11750, y = 2000 - 3.5 * 500 = 250.
+    rho = math.hypot(11750.0, 250.0)
+    assert lat == pytest.approx(math.degrees(2 * math.atan(rho / (2 * 1_737_400)) - math.pi / 2))
+    assert lon == pytest.approx(math.degrees(math.atan2(11750.0, 250.0)), abs=1e-9)
+    with pytest.raises(ValueError, match="leaves no tile"):
+        rim_crest(path, margin_m=2500.0)
+    nodata = tmp_path / "nan.tif"
+    write_tile(nodata, np.full((8, 8), np.nan), left=9000.0, top=2000.0, res=500.0)
+    with pytest.raises(ValueError, match="no data"):
+        rim_crest(nodata)
+
+
 def test_the_three_specs_point_at_registered_site_dems() -> None:
     by_id = {d.id: d for d in load_sources().datasets}
     for spec in SITE_SPECS:
@@ -87,7 +111,7 @@ def test_the_three_specs_point_at_registered_site_dems() -> None:
 
 
 @needs_site_dems
-def test_catalog_holds_the_confirmed_tile_centres() -> None:
+def test_catalog_holds_the_confirmed_placements() -> None:
     sites = {s["id"]: s for s in build_sites(DEFAULT_RAW_DIR, load_sources())}
     assert set(sites) == set(CONFIRMED)
     for site_id, (lat, lon_east) in CONFIRMED.items():
@@ -96,7 +120,8 @@ def test_catalog_holds_the_confirmed_tile_centres() -> None:
         assert (s["lon_deg"] % 360) == pytest.approx(lon_east, abs=5e-4)
         assert s["simulated"] is False
         assert s["source_url"] == "https://pgda.gsfc.nasa.gov/products/78"
-        assert "not a landing or rim point" in s["description"]
+        assert "not a landing" in s["description"]  # none of them is a landing point
+        assert ("crest of the rim ridge" in s["description"]) is (site_id == "shackleton-rim")
         assert -7000 < s["elev_m"] < 7000
 
 

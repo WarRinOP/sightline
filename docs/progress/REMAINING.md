@@ -31,10 +31,13 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 - [x] **S1-04** Horizons check: 3 sites × 50 epochs; residuals saved as JSON. *Dev 1, Oct 4–5.* *Done 2026-10-02 on `dev1/S1-04-horizons-validation` (D-021; PR #5):* `sightline horizons` queried JPL Horizons (12 requests, 6 answers per body and site, cached); `fixtures/golden/horizons_reference.json` and `horizons_residuals.json` written; `packages/engine/test/horizons.test.ts` asserts the 0.02° tolerance (largest gap 2.65e-5°, Sun 3.3e-8°, Earth 2.6e-5°) with two negative controls.
   - [-] **S1-04a** ~~Optional: apply stellar aberration along the site's line of sight in `computeSky`~~ Dropped 2026-10-02 (D-021 item 9): the Earth gap (2.65e-5°) is 755 times inside the 0.02° requirement; the time is kept for the Oct 6 delivery.
 
-- [x] **S1-05** Horizon v0 on one real site (Shackleton Rim = Site04 tile centre). *Dev 1. Done 2026-10-02 (D-023; PR #7), after the team lead restated the early-start permission (CLAUDE.md §2.1).* `sightline horizon` ray-marches the 5 m tile plus the 80 m map to 300 km (1440 azimuths, 13 mast heights) into `horizon_shackleton-rim.json`; the engine's `getHorizon`, `probeLit` and `getSunEarth` use it for that site; the home page shows the real Sun disk and Link tiles for it. `pnpm verify` green (engine 117), pipeline 88 tests. **Not validated** against published maps (M2-13).
-  - [ ] **S1-05a** Run the same command for Connecting Ridge (Site01) and de Gerlache Rim (Site11); both tiles are already downloaded. Generalise `build_horizon` over `SITE_SPECS`. *Dev 1.*
-  - [ ] **S1-05b** Tighten the known limits (METHODS §6): exact mast dependence (store the candidate ground points per azimuth instead of a mast grid), finer or per-bin-maximum rays, the Sun's disk against the mask across its width. *Dev 1, low priority.*
-  - [ ] **S1-05c** Team lead: decide the demo observer. The Shackleton Rim tile centre is on a steep wall (Sun lit 11% of 2026, Earth never visible). The crest of the tile or an Artemis III region point would be a better demo (D-019 option B, P1-04b). *Team lead.*
+- [x] **S1-05** Horizon v0 on one real site. *Dev 1. Done 2026-10-02 (D-023; PR #7 merged).* `sightline horizon` ray-marches the 5 m tile plus the 80 m map to 300 km into a terrain mask; the engine's `getHorizon`, `probeLit` and `getSunEarth` use it. **Not validated** against published maps.
+  - [x] **S1-05a** *(2026-10-02, D-024; PR #8)* The same for Connecting Ridge and de Gerlache Rim: `sightline horizon` runs over all three sites into `horizon_<site>.json`.
+  - [~] **S1-05b** Tighten the known limits (METHODS §6). *Done 2026-10-02:* the mast dependence is exact (an envelope of lines per azimuth replaced a 13-height grid, D-024 item 3). *Open:* finer or per-bin-maximum rays; the Sun's disk against the mask across its width. *Dev 1, low priority.*
+  - [x] **S1-05c** *(2026-10-02, D-024; PR #8)* Shackleton Rim moved to the crest of its rim ridge (highest 5 m pixel more than 1 km from the tile edge): 1739.1 m, 1.9 km from the old tile centre, which is on a steep wall.
+  - [x] **S1-05d** *(2026-10-02, D-024; PR #8)* Real `getTimeline` for the three sites, with `longest_day_s` and `longest_day_start_et` added to the contract before the freeze. `findWindows` still refuses (M2-09).
+  - [ ] **S1-05e** **Validate the terrain results** against a published product (LOLA illumination or AVGVISIB, P1-04c, M2-13). Until then every illumination and visibility figure is "not yet validated". The most important open check. *Dev 1.*
+  - [ ] **S1-05f** Dev 3: read `statistics.longest_day_s` and `longest_day_start_et` in the mission barcode (S1-09), and show what "lit" means (D-024 item 6). *Dev 3.*
 
 - [ ] **S1-06** Terrain scene, sun light from `getSunEarth`, pin, orbit camera, 20 s Hero capture. *Dev 2, Oct 1–5.*
 
@@ -184,13 +187,13 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **M2-04** `dem/`: tile LRU cache, bilinear sampling, multi-res level selection.
 
-- [ ] **M2-05** `horizon/`: distance-adaptive ray-march with exact curvature; parity ≤ 0.05° RMS, ≤ 0.2° max vs golden.
+- [~] **M2-05** `horizon/`: distance-adaptive ray-march with exact curvature; parity ≤ 0.05° RMS, ≤ 0.2° max vs golden. *Built 2026-10-02 as a Python pipeline step (`sightline horizon`, S1-05) whose masks the engine loads; the 3 sites only, exact curvature, analytic tests. Open: a TypeScript ray-marcher over tiles for arbitrary places and its parity against the Python one (needs M2-04).*
 
 - [ ] **M2-06** `illumination/`: solar-disk fraction + Earth-shadow eclipse; analytic test cases.
 
 - [ ] **M2-07** `comms/`: Earth visibility with margin; DSN visibility; golden DSN windows.
 
-- [ ] **M2-08** `timeline/`: per-step state, RLE, statistics.
+- [~] **M2-08** `timeline/`: per-step state, RLE, statistics. *Built 2026-10-02 (S1-05d): per-step state and statistics for the three sites, hourly steps over 2026 in about 13 ms. Open: run-length encoding for the 6-year range and the performance target (M2-12).*
 
 - [ ] **M2-09** `windows/`: constraint search, scoring, Pareto; property tests.
 

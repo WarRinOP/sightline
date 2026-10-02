@@ -9,26 +9,28 @@ from rasterio.warp import transform
 
 from sightline_pipeline.horizon import (
     AZIMUTH_SAMPLES,
-    DEFAULT_HORIZON_PATH,
     FAR_DATASET,
-    MAST_HEIGHTS_M,
     MOON_RADIUS_M,
-    NEAR_DATASET,
     Dem,
     build_horizon,
     elevation_angle,
+    horizon_hulls,
     horizon_masks,
+    horizon_path,
+    mask_from_hulls,
     project,
     read_dem,
+    upper_envelope,
 )
-from sightline_pipeline.sites import DEFAULT_SITES_PATH, MOON_GEOGRAPHIC
+from sightline_pipeline.sites import DEFAULT_SITES_PATH, MOON_GEOGRAPHIC, SITE_SPECS, SiteSpec
 from sightline_pipeline.sources import DEFAULT_RAW_DIR, load_sources
 from tests.conftest import _present
 
 F64 = npt.NDArray[np.float64]
 STEREO = "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +x_0=0 +y_0=0 +R=1737400 +units=m +no_defs"
+SITE04 = "pgda78-site04-surf"
 needs_horizon_dems = pytest.mark.skipif(
-    not _present([NEAR_DATASET, FAR_DATASET]),
+    not _present([*(spec.dataset_id for spec in SITE_SPECS), FAR_DATASET]),
     reason="site and 80 m DEMs missing: run `sightline fetch --only dem`",
 )
 
@@ -262,36 +264,103 @@ def test_no_data_in_a_direction_is_an_error_not_a_horizon() -> None:
         masks(dem)
 
 
-def test_committed_horizon_file_is_well_formed() -> None:
-    doc = json.loads(DEFAULT_HORIZON_PATH.read_text(encoding="utf-8"))
+def test_the_envelope_is_the_maximum_of_the_lines_everywhere() -> None:
+    rng = np.random.default_rng(3)
+    for _ in range(50):
+        n = int(rng.integers(1, 400))
+        a = rng.normal(0.0, 0.05, n)
+        b = 1.0 / rng.uniform(5.0, 5e5, n)  # 1 / horizontal distance, like the real lines
+        env_a, env_b = upper_envelope(a, b, 20.0)
+        h = np.linspace(0.0, 20.0, 4001)
+        direct = np.max(a[None, :] - b[None, :] * h[:, None], axis=1)
+        enveloped = np.max(env_a[None, :] - env_b[None, :] * h[:, None], axis=1)
+        assert np.allclose(direct, enveloped, atol=1e-12, rtol=0)
+        assert (np.diff(env_b) < 0).all()  # each segment is flatter than the last
+        assert len(env_a) <= n
+
+
+def test_the_envelope_of_two_known_lines() -> None:
+    # y = 1 - 1 h and y = 0.5 - 0.1 h cross at h = 5/9: the steep one first, then the flat one.
+    env_a, env_b = upper_envelope(np.array([1.0, 0.5, -3.0]), np.array([1.0, 0.1, 0.01]), 20.0)
+    assert env_a.tolist() == [1.0, 0.5]
+    assert env_b.tolist() == [1.0, 0.1]
+    # Past the largest height of interest the flatter line is not needed.
+    env_a, _ = upper_envelope(np.array([1.0, 0.5]), np.array([1.0, 0.1]), 0.5)
+    assert env_a.tolist() == [1.0]
+    with pytest.raises(ValueError, match="no ground points"):
+        upper_envelope(np.array([-np.inf]), np.array([0.0]), 20.0)
+
+
+def test_the_stored_envelope_equals_the_direct_mask_at_any_mast_height() -> None:
+    # Rough synthetic terrain; heights that no grid would contain.
+    x0, y0 = observer_xy()
+
+    def hills(x: F64, y: F64) -> F64:
+        u, v = (x - x0) / 90.0, (y - y0) / 110.0
+        return 40.0 * np.sin(u + 0.3) * np.cos(1.3 * v) + 15.0 * np.sin(3.7 * u) * np.cos(2.9 * v)
+
+    dem = make_dem(hills, 3000.0, 5.0, (x0, y0))
+    far = make_dem(lambda x, y: np.zeros_like(x), 20_000.0, 80.0, (x0, y0))
+    heights = (0.0, 0.07, 0.4, 1.3, 2.0, 6.1, 13.3, 19.99, 20.0)
+    ground = 12.0
+    hulls = horizon_hulls(LAT, LON, ground, dem, far, n_azimuth=120)
+    offsets = np.concatenate([[0], np.cumsum([len(a) for a, _ in hulls])])
+    doc = {
+        "hull_offsets": offsets.tolist(),
+        "hull_a": np.concatenate([a for a, _ in hulls]).tolist(),
+        "hull_b": np.concatenate([b for _, b in hulls]).tolist(),
+    }
+    direct = horizon_masks(LAT, LON, ground, dem, far, heights, n_azimuth=120)
+    for k, h in enumerate(heights):
+        assert np.allclose(mask_from_hulls(doc, h), direct[k], atol=1e-12, rtol=0), h
+    # The envelope is a handful of lines per azimuth, not the thousands of samples.
+    assert len(doc["hull_a"]) < 120 * 40
+
+
+@pytest.mark.parametrize("spec", SITE_SPECS, ids=lambda spec: spec.site_id)
+def test_committed_horizon_file_is_well_formed(spec: SiteSpec) -> None:
+    doc = json.loads(horizon_path(spec.site_id).read_text(encoding="utf-8"))
+    assert doc["schema_version"] == 2
+    assert doc["site_id"] == spec.site_id
     assert doc["azimuth_samples"] == AZIMUTH_SAMPLES == 1440
     assert doc["azimuth_step_rad"] == pytest.approx(2 * math.pi / 1440)
-    assert doc["mast_heights_m"] == list(MAST_HEIGHTS_M)
-    rows = np.array(doc["mask_elevation_rad"])
-    assert rows.shape == (len(MAST_HEIGHTS_M), 1440)
+    assert doc["max_mast_height_m"] == 20.0
+    offsets = np.array(doc["hull_offsets"])
+    a, b = np.array(doc["hull_a"]), np.array(doc["hull_b"])
+    assert offsets.shape == (1441,) and offsets[0] == 0 and offsets[-1] == len(a) == len(b)
+    assert (np.diff(offsets) >= 1).all()  # at least one line per azimuth
+    assert np.isfinite(a).all() and (b > 0).all()
+    heights = (0.0, 0.1, 0.5, 1.0, 2.0, 3.3, 7.0, 12.0, 20.0)
+    rows = np.array([mask_from_hulls(doc, h) for h in heights])
     assert np.isfinite(rows).all() and np.abs(rows).max() < math.pi / 2
-    assert (np.diff(rows, axis=0) <= 0).all()
+    assert (np.diff(rows, axis=0) <= 1e-12).all()  # a taller mast never raises the mask
     assert doc["provenance"]["simulated"] is False
-    assert doc["provenance"]["data_sources"] == [NEAR_DATASET, FAR_DATASET]
+    assert doc["provenance"]["data_sources"] == [spec.dataset_id, FAR_DATASET]
+    catalog = {s["id"]: s for s in json.loads(DEFAULT_SITES_PATH.read_text())["sites"]}[
+        spec.site_id
+    ]
+    assert doc["location"]["lat_rad"] == pytest.approx(math.radians(catalog["lat_deg"]), abs=1e-12)
+    assert doc["location"]["elev_m"] == catalog["elev_m"]
 
 
 @needs_horizon_dems
-def test_horizon_file_regenerates_from_the_dems() -> None:
-    doc = build_horizon(DEFAULT_RAW_DIR, load_sources(), DEFAULT_SITES_PATH)
-    committed = json.loads(DEFAULT_HORIZON_PATH.read_text(encoding="utf-8"))
+@pytest.mark.parametrize("spec", SITE_SPECS, ids=lambda spec: spec.site_id)
+def test_horizon_file_regenerates_from_the_dems(spec: SiteSpec) -> None:
+    doc = build_horizon(DEFAULT_RAW_DIR, load_sources(), DEFAULT_SITES_PATH, spec.site_id)
+    committed = json.loads(horizon_path(spec.site_id).read_text(encoding="utf-8"))
     assert doc["location"] == committed["location"]
-    assert doc["mast_heights_m"] == committed["mast_heights_m"]
-    a, b = np.array(doc["mask_elevation_rad"]), np.array(committed["mask_elevation_rad"])
-    assert np.abs(a - b).max() < 2e-7  # same code and data; rounding at 1e-7
-    # The 5 m and 80 m rasters agree about the ground under the observer to a metre or so.
+    for h in (0.0, 0.3, 2.0, 7.7, 20.0):
+        assert np.abs(mask_from_hulls(doc, h) - mask_from_hulls(committed, h)).max() < 2e-6, h
+    # The 5 m and 80 m rasters agree about the ground under the observer. A peak is smoothed in
+    # the 80 m map (3.1 m at the Shackleton crest), so this catches gross offsets, not that.
     m = doc["method"]
-    assert abs(m["sampled_near_height_m"] - m["sampled_far_height_m"]) < 3.0
+    assert abs(m["sampled_near_height_m"] - m["sampled_far_height_m"]) < 10.0
 
 
 @needs_horizon_dems
 def test_on_the_real_tile_the_crest_sees_a_lower_horizon_than_the_floor() -> None:
     by_id = {d.id: d for d in load_sources().datasets}
-    near = read_dem(DEFAULT_RAW_DIR / NEAR_DATASET / by_id[NEAR_DATASET].filename)
+    near = read_dem(DEFAULT_RAW_DIR / SITE04 / by_id[SITE04].filename)
     far = read_dem(DEFAULT_RAW_DIR / FAR_DATASET / by_id[FAR_DATASET].filename)
     z = np.nan_to_num(near.z, nan=0.0)
     # Stay 1 km inside the tile edge so every ray starts on 5 m data.
@@ -317,26 +386,17 @@ def test_on_the_real_tile_the_crest_sees_a_lower_horizon_than_the_floor() -> Non
 
 
 @needs_horizon_dems
-def test_mast_interpolation_is_tight_where_the_sun_can_be() -> None:
-    # The engine interpolates linearly between the stored mast heights. Between them the error
-    # can reach 0.3 degrees, but only on steep-wall azimuths where the mask is above 3 degrees;
-    # the Sun never gets above about 2.8 degrees at these latitudes. Where it can be, the error
-    # must stay below 0.001 degrees (1/270 of the Sun's radius).
+@pytest.mark.parametrize("spec", SITE_SPECS, ids=lambda spec: spec.site_id)
+def test_the_committed_envelope_is_exact_at_any_mast_height(spec: SiteSpec) -> None:
+    # The engine evaluates the stored lines at the requested mast height. They must equal a
+    # fresh brute-force mask at heights that were never stored.
     by_id = {d.id: d for d in load_sources().datasets}
-    near = read_dem(DEFAULT_RAW_DIR / NEAR_DATASET / by_id[NEAR_DATASET].filename)
+    near = read_dem(DEFAULT_RAW_DIR / spec.dataset_id / by_id[spec.dataset_id].filename)
     far = read_dem(DEFAULT_RAW_DIR / FAR_DATASET / by_id[FAR_DATASET].filename)
-    doc = json.loads(DEFAULT_HORIZON_PATH.read_text(encoding="utf-8"))
-    grid = np.array(doc["mast_heights_m"])
-    rows = np.array(doc["mask_elevation_rad"])
+    doc = json.loads(horizon_path(spec.site_id).read_text(encoding="utf-8"))
     loc = doc["location"]
-    mids = [float((a + b) / 2) for a, b in zip(grid[:-1], grid[1:], strict=True)]
-    exact = horizon_masks(
-        loc["lat_rad"], loc["lon_rad"], loc["elev_m"], near, far, mast_heights_m=mids
-    )
-    for k, h in enumerate(mids):
-        j = int(np.searchsorted(grid, h))
-        t = (h - grid[j - 1]) / (grid[j] - grid[j - 1])
-        interpolated = rows[j - 1] + (rows[j] - rows[j - 1]) * t
-        low = exact[k] < math.radians(3.0)
-        assert low.sum() > 100  # there are azimuths in the Sun's band to judge
-        assert np.abs(interpolated - exact[k])[low].max() < math.radians(0.001), h
+    heights = (0.0, 0.05, 0.125, 0.7, 1.9, 2.0, 6.1, 13.3, 19.9, 20.0)
+    exact = horizon_masks(loc["lat_rad"], loc["lon_rad"], loc["elev_m"], near, far, heights)
+    for k, h in enumerate(heights):
+        # Rounding of the stored lines (9 decimals) is the only difference allowed.
+        assert np.abs(mask_from_hulls(doc, h) - exact[k]).max() < 2e-7, (spec.site_id, h)

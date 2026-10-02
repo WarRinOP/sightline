@@ -78,9 +78,54 @@ percentages and communication windows are not built yet.
    direction, which differs from the geodetic vertical by up to 0.19°.
 
 **What this is not.** On the flat horizon, "the Sun is above it" is not "the site is lit".
-`getHorizon` and `probeLit` therefore answer only where a terrain horizon exists and refuse
-elsewhere (`NotAvailableError`, S1-05); `getTimeline` and `findWindows` refuse everywhere until
-M2-08. The mock engine still answers them, labelled SIMULATED.
+`getHorizon`, `probeLit` and `getTimeline` therefore answer only where a terrain horizon exists (the
+three catalog sites, §6) and refuse elsewhere (`NotAvailableError`); `findWindows` refuses
+everywhere until M2-09. The mock engine still answers them, labelled SIMULATED.
+
+## 4. The site catalog
+
+`sightline sites` writes `packages/engine/src/data/sites.json` from the downloaded PGDA #78 site
+DEMs (Barker et al. 2021), each at a position that can be reproduced from the file, with the height
+read from the 5 m DEM there. Shackleton Rim is Site04, Connecting Ridge is Site01 and de Gerlache
+Rim is Site11, as PGDA names them. Longitudes are stored east in [-180, 180]. None is a landing
+point.
+
+- **Connecting Ridge and de Gerlache Rim** are the **centres of their 16 km tiles**, computed from
+  the file's georeference, with the height the mean of the four pixels around the centre (D-019,
+  option A).
+- **Shackleton Rim** is the **crest of the rim ridge** in its tile: the highest 5 m pixel more than
+  1 km from the tile edge, with that pixel's own height (D-024, the team lead's decision of
+  2026-10-02). The tile centre it replaced is on a steep crater wall: the terrain rises 31 m within
+  50 m to the east of it. The crest is 1.9 km from that centre, at 1739.1 m against 769.7 m. The
+  1 km margin keeps the search off a ridge that continues off the tile (the highest pixel of the
+  whole tile, 1805 m, is on its edge) and starts every ray on 5 m data. The same pixel is the best
+  one for a 1 km and a 2 km margin, so it is an interior peak, not an edge effect.
+
+## 5. Validation
+
+Parity fixtures in `fixtures/golden/` are written only by `sightline golden`. Tolerances were fixed
+before the first run and are not to be loosened to make a test pass.
+
+| Quantity | Reference | Tolerance | Worst gap measured (144 cases, 4 sites, with and without a 2 m mast) |
+|---|---|---|---|
+| UTC to ET, ET to UTC | SPICE `str2et`, `et2utc` (15 cases, three leap seconds) | 1 µs; exact string | within the tolerance in every case |
+| Sun azimuth and elevation | SPICE `spkcpo`, observer fixed on the Moon, LT+S at the observer | 1e-4° | 2.1e-8° |
+| Earth azimuth and elevation | the same | 1e-4° | 2.7e-5° |
+| Sun disk fraction | the same direction, same formula in Python | (2/π)·1e-4°/r_sun, about 2e-4 | 6.9e-9 |
+| DSN elevation of the site | SPICE `spkcpt` in each station's topocentric frame | 0.25° | 0.189° |
+
+The Sun and Earth references come from a different SPICE route than the engine's (observer on the
+Moon versus Moon-centre minus site vector), so the agreement also tests that simplification. The
+0.25° DSN tolerance is the 0.19° geodetic-versus-geocentric gap plus margin; the measured gap
+(0.189°) is that effect, not noise.
+
+Seasonal checks on the real file (2026, measured in S1-03 at the three tile centres and not repeated at the Shackleton crest): the Sun's elevation reaches ±1.77°
+(Shackleton Rim), ±2.05° to 2.11° (Connecting Ridge) and ±2.8° (de Gerlache Rim), which is the
+lunar axial tilt of 1.54° plus each site's colatitude; the Sun circles the horizon 12 or 13 times
+(one lunar day each); the month-averaged elevation changes sign on 2026-02-27 and 2026-08-23 (the
+draconic cycle); Earth stays within about 10° of the horizon. With a 0° mask a DSN link exists
+whenever Earth is above the horizon (the best complex is never below about 8.7°); with a 10° mask
+there are short gaps, about 0.5% of the Earth-up time.
 
 ### 5.1 Against JPL Horizons (S1-04)
 
@@ -117,13 +162,12 @@ both bodies. The statistics above use `atan2(|u×v|, u·v)`, which resolves angl
 the Earth orientation predict kernel's accuracy beyond its use for station directions; the engine
 in a browser worker (the checks above run in Node).
 
-## 6. Terrain horizon (S1-05)
+## 6. Terrain horizon and timeline (S1-05)
 
-`sightline horizon` computes, for one observer, the highest elevation the ground reaches in each of
-1440 azimuths (0.25°, the contract's `HORIZON_AZIMUTH_SAMPLES`), for 13 mast heights from 0 to 20 m,
-and writes `packages/engine/src/data/horizon_shackleton-rim.json` (205 KB). The engine loads it; it
-does not recompute it. Today there is one observer: the Shackleton Rim catalog entry (§4), which is
-the centre of the PGDA Site04 tile.
+`sightline horizon` computes, for each catalog site, the highest elevation the ground reaches in
+each of 1440 azimuths (0.25°, the contract's `HORIZON_AZIMUTH_SAMPLES`) and writes
+`packages/engine/src/data/horizon_<site>.json` (83 to 256 KB). The engine loads the files; it does
+not recompute them.
 
 **Method.**
 
@@ -134,49 +178,71 @@ the centre of the PGDA Site04 tile.
 2. Ground points are projected to the DEMs' south-polar stereographic plane (`rho = 2R tan((90° +
    lat)/2)`, `x = rho sin(lon)`, `y = rho cos(lon)`); this agrees with PROJ to 1e-9 m on 2,000
    random points in the CRS of both files, and `read_dem` refuses a file whose CRS differs.
-3. Height is sampled bilinearly. Near field: the 5 m site tile (`pgda78-site04-surf`), every 5 m to
-   12 km. Far field: the 80 m south-polar map (`pgda90-ldem-80s-80m`), every 80 m to 300 km, used
-   only where the 5 m tile has no data. Terrain beyond 300 km or outside both rasters is not seen,
-   so the mask is a lower bound on the true horizon there.
-4. Elevation of a ground point `z` above the sphere at ground distance `s`, seen from an observer
-   `h` above the sphere, with `a = s / R`: `atan2((z − h) − (R + z)·2 sin²(a/2), (R + z) sin a)`.
-   This is exact for the sphere. It equals the textbook form `atan((z − h)/s) − s/(2R)` to
-   O(a³); a test compares the two on random terrain over 12 azimuths and they agree within 5e-5 rad
-   (the difference is the horizontal distance `(R+z) sin a` against `s`). The `(z − h)` form avoids
-   subtracting two numbers near 1.7e6 m, which lost digits at small `a` (found by a test that
-   expected `−a/2` and got 1.7e-12 rad off).
-5. The mask is the maximum over the ray. Between stored mast heights the engine interpolates
-   linearly, and between azimuth bins likewise (wrapping at north).
+3. Height is sampled bilinearly. Near field: the site's 5 m tile, every 5 m to 12 km. Far field: the
+   80 m south-polar map (`pgda90-ldem-80s-80m`), every 80 m to 300 km, used only where the 5 m tile
+   has no data. Terrain beyond 300 km or outside both rasters is not seen, so the mask is a lower
+   bound on the true horizon there.
+4. For a ground point at height `z` above the sphere and distance `s` (`a = s/R`, `H = (R+z) sin a`),
+   seen from an observer `g + h` above the sphere (`g` the ground under the mast, `h` the mast),
+   the tangent of its elevation is exactly `A − h·B` with `A = ((z − g) − (R+z)·2 sin²(a/2)) / H`
+   and `B = 1/H`. The first form is exact for the sphere and equals the textbook
+   `atan((z − g − h)/s) − s/(2R)` to O(a³) (a test compares them within 5e-5 rad). The
+   `(z − g)` form avoids subtracting two numbers near 1.7e6 m, which lost digits at small `a`.
+5. **The mask at any mast height is `atan(max over ground points of A − h·B)`**: the upper envelope
+   of lines in `h`. For each azimuth the file keeps only the lines that are highest somewhere on
+   `h ∈ [0, 20 m]` (the contract's maximum): 2 to 6 per azimuth, 2,500 to 8,800 per site. So the
+   mast dependence is exact, not interpolated. (A first version stored masks at 13 mast heights
+   and interpolated; at Connecting Ridge and de Gerlache Rim it was off by 0.1° to 0.7° between
+   stored heights in the Sun's band, because ground 5 to 30 m away dominates there. It was replaced.)
+   Between azimuth bins the engine interpolates linearly, wrapping at north.
 
 **What the tests establish.** On synthetic terrain with analytic answers (CI): a DEM of zeros (the
 sphere) gives the closed form, and from a 2 m mast the mask equals the flat-horizon dip
 `acos(R/(R+h))` that §3 uses without terrain; a 100 m wall 1 km away gives `atan` of its height
 over its distance; a bump due east peaks at azimuth 90° and one due north peaks across the 359°/0°
 seam; a bowl gives `atan(z_rim/ρ_rim)` from its floor and a lower, non-positive mask from the rim
-plateau; a taller mast never raises the mask (Δθ ≤ 0 at every azimuth); no data in a direction is an
-error, not a horizon. On the real tile (skipped in CI, which does not download the DEMs): the
-highest point of the tile sees a lower mean horizon than the lowest point, and the file regenerates
-from the DEMs.
+plateau; a taller mast never raises the mask (Δθ ≤ 0 at every azimuth); the stored envelope equals a
+brute-force mask at heights nobody stored; the envelope of random lines equals their maximum
+everywhere; no data in a direction is an error, not a horizon; a brute-force scalar implementation
+agrees within 5e-5 rad. On the real tiles (skipped in CI, which does not download the DEMs): the
+highest point of the Site04 tile sees a lower mean horizon than the lowest, each file regenerates
+from the DEMs, and the committed envelope equals a fresh brute-force mask at ten mast heights for
+all three sites.
 
-**Measured properties of the Shackleton Rim file** (mast 0, degrees): minimum 0.089, mean 13.0,
-maximum 32.7. The terrain rises about 31 m within 50 m to the east and falls the same to the west,
-so the tile centre sits on a roughly 32° crater wall, not on the rim crest. For 2026, hourly, at a
-2 m mast, the engine puts any part of the Sun above the mask 11.0% of the time (58.0% to 60.1%
-above a flat horizon) and Earth above it 0% of the time (45% above a flat horizon). These are
-engine outputs, **not validated** against published illumination or visibility maps (M2-13).
+**Timeline** (`getTimeline`). For each step from `start_et` to `end_et` inclusive, `computeSky`
+runs with the site's mask at the profile's mast height. A step is *lit* when the Sun's centre is at
+least `min_sun_elev_rad` above the local horizontal (default 0) and the disk fraction above the mask
+is positive and at least `min_sun_disk_fraction`; it has a *link* when Earth clears the mask by
+`min_earth_elev_rad` and at least one DSN complex sees the site above `dsn_min_elev_rad`. A night
+is a maximal run of unlit steps and a day a maximal run of lit steps, each counted as steps ×
+`step_s`, a run cut by the end of the range counting as far as it goes. `probeLit` says lit for any
+sliver of the disk; with `min_sun_elev_rad` at −90° the timeline agrees with it step for step
+(tested), but with the default profile the timeline is stricter.
+
+**Measured for the three sites** (2026, hourly, default profile: 2 m mast, 50 h battery; engine
+output, **not validated** against published illumination or visibility maps, M2-13):
+
+| Site | Lit | Link | Lit and link | Longest night | Longest day | Nights over 50 h |
+|---|---|---|---|---|---|---|
+| Shackleton Rim (crest) | 48.9 % | 49.9 % | 25.2 % | 185.8 d | 115.8 d | 1 |
+| Connecting Ridge (tile centre) | 35.2 % | 39.8 % | 11.8 % | 146.3 d | 23.8 d | 9 |
+| de Gerlache Rim (tile centre) | 36.6 % | 53.8 % | 21.4 % | 114.7 d | 25.6 d | 11 |
+
+The long runs are the polar seasons: the Sun's centre is above the horizontal for roughly half of a
+year and below it for the rest. With no mast the figures differ a lot at Connecting Ridge (lit
+24.8 %, link 22.1 %): the ground within about 30 m of the observer, which the 5 m DEM resolves in
+a few pixels, sets the mask there. The old Shackleton tile centre (on the crater wall, since
+replaced) gave any-part-of-the-disk light 10.95 % of 2026 and Earth 0 %.
 
 **Known limits.**
 
-- **Mast interpolation.** Exact at the stored heights, which include the default 2 m. Between them
-  the error is at most 2.2e-5° wherever the mask is below 3° (the only place the Sun can be at
-  these latitudes) and up to 0.31° on steep-wall azimuths where the mask is above 3°. The
-  controlling ground point there is a few metres away, so the mask drops by degrees per metre of
-  mast; a finer grid does not shrink the worst case. A test asserts the first figure.
+- **Near-field resolution.** At small masts the mask is set by ground a few pixels from the
+  observer, so it is only as good as the 5 m DEM there. The lander's own footprint is not modelled.
 - **Ray spacing.** At 0.25° a ray pair is 35 m apart at 8 km and 1.3 km apart at 300 km, so a narrow
   ridge between rays can be missed. A finer ray set, or per-bin maxima, would remove this.
 - **Straight horizon across the Sun's disk.** The mask is read at the Sun's centre azimuth and used
   as a straight line across the disk (radius 0.27°).
-- **The 5 m and 80 m rasters** agree about the ground under the observer to 0.8 m (769.68 m against
-  770.49 m); nothing was done to blend the two beyond the hand-over at the tile's edge.
-- **One site.** Connecting Ridge and de Gerlache Rim have DEMs on disk but no mask yet.
-
+- **The 5 m and 80 m rasters** agree about the ground under the observer to 0.8 m at the tile
+  centres and 3.1 m at the Shackleton crest (an 80 m map smooths a peak); nothing was done to blend
+  the two beyond the hand-over at the tile's edge.
+- **Sun and Earth at azimuth, not area.** Earth's disk (about 1.9° across) is treated as a point.

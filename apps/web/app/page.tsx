@@ -11,12 +11,13 @@ export default function HomePage() {
         <p className="text-text-2">
           Where the Sun and Earth are in the sky of a spot near the Moon&apos;s south pole. The
           directions below come from NASA NAIF SPICE ephemerides and are computed in your browser.
-          Light and link verdicts need the terrain horizon, which is not built yet, so they are not
-          shown.
+          Light and link are judged against the terrain horizon built from NASA LOLA elevation data;
+          that part is real but not yet checked against published maps.
         </p>
         <p className="text-text-2">
-          The {sites.length} preset sites are the centres of NASA PGDA site-DEM tiles, named after
-          the PGDA product. They are not landing points or rim positions.
+          The {sites.length} preset sites are positions in NASA PGDA site-DEM tiles: Shackleton Rim
+          is the crest of the rim ridge in its tile, the other two are tile centres. They are named
+          after the PGDA products. None of them is a landing point.
         </p>
       </header>
 

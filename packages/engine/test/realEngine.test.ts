@@ -6,6 +6,7 @@ import {
   siteLocation,
   DEFAULT_LANDER_PROFILE,
   type EngineClient,
+  type Location,
 } from "@sightline/contracts";
 import {
   BUNDLED_EPHEMERIS_META,
@@ -60,13 +61,13 @@ describe("listSites", () => {
       expect(SiteSchema.safeParse(s).success).toBe(true);
       expect(s.simulated).toBe(false);
       expect(s.source_url).toBe("https://pgda.gsfc.nasa.gov/products/78");
-      expect(s.description).toContain("tile centre, not a landing or rim point");
+      expect(s.description).toContain("not a landing");
     }
   });
 
-  it("holds the tile centres confirmed in D-019 (option A)", () => {
+  it("holds the placements: Shackleton Rim at its ridge crest (D-024), the other two at their tile centres (D-019)", () => {
     const want: Record<string, [number, number]> = {
-      "shackleton-rim": [-89.767, 188.13 - 360],
+      "shackleton-rim": [-89.7804, 203.803 - 360],
       "connecting-ridge": [-89.463, 222.51 - 360],
       "de-gerlache-rim": [-88.683, 292.068 - 360],
     };
@@ -75,6 +76,9 @@ describe("listSites", () => {
       expect(Math.abs(s.lat_deg - lat)).toBeLessThan(5e-4);
       expect(Math.abs(s.lon_deg - lon)).toBeLessThan(5e-4);
     }
+    const rim = BUNDLED_SITES[0]!;
+    expect(rim.description).toContain("crest of the rim ridge");
+    expect(BUNDLED_SITES[1]!.description).toContain("tile centre");
   });
 
   it("has the heights sampled from the 5 m DEMs, not the ones in the brief", () => {
@@ -88,7 +92,7 @@ describe("listSites", () => {
   it("hands out copies", async () => {
     const [first] = await engine.listSites();
     first!.name = "changed";
-    expect((await engine.listSites())[0]!.name).toBe("Shackleton Rim");
+    expect((await engine.listSites())[0]!.name).toBe("Shackleton Rim crest");
   });
 });
 
@@ -103,8 +107,12 @@ describe("provenance", () => {
   });
 });
 
-describe("getSunEarth on real positions", () => {
+describe("getSunEarth on real positions (flat horizon: no terrain masks loaded)", () => {
   const sites = BUNDLED_SITES;
+  // These tests are about the sky alone, so they use a client with no terrain masks.
+  const engine: EngineClient = createSightlineEngineClient(readArrayBuffer(BUNDLED_BIN), {
+    horizons: [],
+  });
 
   async function year(siteIndex: number, step_s: number, mast = 2) {
     const loc = siteLocation(sites[siteIndex]!);
@@ -236,35 +244,35 @@ describe("getSunEarth on real positions", () => {
   });
 });
 
-describe("methods that need terrain or the timeline engine", () => {
+describe("methods that need a terrain horizon or the window search", () => {
   const range = { start_et: START_ET, end_et: START_ET + DAY_S, step_s: 3600 };
-  // Connecting Ridge has no terrain horizon yet; Shackleton Rim has (see horizon.test.ts).
-  const noTerrain = siteLocation(BUNDLED_SITES[1]!);
+  // A place about 0.3 km from the Shackleton Rim crest: no terrain horizon is bundled for it.
+  const nowhere: Location = { ...siteLocation(BUNDLED_SITES[0]!), lat_rad: -1.5668 };
   const withTerrain = siteLocation(BUNDLED_SITES[0]!);
 
-  it("refuse a site that has no terrain horizon instead of answering with a flat-ground verdict", async () => {
-    for (const c of [engine.getHorizon(noTerrain, 2), engine.probeLit(noTerrain, START_ET)]) {
+  it("refuse a place that has no terrain horizon instead of answering with a flat-ground verdict", async () => {
+    const calls: Promise<unknown>[] = [
+      engine.getHorizon(nowhere, 2),
+      engine.probeLit(nowhere, START_ET),
+      engine.getTimeline({ location: nowhere, profile: DEFAULT_LANDER_PROFILE, ...range }),
+    ];
+    for (const c of calls) {
       await expect(c).rejects.toBeInstanceOf(NotAvailableError);
-      await expect(c).rejects.toThrow(/Shackleton Rim.*S1-05/);
+      await expect(c).rejects.toThrow(/three catalog sites/);
     }
   });
 
-  it("refuse the timeline and the window search everywhere until M2-08", async () => {
-    for (const loc of [noTerrain, withTerrain]) {
-      const calls: Promise<unknown>[] = [
-        engine.getTimeline({ location: loc, profile: DEFAULT_LANDER_PROFILE, ...range }),
-        engine.findWindows({
-          location: loc,
-          profile: DEFAULT_LANDER_PROFILE,
-          ...range,
-          min_duration_s: 0,
-          max_results: 3,
-        }),
-      ];
-      for (const c of calls) {
-        await expect(c).rejects.toBeInstanceOf(NotAvailableError);
-        await expect(c).rejects.toThrow(/M2-08/);
-      }
+  it("refuse the window search everywhere until M2-09", async () => {
+    for (const loc of [nowhere, withTerrain]) {
+      const c = engine.findWindows({
+        location: loc,
+        profile: DEFAULT_LANDER_PROFILE,
+        ...range,
+        min_duration_s: 0,
+        max_results: 3,
+      });
+      await expect(c).rejects.toBeInstanceOf(NotAvailableError);
+      await expect(c).rejects.toThrow(/M2-09/);
     }
   });
 });

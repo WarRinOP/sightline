@@ -1,5 +1,6 @@
 export { MOCK_EPOCH_ET, MOCK_PROVENANCE, SYNTHETIC_SOURCE } from "./mock/constants";
-export { MockEngineClient, createMockEngineClient, summarizeSteps } from "./mock/mockEngine";
+export { MockEngineClient, createMockEngineClient } from "./mock/mockEngine";
+export { isLit, stepKind, summarizeSteps } from "./timeline";
 export { MOCK_SITES } from "./mock/mockSites";
 export {
   MOCK_TILE_MANIFEST,
