@@ -91,6 +91,16 @@ in its first tests and one wrong claim in a code comment about interpolation; te
 and they are recorded in `docs/progress/DECISIONS.md` (D-023). The result has not been validated
 against published illumination maps.
 
+### Terrain horizons for all sites, the crest, and the timeline (S1-05a, S1-05c, S1-05d, 2026-10-02)
+
+The AI extended the horizon code to the other two sites, wrote the rule that finds the Shackleton
+crest (the team lead asked for it), replaced a mast-height grid with an exact formulation after its
+own tests showed an interpolation error, and wrote the timeline code and its tests. It also
+regenerated the reference files with their commands and made a documentation mistake (it deleted two
+sections of `METHODS.md` in an earlier edit) that it found and repaired. The elevation data and the
+JPL Horizons answers are NASA's and JPL's. None of the results has been validated against published
+illumination maps.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list

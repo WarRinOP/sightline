@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { Site, SunEarthState } from "@sightline/contracts";
-import { siteLocation } from "@sightline/contracts";
+import type { Site, SunEarthState, TimelineStatistics } from "@sightline/contracts";
+import { DEFAULT_LANDER_PROFILE, siteLocation } from "@sightline/contracts";
 import { etToUtcIso, utcIsoToEt } from "@sightline/engine";
 import { connectEngine, type EngineConnection } from "../workers/engineBridge";
 
@@ -10,6 +10,11 @@ const TICK_MS = 200;
 // Two hours per tick: the engine's samples are hourly and interpolated, and a lunar day (29.5
 // days) passes in about a minute and a half.
 const TICK_STEP_S = 2 * 3600;
+
+// The mast and limits every number on this page assumes: the contract's default lander profile.
+const PROFILE = DEFAULT_LANDER_PROFILE;
+const HOUR_S = 3600;
+const DAY_S = 86_400;
 
 const toDeg = (rad: number) => (rad * 180) / Math.PI;
 const signed = (deg: number) => `${deg >= 0 ? "+" : "−"}${Math.abs(deg).toFixed(2)}°`;
@@ -28,6 +33,8 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
   const [real, setReal] = useState<SunEarthState | null>(null);
   // Per site: does the engine have a terrain horizon, and is it simulated? Asked, not assumed.
   const [terrain, setTerrain] = useState<Record<string, { simulated: boolean } | null>>({});
+  // Per site: the engine's statistics over the whole ephemeris, or "error".
+  const [year, setYear] = useState<Record<string, TimelineStatistics | "error">>({});
 
   // Start the engine worker. StrictMode mounts twice in development; the first one is terminated.
   useEffect(() => {
@@ -84,7 +91,7 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
   useEffect(() => {
     if (!engine || !location || epoch_et === null) return;
     let cancelled = false;
-    void engine.client.getSunEarth(epoch_et, location, 0).then((state) => {
+    void engine.client.getSunEarth(epoch_et, location, PROFILE.mast_height_m).then((state) => {
       if (!cancelled) setReal(state);
     });
     return () => {
@@ -95,7 +102,7 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
   useEffect(() => {
     if (!engine || !location || terrain[siteId] !== undefined) return;
     let cancelled = false;
-    engine.client.getHorizon(location, 0).then(
+    engine.client.getHorizon(location, PROFILE.mast_height_m).then(
       (mask) => {
         if (!cancelled) setTerrain((t) => ({ ...t, [siteId]: { simulated: mask.simulated } }));
       },
@@ -111,6 +118,26 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
 
   const provenance = engine?.client.provenance;
   const siteTerrain = terrain[siteId];
+  const siteYear = year[siteId];
+
+  useEffect(() => {
+    if (!engine || !location || !siteTerrain || year[siteId] !== undefined) return;
+    let cancelled = false;
+    const { start_et, end_et } = engine.coverage;
+    engine.client
+      .getTimeline({ location, profile: PROFILE, start_et, end_et, step_s: HOUR_S })
+      .then(
+        (t) => {
+          if (!cancelled) setYear((y) => ({ ...y, [siteId]: t.statistics }));
+        },
+        () => {
+          if (!cancelled) setYear((y) => ({ ...y, [siteId]: "error" }));
+        },
+      );
+    return () => {
+      cancelled = true;
+    };
+  }, [engine, location, siteId, siteTerrain, year]);
   // The tag comes from the data, never from a constant: a simulated ephemeris shows the purple one.
   const realTag = provenance?.simulated ? "Simulated" : "Real · NAIF SPICE";
 
@@ -237,15 +264,47 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
             }
           />
         </dl>
+        {siteTerrain ? (
+          <>
+            <h4 className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
+              Whole of the ephemeris, hourly
+            </h4>
+            {siteYear === "error" ? (
+              <p role="alert" className="text-sm text-alert">
+                The timeline could not be computed.
+              </p>
+            ) : (
+              <dl className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+                <Readout label="Lit" value={siteYear ? percent(siteYear.illuminated_ratio) : "…"} />
+                <Readout label="Link" value={siteYear ? percent(siteYear.comms_ratio) : "…"} />
+                <Readout
+                  label="Lit and link"
+                  value={siteYear ? percent(siteYear.both_ratio) : "…"}
+                />
+                <Readout
+                  label="Longest night"
+                  value={siteYear ? days(siteYear.longest_night_s) : "…"}
+                />
+                <Readout
+                  label="Longest day"
+                  value={siteYear ? days(siteYear.longest_day_s) : "…"}
+                />
+              </dl>
+            )}
+          </>
+        ) : null}
         <p className="text-xs text-text-3">
           {siteTerrain
-            ? "Judged against the terrain horizon from NASA LOLA elevation data (5 m tile, 80 m map to 300 km), mast 0 m, as seen from the tile centre. This tile centre is on a steep crater wall, not on the rim crest. Not yet checked against published illumination maps. Link means Earth is above the terrain and at least one DSN complex sees it."
-            : "These need a terrain horizon, which exists only for Shackleton Rim so far (task S1-05), so no number is shown rather than one that ignores the terrain."}
+            ? `Judged against the terrain horizon built from NASA LOLA elevation data (5 m site tile, 80 m map to 300 km), for a ${PROFILE.mast_height_m} m mast. Lit means the Sun's centre is above the local horizontal and part of its disk clears the terrain. Link means Earth clears the terrain and at least one DSN complex sees it. Not yet checked against published illumination maps.`
+            : "These need a terrain horizon, which exists only for the three catalog sites, so no number is shown rather than one that ignores the terrain."}
         </p>
       </div>
     </section>
   );
 }
+
+const percent = (ratio: number) => `${(ratio * 100).toFixed(1)} %`;
+const days = (seconds: number) => `${(seconds / DAY_S).toFixed(1)} d`;
 
 function Tag({
   simulated,
