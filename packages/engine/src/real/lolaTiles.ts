@@ -18,6 +18,7 @@ import bundledManifest from "../data/tiles/manifest.json";
  * `<level>/<x>/<y>.bin`. The default reads `<baseUrl>/<level>/<x>/<y>.bin` with `fetch`.
  */
 
+const DEFAULT_TILE_BASE_URL = "/api/tiles";
 const MAGIC = [0x53, 0x4c, 0x54, 0x31]; // "SLT1"
 const HEADER_BYTES = 32;
 
@@ -138,13 +139,24 @@ export function tileHeightRange(tile: TileData): { min_m: number; max_m: number 
 export interface LolaTileSourceOptions {
   /** Bytes of `<level>/<x>/<y>.bin`. Default: `fetch` from `baseUrl`. */
   readTile?: (path: string) => Promise<Uint8Array>;
-  /** Used by the default `readTile`; no trailing slash needed. Default "/tiles". */
+  /** Used by the default `readTile`; no trailing slash needed. Default "/api/tiles", the route the
+   * web app serves them from (apps/web/app/api/tiles). */
   baseUrl?: string;
   /** Which tiles exist. Default: the subset committed with the engine (levels 0-3 and the tile
    * under each catalog site at levels 7-11). Pass the full pyramid's `coverage.json` when the host
    * serves the full pyramid. */
   coverage?: TileCoverage;
   manifest?: TileManifest;
+}
+
+/** The `coverage.json` served next to the tiles: which tiles exist there (the full pyramid's when
+ * the host has it). The bundled default lists only the committed subset. */
+export async function fetchTileCoverage(
+  baseUrl: string = DEFAULT_TILE_BASE_URL,
+): Promise<TileCoverage> {
+  const res = await fetch(`${baseUrl.replace(/\/+$/, "")}/coverage.json`);
+  if (!res.ok) throw new Error(`tile coverage: HTTP ${res.status}`);
+  return parseCoverage(await res.json());
 }
 
 function fetchReader(baseUrl: string): (path: string) => Promise<Uint8Array> {
@@ -171,7 +183,7 @@ export class LolaTileSource implements TileSource {
       list.push(r);
       this.rectsByLevel.set(r.level, list);
     }
-    this.readTile = options.readTile ?? fetchReader(options.baseUrl ?? "/tiles");
+    this.readTile = options.readTile ?? fetchReader(options.baseUrl ?? DEFAULT_TILE_BASE_URL);
   }
 
   getManifest(): Promise<TileManifest> {

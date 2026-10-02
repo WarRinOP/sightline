@@ -13,6 +13,7 @@ export {
   LolaTileSource,
   TileNotAvailableError,
   createLolaTileSource,
+  fetchTileCoverage,
   parseCoverage,
   parseTileBytes,
   tileHeightRange,

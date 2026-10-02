@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #11 (tile pyramid and loader) awaiting review and merge; message to Dev 3 about the contract additions (not sent); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #12 (tile serving) awaiting review and merge; message to Dev 3 about the contract additions (not sent); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -77,6 +77,37 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 021 — 2026-10-02 — M1-04b serve the tiles to the browser (Claude Code)
+
+**Phase / tasks:** M1-04 ticked (PR #11 merged; the per-tile scale was approved), M1-04a decided, M1-04b done. Branch `dev1/M1-04b-serve-tiles` from `main`.
+
+**Done:**
+
+- Routes `/api/tiles/<level>/<x>/<y>.bin`, `/api/tiles/manifest.json`, `/api/tiles/coverage.json` in `apps/web/app/api/tiles/` (D-028): the committed tiles are built into the site, other tiles are read from `data/processed/tiles/` when it exists, a 404 otherwise; plain-decimal path checks.
+- Engine loader: default `baseUrl` is now `/api/tiles`; new `fetchTileCoverage()`.
+- 9 new web tests (route bytes equal the fixture bytes, the loader works through the route, path-safety cases, directory fallback order, a guard against two dynamic segments side by side).
+
+**Verified by:**
+
+- `pnpm verify` exit 0 (see the PR for the counts).
+- `next build` then `next start`: the home page 200; `/api/tiles/3/2/4.bin` (committed) and `/api/tiles/6/10/20.bin` (only in the full pyramid) are byte-identical to the files (`cmp`); `/api/tiles/11/0/0.bin`, `..%2f` forms, a missing `.bin`, a wrong name and an extra segment are all 404; `manifest.json` and `coverage.json` 200.
+- A real browser (`playwright-cli` on `next start`): `fetch('/api/tiles/7/61/61.bin')` returns 200, 8,224 bytes, magic `SLT1`, level 7, x 61, y 61, scale 0.1; the served coverage lists 20 rectangles (the full pyramid, because it exists on this machine).
+- **Mistake of mine:** the first version put `[name]` beside `[level]`; the build and all tests passed and the server then returned 500 for every page. Found by `curl` against `next start`; fixed and guarded (D-028 item 5). Also Turbopack warned that it was tracing 31,875 files; fixed with `turbopackIgnore`.
+- **NOT VERIFIED:** a Vercel deploy (working directory, output tracing of the committed tiles); the scene or any page actually calling `createLolaTileSource()` (nothing in the app uses it yet); CI on this branch (first run is the PR); `next dev` (not started, because it rewrites `apps/web/AGENTS.md`).
+
+**Decisions logged:** D-028
+
+**Blockers / risks:**
+
+- A deployed site has only the 100 committed tiles until the pyramid is published (M1-08).
+- Still unsent: the message to Dev 3 and the note to Dev 2 on how to call the tile source; the contracts freeze is tomorrow.
+
+**Next 3 tasks:**
+
+1. Merge this PR; send Dev 2 (how to call `createLolaTileSource()`) and Dev 3 (`longest_day_s`, the labelled rows, `/api/tiles`).
+2. S1-05h: the Earth-link check against the AVGVISIB Earth map.
+3. S1-13 (tag `v0.1-stage1`), S1-14 (submission); then M2-04.
 
 ### Session 020 — 2026-10-02 — M1-04 real tile pyramid and `LolaTileSource` (Claude Code)
 
