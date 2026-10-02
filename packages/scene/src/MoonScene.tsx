@@ -6,6 +6,7 @@ import type { MoonSceneProps, CameraHandle } from "./types";
 import { locationToScenePosition } from "./math";
 import { TerrainQuadtree } from "./TerrainQuadtree";
 import { DeepSpaceSky } from "./DeepSpaceSky";
+import { SitePin } from "./SitePin";
 
 function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" | "onReady" | "onPickLocation">) {
   const [sunDirection, setSunDirection] = useState(new THREE.Vector3(1, 0.5, 0));
@@ -59,13 +60,7 @@ function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" 
 
       {/* Site pin */}
       <group ref={pinGroupRef}>
-        <mesh castShadow>
-          <cylinderGeometry args={[50, 50, 1000]} />
-          <meshStandardMaterial color="#4CC9F0" />
-        </mesh>
-        <Text position={[0, 700, 0]} fontSize={300} color="#FFFFFF">
-          Site Pin
-        </Text>
+        <SitePin label={sites.find(s => s.id === inputs.current?.selected_site_id)?.name || "Target Site"} />
       </group>
 
       <OrbitControls ref={controlsRef} makeDefault minDistance={100} maxDistance={50000} target={[0, 1737400, 0]} maxPolarAngle={Math.PI / 2} />
