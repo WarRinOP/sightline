@@ -49,42 +49,40 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
     }
   });
 
-  const geometry = useMemo(() => {
-    if (!tileData) return null;
+  const { geometry, heightTexture } = useMemo(() => {
+    if (!tileData) return { geometry: null, heightTexture: null };
     const { size_px, offset_m, scale_m, heights } = tileData;
     const sizeX = bounds.x_max - bounds.x_min;
     const sizeY = bounds.y_max - bounds.y_min;
     
-    // We create a plane geometry. Note that PlaneGeometry creates segments, so vertices = segments + 1
-    // The tile data has size_px samples. We need size_px - 1 segments.
     const segments = size_px - 1;
     const geom = new THREE.PlaneGeometry(sizeX, sizeY, segments, segments);
-    
-    // Rotate to lie flat on XZ plane
     geom.rotateX(-Math.PI / 2);
     
     const pos = geom.attributes.position as THREE.BufferAttribute;
-    if (!pos) return geom;
-    
-    // PlaneGeometry generates vertices from top-left (y max, x min) to bottom-right (y min, x max)
-    // Our TileData has row 0 at y_min (bottom) and col 0 at x_min (left).
-    
-    for (let i = 0; i < pos.count; i++) {
-      const col = i % size_px;
-      // PlaneGeometry rows go from top (y_max) to bottom (y_min)
-      const row = (size_px - 1) - Math.floor(i / size_px);
-      
-      const idx = row * size_px + col;
-      const hCount = heights[idx] ?? 0;
-      const h = offset_m + hCount * scale_m;
-      pos.setY(i, h);
+    if (pos) {
+      for (let i = 0; i < pos.count; i++) {
+        const col = i % size_px;
+        const row = (size_px - 1) - Math.floor(i / size_px);
+        const idx = row * size_px + col;
+        const hCount = heights[idx] ?? 0;
+        pos.setY(i, offset_m + hCount * scale_m);
+      }
+      geom.computeVertexNormals();
     }
     
-    geom.computeVertexNormals();
-    return geom;
+    // Create DataTexture for the heightmap
+    const data = new Float32Array(size_px * size_px);
+    for (let i = 0; i < heights.length; i++) {
+      data[i] = offset_m + (heights[i] ?? 0) * scale_m;
+    }
+    const texture = new THREE.DataTexture(data, size_px, size_px, THREE.RedFormat, THREE.FloatType);
+    texture.needsUpdate = true;
+    
+    return { geometry: geom, heightTexture: texture };
   }, [tileData, bounds]);
 
-  if (!tileData) return null; // Loading
+  if (!tileData || !geometry || !heightTexture) return null; // Loading
 
   const midX = (bounds.x_min + bounds.x_max) / 2;
   const midY = (bounds.y_min + bounds.y_max) / 2;
@@ -138,11 +136,26 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
         wireframe={false} 
         flatShading 
         onBeforeCompile={(shader) => {
-          // Add uniform for sun direction
-          shader.uniforms.uSunDirection = { value: new THREE.Vector3(1, 0.5, 0).normalize() };
+          shader.uniforms.uSunDirection = { value: sunDirection };
+          shader.uniforms.uHeightTexture = { value: heightTexture };
+          shader.uniforms.uBounds = { value: new THREE.Vector4(bounds.x_min, bounds.y_min, bounds.x_max, bounds.y_max) };
           
+          shader.vertexShader = `
+            varying vec3 vTerrainWorldPos;
+            ${shader.vertexShader}
+          `.replace(
+            '#include <worldpos_vertex>',
+            `
+            #include <worldpos_vertex>
+            vTerrainWorldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;
+            `
+          );
+
           shader.fragmentShader = `
             uniform vec3 uSunDirection;
+            uniform sampler2D uHeightTexture;
+            uniform vec4 uBounds; // x_min, y_min, x_max, y_max
+            varying vec3 vTerrainWorldPos;
             ${shader.fragmentShader}
           `;
           
@@ -151,16 +164,41 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
             `
             #include <dithering_fragment>
             
-            // Lommel-Seeliger reflectance: I / (I + E)
+            // Lommel-Seeliger reflectance
             vec3 viewDir = normalize(vViewPosition);
             float cosE = max(0.01, dot(geometryNormal, viewDir));
             float cosI = max(0.01, dot(geometryNormal, uSunDirection));
-            
             float lommelSeeliger = cosI / (cosI + cosE);
             
-            // Adjust the final color
-            // This flattens the lighting and gives it the characteristic "dusty" lunar look
-            gl_FragColor.rgb = gl_FragColor.rgb * (0.5 + 1.5 * lommelSeeliger);
+            // Near-field shadow ray-march (M3-04)
+            // March along uSunDirection
+            float shadowMask = 1.0;
+            if (cosI > 0.0) {
+              vec3 rayPos = vTerrainWorldPos;
+              vec3 rayDir = normalize(uSunDirection);
+              float stepSize = (uBounds.z - uBounds.x) / 64.0; // approx tile pixel size
+              
+              for (int i = 1; i <= 8; i++) {
+                rayPos += rayDir * stepSize;
+                
+                // Map world XZ to texture UV (uBounds: x_min, y_min, x_max, y_max)
+                // Note: World Z corresponds to Terrain Y, which is mapped to uBounds y
+                float u = (rayPos.x - uBounds.x) / (uBounds.z - uBounds.x);
+                float v = (-rayPos.z - uBounds.y) / (uBounds.w - uBounds.y);
+                
+                if (u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0) {
+                  float h = texture2D(uHeightTexture, vec2(u, v)).r;
+                  if (h > rayPos.y) {
+                    shadowMask = 0.0;
+                    break;
+                  }
+                }
+              }
+            } else {
+              shadowMask = 0.0;
+            }
+            
+            gl_FragColor.rgb = gl_FragColor.rgb * (0.5 + 1.5 * lommelSeeliger) * shadowMask;
             `
           );
         }}
