@@ -1,0 +1,21 @@
+{
+  "name": "@sightline/engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SIGHTLINE physics engine (pure TypeScript). Today: the SIMULATED mock engine and mock tiles.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sightline/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "5.0.3"
+  }
+}
