@@ -20,6 +20,11 @@ const toDeg = (rad: number) => (rad * 180) / Math.PI;
 const signed = (deg: number) => `${deg >= 0 ? "+" : "−"}${Math.abs(deg).toFixed(2)}°`;
 const compass = (rad: number) => `${toDeg(rad).toFixed(1)}°`;
 
+interface YearStats {
+  profile: TimelineStatistics;
+  published: { anyPart: number; meanDisk: number };
+}
+
 type Connection =
   | { status: "loading" }
   | { status: "error"; message: string }
@@ -33,8 +38,10 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
   const [real, setReal] = useState<SunEarthState | null>(null);
   // Per site: does the engine have a terrain horizon, and is it simulated? Asked, not assumed.
   const [terrain, setTerrain] = useState<Record<string, { simulated: boolean } | null>>({});
-  // Per site: the engine's statistics over the whole ephemeris, or "error".
-  const [year, setYear] = useState<Record<string, TimelineStatistics | "error">>({});
+  // Per site: the engine's statistics over the whole ephemeris, or "error". `profile` follows the
+  // default lander profile; `published` counts any part of the disk above the terrain and averages
+  // the visible fraction of the disk, which is how published illumination studies define it.
+  const [year, setYear] = useState<Record<string, YearStats | "error">>({});
 
   // Start the engine worker. StrictMode mounts twice in development; the first one is terminated.
   useEffect(() => {
@@ -124,16 +131,33 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
     if (!engine || !location || !siteTerrain || year[siteId] !== undefined) return;
     let cancelled = false;
     const { start_et, end_et } = engine.coverage;
-    engine.client
-      .getTimeline({ location, profile: PROFILE, start_et, end_et, step_s: HOUR_S })
-      .then(
-        (t) => {
-          if (!cancelled) setYear((y) => ({ ...y, [siteId]: t.statistics }));
-        },
-        () => {
-          if (!cancelled) setYear((y) => ({ ...y, [siteId]: "error" }));
-        },
-      );
+    const request = { location, start_et, end_et, step_s: HOUR_S };
+    Promise.all([
+      engine.client.getTimeline({ ...request, profile: PROFILE }),
+      // No minimum Sun elevation: any part of the disk above the terrain counts.
+      engine.client.getTimeline({
+        ...request,
+        profile: { ...PROFILE, min_sun_elev_rad: -Math.PI / 2 },
+      }),
+    ]).then(
+      ([lander, published]) => {
+        const meanDisk =
+          published.steps.reduce((sum, step) => sum + step.sun_disk_fraction, 0) /
+          published.steps.length;
+        if (!cancelled) {
+          setYear((y) => ({
+            ...y,
+            [siteId]: {
+              profile: lander.statistics,
+              published: { anyPart: published.statistics.illuminated_ratio, meanDisk },
+            },
+          }));
+        }
+      },
+      () => {
+        if (!cancelled) setYear((y) => ({ ...y, [siteId]: "error" }));
+      },
+    );
     return () => {
       cancelled = true;
     };
@@ -266,36 +290,57 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
         </dl>
         {siteTerrain ? (
           <>
-            <h4 className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
-              Whole of the ephemeris, hourly
-            </h4>
             {siteYear === "error" ? (
               <p role="alert" className="text-sm text-alert">
                 The timeline could not be computed.
               </p>
             ) : (
-              <dl className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                <Readout label="Lit" value={siteYear ? percent(siteYear.illuminated_ratio) : "…"} />
-                <Readout label="Link" value={siteYear ? percent(siteYear.comms_ratio) : "…"} />
-                <Readout
-                  label="Lit and link"
-                  value={siteYear ? percent(siteYear.both_ratio) : "…"}
-                />
-                <Readout
-                  label="Longest night"
-                  value={siteYear ? days(siteYear.longest_night_s) : "…"}
-                />
-                <Readout
-                  label="Longest day"
-                  value={siteYear ? days(siteYear.longest_day_s) : "…"}
-                />
-              </dl>
+              <>
+                <h4 className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
+                  Illumination over the ephemeris, hourly, as published studies define it
+                </h4>
+                <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  <Readout
+                    label="Average disk visible"
+                    value={siteYear ? percent(siteYear.published.meanDisk) : "…"}
+                  />
+                  <Readout
+                    label="Any part of Sun visible"
+                    value={siteYear ? percent(siteYear.published.anyPart) : "…"}
+                  />
+                  <Readout
+                    label="Link to Earth"
+                    value={siteYear ? percent(siteYear.profile.comms_ratio) : "…"}
+                  />
+                </dl>
+                <h4 className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
+                  For a lander: default profile, Sun&apos;s centre above the horizontal
+                </h4>
+                <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <Readout
+                    label="Lit"
+                    value={siteYear ? percent(siteYear.profile.illuminated_ratio) : "…"}
+                  />
+                  <Readout
+                    label="Lit and link"
+                    value={siteYear ? percent(siteYear.profile.both_ratio) : "…"}
+                  />
+                  <Readout
+                    label="Longest night"
+                    value={siteYear ? days(siteYear.profile.longest_night_s) : "…"}
+                  />
+                  <Readout
+                    label="Longest day"
+                    value={siteYear ? days(siteYear.profile.longest_day_s) : "…"}
+                  />
+                </dl>
+              </>
             )}
           </>
         ) : null}
         <p className="text-xs text-text-3">
           {siteTerrain
-            ? `Judged against the terrain horizon built from NASA LOLA elevation data (5 m site tile, 80 m map to 300 km), for a ${PROFILE.mast_height_m} m mast. Lit means the Sun's centre is above the local horizontal and part of its disk clears the terrain. Link means Earth clears the terrain and at least one DSN complex sees it. Not yet checked against published illumination maps.`
+            ? `Judged against the terrain horizon built from NASA LOLA elevation data (5 m site tile, 80 m map to 300 km), for a ${PROFILE.mast_height_m} m mast. Average disk visible is the mean visible fraction of the Sun's disk, the quantity Barker et al. (2021) call average illumination; for the lander, Lit also needs the Sun's centre above the local horizontal, so it is lower. Link means Earth clears the terrain and at least one DSN complex sees it. The method gives results consistent with Barker et al.'s published ranges at their Site 1 regions and with the pattern of NASA's AVGVISIB map (docs/science/METHODS.md §7); the values at these three sites are not themselves published.`
             : "These need a terrain horizon, which exists only for the three catalog sites, so no number is shown rather than one that ignores the terrain."}
         </p>
       </div>

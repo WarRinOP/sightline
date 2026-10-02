@@ -220,7 +220,7 @@ sliver of the disk; with `min_sun_elev_rad` at −90° the timeline agrees with 
 (tested), but with the default profile the timeline is stricter.
 
 **Measured for the three sites** (2026, hourly, default profile: 2 m mast, 50 h battery; engine
-output, **not validated** against published illumination or visibility maps, M2-13):
+output. The method is compared with published results in §7; these figures at these exact points are not published, and this "Lit" is the lander profile's, not the published "illumination"):
 
 | Site | Lit | Link | Lit and link | Longest night | Longest day | Nights over 50 h |
 |---|---|---|---|---|---|---|
@@ -246,3 +246,113 @@ replaced) gave any-part-of-the-disk light 10.95 % of 2026 and Earth 0 %.
   centres and 3.1 m at the Shackleton crest (an 80 m map smooths a peak); nothing was done to blend
   the two beyond the hand-over at the tile's edge.
 - **Sun and Earth at azimuth, not area.** Earth's disk (about 1.9° across) is treated as a point.
+
+## 7. Comparison with published illumination (S1-05e)
+
+`sightline benchmark` writes `fixtures/golden/illumination_benchmark.json`. The criteria were fixed
+in D-025 and committed before the first run; none was changed afterwards. Everything below is read
+from that file.
+
+**What there is to compare with.** `DATA_VERIFICATION_REPORT.md` §4.2 holds no published
+percentages: it lists the AVGVISIB map files and a second-hand note about Barker et al. (2021).
+Barker et al. (2021) Table 2 (NTRS accepted manuscript, SHA-256 pinned as `ntrs-barker2021-pdf`) is
+real but narrower than that note: it is for seven Regions of Interest (RoIs) at Site 1, selected for
+nominal average illumination above 70 % at 1 m, and its values are the **1st percentile over 100
+DEM error clones**, not nominal point values. It has nothing for Shackleton or de Gerlache and
+nothing at our Connecting Ridge position. The PDS AVGVISIB map (`pds-avgvisib-85s-60m`) is a
+long-term average whose simulation span and observer height are not in its label or readme
+(Mazarico et al.'s 2011 abstract describes several 18.6-year cycles at 6 h for the original 240 m
+work); that part of P1-04c stays open. So the engine's numbers at our three sites have **no
+published counterpart to match**. What can be checked is the method and the spatial pattern.
+
+**Method match** (Barker et al., section 5). Both use hourly steps, the Sun's disk divided
+horizontally at the horizon elevation at the disc centre's azimuth, and a 5 m / 80 m nested terrain
+in MOON_ME. They differ in: 720 rays 0.5° apart (ours 1440); a limb-darkened Sun at 550 nm (ours
+a uniform disk; a sensitivity run with an assumed linear coefficient of 0.6, which is **my**
+assumption and not their law, changes the averages by at most 0.02 point); 5 m to 5 km, 80 m
+to 100 km and 240 m beyond (ours 5 m to 12 km, 80 m to 300 km); 100 clones (ours the nominal DEM).
+
+**Benchmark A: Barker et al. Table 2.** Our method, the Sun from SPICE for 2024-01-01 to 2026-01-01
+(17,544 hourly steps), at the seven RoI centroids (the paper's X and Y, in the 5 m DEM's plane),
+observer 1 m and 5 m above the nominal DEM. Mean visible fraction of the Sun's disk, %:
+
+| RoI | ours, 1 m | paper A / C, 1 m | ours, 5 m | paper A / C, 5 m |
+|---|---|---|---|---|
+| 1 | 80.8 | 68.03 / 85.84 | 91.2 | 89.26 / 91.83 |
+| 2 | 79.6 | 70.32 / 85.75 | 90.5 | 88.51 / 91.24 |
+| 3 | 74.4 | 67.51 / 77.31 | 87.1 | 84.53 / 89.78 |
+| 4 | 82.6 | 69.61 / 86.81 | 88.9 | 88.12 / 91.11 |
+| 5 | 78.3 | 70.38 / 84.47 | 86.7 | 85.71 / 88.38 |
+| 6 | 84.8 | 71.15 / 86.74 | 88.0 | 87.35 / 89.05 |
+| 7 | 76.4 | 67.36 / 83.44 | 83.2 | 82.79 / 84.98 |
+
+A is the paper's 1st percentile after averaging the RoI; C is the same counting only the most
+illuminated pixel at each step (an optimistic bound). **All three criteria pass:** A1 (ours at least A
+minus 2.0 points, at both heights, all seven RoIs): ours is at least A in every case, by 6.9 to 13.7
+points at 1 m and by 0.4 to 2.6 at 5 m; A2 (at most C plus 5.0): ours is below C in every case;
+A3 (median at 1 m at least 70 %): 79.6 %. The longest continuous illumination and shadow periods
+(not criteria) are in the expected direction in all 28 comparisons: ours is at least the paper's
+LCIP-1 and at most its LCSP-99 for every RoI, at both heights. The comparison is one-sided on
+purpose: the paper's values are pessimistic percentiles, and it says the nominal DEM "tends to be
+better than the mean/median of the clones".
+
+**Benchmark B: the AVGVISIB map.** 300 random points in each site tile (more than 1 km from the
+edge), our any-part-of-the-disk lit fraction over 2024 to 2026 (1° rays) against the map's pixel.
+The map's orientation was fixed from terrain, not from the correlation: its zero pixels must sit on
+low ground in the 80 m DEM. `identity` wins by a wide margin (zero pixels average 1,162 m below the
+others, against 489 m for the runner-up of the eight symmetries, a margin of 672 m). Spearman rank
+correlation at a 2 m mast: **0.950 over all 900 points; 0.974 (Shackleton tile), 0.895 (Connecting
+Ridge), 0.979 (de Gerlache)**; at 0 m 0.922 overall. Criteria: at least 0.8 overall and 0.7 per
+tile: pass. The mean lit fractions agree closely with the map's means (0 m: 0.138, 0.258, 0.282
+against 0.141, 0.261, 0.291), but the map's observer height is unknown, so this is not used as a
+test.
+
+**Informational, added after the first run** (not criteria): at the three catalog sites the
+map's pixel against ours (any part of the disk, 2024 to 2026): Shackleton crest map 0.852 against
+0.860 at 0 m and 0.907 at 2 m; Connecting Ridge map 0.439 against 0.400 and 0.527; de Gerlache map
+0.490 against 0.281 and 0.598. The map's own 3 x 3 neighbourhood spans 0.063 to 0.852, 0.367 to
+0.770 and 0.331 to 0.613 respectively, and ours is inside that span at 2 m for all three and at
+0 m for two (de Gerlache at 0 m is below it). A 60 m pixel is not a 5 m point, and these sites sit
+on steep ground, so this agrees loosely, as it should.
+
+**The two engine paths agree.** The benchmark's Python path (SPICE Sun, the pipeline's masks, the
+same visible-fraction rule) and the engine's `getTimeline` give identical 2026 results at the three
+sites at a 2 m mast: mean visible fraction 85.76, 45.60 and 53.96 %; any part of the disk
+90.67, 51.01 and 59.47 % (an engine test recomputes them in TypeScript). So the benchmark tests
+the code that serves the app.
+
+**The headline numbers were a different quantity.** "Lit" in the timeline under the default lander
+profile also needs the Sun's centre above the local horizontal, which halves it at a polar site. It
+is **not** the "average illumination" of the published studies. The comparable 2026 figures at 2 m
+are the mean visible fraction of the disk and the any-part fraction above: Shackleton crest 85.8 and
+90.7 %, Connecting Ridge 45.6 and 51.0 %, de Gerlache 54.0 and 59.5 % (the profile "lit" there:
+48.9, 35.2 and 36.6 %). The home page now shows both, labelled.
+
+**Differences, measured where they could be.**
+
+- *Epoch window.* Barker et al. use 2024 to 2026 (matched in benchmark A). The engine's ephemeris is
+  2026. At our sites and a 2 m mast, 2026 alone against 2024 to 2026 changes the mean visible
+  fraction by 0.2, 2.0 and 0.3 points (crest, Connecting Ridge, de Gerlache) and the any-part
+  fraction by 0.04, 1.6 and 0.4 points. AVGVISIB is a long-term average (span unknown) and the
+  18.6-year cycle is not covered by either window.
+- *Mast height.* Barker et al.: 67 to 71 % at 1 m against 83 to 89 % at 5 m (A). Ours: 74 to 85 %
+  against 83 to 91 %. Our sites show the same strong dependence (Connecting Ridge, 2024 to 2026
+  mean visible fraction: 36.4 % at 0 m, 47.6 % at 2 m). The map's height being unknown matters for
+  comparing to it.
+- *Far-field range.* The Barker regions at 1 m with the 80 m map used to 50, 100, 150 and 300 km:
+  cutting at 100 km instead of 300 km changes the averages by up to 3.59 points (RoI 6: 88.35 to
+  84.76 %); from 150 to 300 km by at most 0.27 points. So the horizon distance matters out to about
+  150 km and has nearly converged by 300 km; the effect of terrain beyond 300 km (the 80 m map ends
+  at 304 km) was not tested. The paper's own far field is its 240 m map beyond 100 km.
+
+**What may be cited (decision, D-025).** Yes: "the horizon method reproduces the published
+Barker et al. (2021) Site 1 results within the ranges set beforehand (seven regions, 2024 to 2026,
+1 m and 5 m), and our lit map correlates with NASA's AVGVISIB illumination map (Spearman 0.95 over
+900 random points in the three tiles)". The engine's illumination at the three sites may be cited
+as "average visible fraction of the Sun's disk, computed with the method of Barker et al. (2021)",
+with the year, the mast height and "not published for these exact points". No: "validated at the
+three sites", any figure called "illumination" that is the profile "lit" (48.9, 35.2, 36.6 %), any
+comparison to a published number for the same place, or any claim about Earth visibility (no
+published reference was used for it: the AVGVISIB Earth-visibility map in `sources.yaml` was not
+fetched or compared).
+

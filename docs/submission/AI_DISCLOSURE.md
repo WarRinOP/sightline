@@ -101,6 +101,16 @@ sections of `METHODS.md` in an earlier edit) that it found and repaired. The ele
 JPL Horizons answers are NASA's and JPL's. None of the results has been validated against published
 illumination maps.
 
+### The illumination benchmark (S1-05e, 2026-10-02)
+
+The AI read the published paper (Barker et al. 2021, NTRS) and the PDS map documentation, found that
+the "published percentages" a brief expected were not in the repository's report and that the
+paper's Table 2 is narrower than described, wrote the benchmark code, fixed its pass criteria before
+running it, transcribed Table 2 by hand (with consistency checks), and reported the results
+including a finding that the headline "lit" figures were a different quantity from the published
+"illumination". The paper's numbers are the authors'; the map is NASA's. The benchmark supports the
+method, not a validation at the three sites, and the documents say so.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list
