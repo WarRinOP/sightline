@@ -1,0 +1,5621 @@
+{
+  "schema_version": 1,
+  "generated_by": "packages/engine/test/horizons.test.ts (WRITE_HORIZONS_RESIDUALS=1)",
+  "reference": {
+    "file": "horizons_reference.json",
+    "api_version": "1.2",
+    "targets": {
+      "sun": "10",
+      "earth": "399"
+    },
+    "epoch_count": 50,
+    "site_ids": [
+      "shackleton-rim",
+      "connecting-ridge",
+      "de-gerlache-rim"
+    ],
+    "notes": [
+      "Residual = engine minus Horizons, both topocentric (observer on the ground at the site, no mast), geometric azimuth and elevation, no atmosphere.",
+      "Horizons: the Moon is a 1737.4 km sphere (MEAN_ME, high precision), DE441, light time, stellar aberration and relativistic light bending included.",
+      "Engine: SPICE DE440 states sampled hourly, cubic Hermite, apparent (LT+S) at the Moon's centre minus the site vector.",
+      "Times are UTC to the millisecond, spaced evenly from 2026-01-02 to 2026-12-30; they fall between the hourly samples on purpose."
+    ]
+  },
+  "engine": {
+    "provenance": {
+      "source": "SIGHTLINE_PIPELINE",
+      "simulated": false,
+      "data_sources": [
+        "naif-lsk",
+        "naif-spk-de440s",
+        "naif-pck-moon-pa-de440",
+        "naif-pck-pck00011",
+        "naif-fk-moon-de440",
+        "naif-pck-earth-predict",
+        "naif-fk-earth-topo",
+        "naif-spk-dsn-stations"
+      ],
+      "spice_kernels": [
+        "naif0012.tls",
+        "de440s.bsp",
+        "moon_pa_de440_200625.bpc",
+        "pck00011.tpc",
+        "moon_de440_250416.tf",
+        "earth_2026_260806_2126_predict.bpc",
+        "earth_topo_260814.tf",
+        "earthstns_itrf93_260814.bsp"
+      ],
+      "dem_citation": null,
+      "pipeline_version": "0.1.0",
+      "data_version": "ephem-2026-3600s-v1"
+    },
+    "mast_height_m": 0
+  },
+  "tolerance_deg": 0.02,
+  "passes": true,
+  "summary": {
+    "sun": {
+      "az_on_sky_deg": {
+        "max_abs": 3.2403005312196784e-8,
+        "mean": -1.7541408498660987e-9,
+        "rms": 1.3575626979825224e-8
+      },
+      "el_deg": {
+        "max_abs": 3.5554332811216227e-9,
+        "mean": -9.098577955872026e-11,
+        "rms": 1.7984723264971229e-9
+      },
+      "separation_deg": {
+        "max_abs": 3.256964613847323e-8,
+        "mean": 1.0253411214543868e-8,
+        "rms": 1.3694241637828835e-8
+      }
+    },
+    "earth": {
+      "az_on_sky_deg": {
+        "max_abs": 5.94279066264792e-7,
+        "mean": -3.41061383482925e-7,
+        "rms": 3.631549016598963e-7
+      },
+      "el_deg": {
+        "max_abs": 0.00002647451156562175,
+        "mean": 3.05765364394898e-7,
+        "rms": 0.000018152549776098888
+      },
+      "separation_deg": {
+        "max_abs": 0.000026477698452608505,
+        "mean": 0.000016340452565885032,
+        "rms": 0.000018156182000962102
+      }
+    },
+    "overall_separation_deg": {
+      "max_abs": 0.000026477698452608505,
+      "mean": 0.000008175352988549788,
+      "rms": 0.000012838363065132452
+    }
+  },
+  "by_site": {
+    "shackleton-rim": {
+      "sun": {
+        "az_on_sky_deg": {
+          "max_abs": 9.866513180082237e-9,
+          "mean": -1.5449300504049469e-9,
+          "rms": 5.676266386779752e-9
+        },
+        "el_deg": {
+          "max_abs": 3.5342367921131768e-9,
+          "mean": -1.445089874152483e-10,
+          "rms": 1.7987325103343512e-9
+        },
+        "separation_deg": {
+          "max_abs": 1.0264521938473589e-8,
+          "mean": 5.38018624646754e-9,
+          "rms": 5.954446670494073e-9
+        }
+      },
+      "earth": {
+        "az_on_sky_deg": {
+          "max_abs": 5.722430177946915e-7,
+          "mean": -3.3539323128806967e-7,
+          "rms": 3.575361020291264e-7
+        },
+        "el_deg": {
+          "max_abs": 0.00002644377091209904,
+          "mean": 3.0242068731367587e-7,
+          "rms": 0.000018144906647420275
+        },
+        "separation_deg": {
+          "max_abs": 0.00002644669748119669,
+          "mean": 0.000016333493760123748,
+          "rms": 0.00001814842883846459
+        }
+      }
+    },
+    "connecting-ridge": {
+      "sun": {
+        "az_on_sky_deg": {
+          "max_abs": 1.3945111592898723e-8,
+          "mean": -1.62233262581525e-9,
+          "rms": 9.43426688768138e-9
+        },
+        "el_deg": {
+          "max_abs": 3.195445685832965e-9,
+          "mean": -9.746542857513863e-11,
+          "rms": 1.7152859999077455e-9
+        },
+        "separation_deg": {
+          "max_abs": 1.4206719620784924e-8,
+          "mean": 8.86048721155264e-9,
+          "rms": 9.58893529384321e-9
+        }
+      },
+      "earth": {
+        "az_on_sky_deg": {
+          "max_abs": 5.665859273963752e-7,
+          "mean": -3.3030453973058703e-7,
+          "rms": 3.527836323421368e-7
+        },
+        "el_deg": {
+          "max_abs": 0.00002646127647865093,
+          "mean": 3.0419964124672736e-7,
+          "rms": 0.000018155933215752272
+        },
+        "separation_deg": {
+          "max_abs": 0.00002646410282159434,
+          "mean": 0.00001634323665698327,
+          "rms": 0.00001815936031971086
+        }
+      }
+    },
+    "de-gerlache-rim": {
+      "sun": {
+        "az_on_sky_deg": {
+          "max_abs": 3.2403005312196784e-8,
+          "mean": -2.0951598733780994e-9,
+          "rms": 2.077661069290149e-8
+        },
+        "el_deg": {
+          "max_abs": 3.5554332811216227e-9,
+          "mean": -3.0982922685773854e-11,
+          "rms": 1.8777282610416996e-9
+        },
+        "separation_deg": {
+          "max_abs": 3.256964613847323e-8,
+          "mean": 1.6519560185611422e-8,
+          "rms": 2.0861295426805713e-8
+        }
+      },
+      "earth": {
+        "az_on_sky_deg": {
+          "max_abs": 5.94279066264792e-7,
+          "mean": -3.574863794301181e-7,
+          "rms": 3.786239457511012e-7
+        },
+        "el_deg": {
+          "max_abs": 0.00002647451156562175,
+          "mean": 3.106757646242908e-7,
+          "rms": 0.000018156807041514495
+        },
+        "separation_deg": {
+          "max_abs": 0.000026477698452608505,
+          "mean": 0.00001634462728054808,
+          "rms": 0.000018160754335387017
+        }
+      }
+    }
+  },
+  "horizons_vs_spice_separation_deg": {
+    "sun": {
+      "max": 1.0009058336733977e-8,
+      "mean": 5.4753104137243614e-9,
+      "rms": 6.0191181486635785e-9
+    },
+    "earth": {
+      "max": 4.78339785120186e-7,
+      "mean": 3.454461083596139e-7,
+      "rms": 3.554495682272321e-7
+    }
+  },
+  "cases": [
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-02T00:00:00.000",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 192.262275252,
+        "el_deg": 1.101341937
+      },
+      "engine": {
+        "az_deg": 192.26227524891704,
+        "el_deg": 1.1013419394922188
+      },
+      "residual": {
+        "az_on_sky_deg": -3.082390126210119e-9,
+        "el_deg": 2.4922188757159347e-9,
+        "separation_deg": 3.9638649412798354e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-02T00:00:00.000",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 172.497298801,
+        "el_deg": 5.959133437
+      },
+      "engine": {
+        "az_deg": 172.4972983946587,
+        "el_deg": 5.959124047992198
+      },
+      "residual": {
+        "az_on_sky_deg": -4.0414552634642176e-7,
+        "el_deg": -0.000009389007802340643,
+        "separation_deg": 0.000009397701906997089
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-09T09:18:22.041",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 102.649022891,
+        "el_deg": 1.156153049
+      },
+      "engine": {
+        "az_deg": 102.64902288320087,
+        "el_deg": 1.1561530472802104
+      },
+      "residual": {
+        "az_on_sky_deg": -7.797556671259404e-9,
+        "el_deg": -1.7197896440279692e-9,
+        "separation_deg": 7.984953724465248e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-09T09:18:22.041",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 178.116607161,
+        "el_deg": -3.253494126
+      },
+      "engine": {
+        "az_deg": 178.1166068273686,
+        "el_deg": -3.25346934938902
+      },
+      "residual": {
+        "az_on_sky_deg": -3.3309367604443923e-7,
+        "el_deg": 0.000024776610980214997,
+        "separation_deg": 0.00002477884991443437
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-16T18:36:44.082",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 12.732987704,
+        "el_deg": 1.335715792
+      },
+      "engine": {
+        "az_deg": 12.732987696838565,
+        "el_deg": 1.3357157917487963
+      },
+      "residual": {
+        "az_on_sky_deg": -7.159529000707868e-9,
+        "el_deg": -2.5120372448839134e-10,
+        "separation_deg": 7.163893562381368e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-16T18:36:44.082",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 169.517078752,
+        "el_deg": -6.643279927
+      },
+      "engine": {
+        "az_deg": 169.5170786414707,
+        "el_deg": -6.643270282910508
+      },
+      "residual": {
+        "az_on_sky_deg": -1.0978716833725011e-7,
+        "el_deg": 0.000009644089492333308,
+        "separation_deg": 0.00000964471437303338
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-24T03:55:06.122",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 282.705022807,
+        "el_deg": 0.994273017
+      },
+      "engine": {
+        "az_deg": 282.70502281301054,
+        "el_deg": 0.9942730187363517
+      },
+      "residual": {
+        "az_on_sky_deg": 6.00971811854047e-9,
+        "el_deg": 1.7363516180424199e-9,
+        "separation_deg": 6.2554456893020295e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-24T03:55:06.122",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 166.747999255,
+        "el_deg": 2.687842688
+      },
+      "engine": {
+        "az_deg": 166.74799874028903,
+        "el_deg": 2.6878187083140084
+      },
+      "residual": {
+        "az_on_sky_deg": -5.141447582170832e-7,
+        "el_deg": -0.00002397968599154865,
+        "separation_deg": 0.000023985197205985098
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-31T13:13:28.163",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 192.959813901,
+        "el_deg": 0.502367747
+      },
+      "engine": {
+        "az_deg": 192.95981389895655,
+        "el_deg": 0.50236774981259
+      },
+      "residual": {
+        "az_on_sky_deg": -2.043328675876431e-9,
+        "el_deg": 2.8125900497499856e-9,
+        "separation_deg": 3.476477271728427e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-01-31T13:13:28.163",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 174.850611565,
+        "el_deg": 4.334722894
+      },
+      "engine": {
+        "az_deg": 174.85061120097131,
+        "el_deg": 4.334714641151934
+      },
+      "residual": {
+        "az_on_sky_deg": -3.629873650486551e-7,
+        "el_deg": -0.000008252848066270246,
+        "separation_deg": 0.000008260826898801084
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-02-07T22:31:50.204",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 103.296163947,
+        "el_deg": 0.472578234
+      },
+      "engine": {
+        "az_deg": 103.2961639420518,
+        "el_deg": 0.4725782332836451
+      },
+      "residual": {
+        "az_on_sky_deg": -4.948051298440815e-9,
+        "el_deg": -7.163548643163153e-10,
+        "separation_deg": 4.9996101931107244e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-02-07T22:31:50.204",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 175.575326415,
+        "el_deg": -5.89791063
+      },
+      "engine": {
+        "az_deg": 175.57532611237266,
+        "el_deg": -5.897886803269281
+      },
+      "residual": {
+        "az_on_sky_deg": -3.0102537539637256e-7,
+        "el_deg": 0.000023826730719100908,
+        "separation_deg": 0.000023828632211326187
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-02-15T07:50:12.245",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 13.334198279,
+        "el_deg": 0.603086825
+      },
+      "engine": {
+        "az_deg": 13.334198272760343,
+        "el_deg": 0.603086824381807
+      },
+      "residual": {
+        "az_on_sky_deg": -6.239242751678194e-9,
+        "el_deg": -6.181929412818477e-10,
+        "separation_deg": 6.269861139591199e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-02-15T07:50:12.245",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 167.522007177,
+        "el_deg": -4.744140318
+      },
+      "engine": {
+        "az_deg": 167.5220070349401,
+        "el_deg": -4.744129601216318
+      },
+      "residual": {
+        "az_on_sky_deg": -1.41573187195411e-7,
+        "el_deg": 0.000010716783682696018,
+        "separation_deg": 0.000010717718762600556
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-02-22T17:08:34.286",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 283.241481671,
+        "el_deg": 0.222454882
+      },
+      "engine": {
+        "az_deg": 283.24148167900694,
+        "el_deg": 0.22245488492485363
+      },
+      "residual": {
+        "az_on_sky_deg": 8.006903630917287e-9,
+        "el_deg": 2.9248536370651834e-9,
+        "separation_deg": 8.524388028371485e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-02-22T17:08:34.286",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 169.555640785,
+        "el_deg": 5.459384422
+      },
+      "engine": {
+        "az_deg": 169.55564021639182,
+        "el_deg": 5.459359803031983
+      },
+      "residual": {
+        "az_on_sky_deg": -5.660288610035977e-7,
+        "el_deg": -0.000024618968017087184,
+        "separation_deg": 0.000024625474107266523
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-02T02:26:56.327",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 193.411781388,
+        "el_deg": -0.31711562
+      },
+      "engine": {
+        "az_deg": 193.41178138683404,
+        "el_deg": -0.3171156173448934
+      },
+      "residual": {
+        "az_on_sky_deg": -1.165954349085713e-9,
+        "el_deg": 2.655106579041444e-9,
+        "separation_deg": 2.8998323372654302e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-02T02:26:56.327",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 176.258722679,
+        "el_deg": 1.210121878
+      },
+      "engine": {
+        "az_deg": 176.25872238425856,
+        "el_deg": 1.210114467502069
+      },
+      "residual": {
+        "az_on_sky_deg": -2.946756892169529e-7,
+        "el_deg": -0.000007410497931070736,
+        "separation_deg": 0.000007416354452082805
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-09T11:45:18.367",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 103.644307288,
+        "el_deg": -0.361667448
+      },
+      "engine": {
+        "az_deg": 103.64430728458842,
+        "el_deg": -0.36166744940073114
+      },
+      "residual": {
+        "az_on_sky_deg": -3.4114466607153126e-9,
+        "el_deg": -1.4007311421870838e-9,
+        "separation_deg": 3.6878655483580943e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-09T11:45:18.367",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 172.648583236,
+        "el_deg": -7.206789353
+      },
+      "engine": {
+        "az_deg": 172.64858294253904,
+        "el_deg": -7.206766451936381
+      },
+      "residual": {
+        "az_on_sky_deg": -2.9114258327313864e-7,
+        "el_deg": 0.000022901063618796513,
+        "separation_deg": 0.000022902914201477888
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-16T21:03:40.408",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 13.590164021,
+        "el_deg": -0.222654948
+      },
+      "engine": {
+        "az_deg": 13.590164015966188,
+        "el_deg": -0.22265494797651306
+      },
+      "residual": {
+        "az_on_sky_deg": -5.033787791582292e-9,
+        "el_deg": 2.348693461939888e-11,
+        "separation_deg": 5.033827883737551e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-16T21:03:40.408",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 166.060969255,
+        "el_deg": -1.70678421
+      },
+      "engine": {
+        "az_deg": 166.06096905622599,
+        "el_deg": -1.7067726755145232
+      },
+      "residual": {
+        "az_on_sky_deg": -1.9868585810343458e-7,
+        "el_deg": 0.000011534485476749623,
+        "separation_deg": 0.000011536196568660523
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-24T06:22:02.449",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 283.394467127,
+        "el_deg": -0.588493378
+      },
+      "engine": {
+        "az_deg": 283.39446713662977,
+        "el_deg": -0.5884933752607657
+      },
+      "residual": {
+        "az_on_sky_deg": 9.62922195561911e-9,
+        "el_deg": 2.7392342838439276e-9,
+        "separation_deg": 1.0011330245749833e-8
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-24T06:22:02.449",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 173.172634159,
+        "el_deg": 6.220780394
+      },
+      "engine": {
+        "az_deg": 173.17263358336754,
+        "el_deg": 6.220755266182143
+      },
+      "residual": {
+        "az_on_sky_deg": -5.722430177946915e-7,
+        "el_deg": -0.00002512781785757312,
+        "separation_deg": 0.0000251343329393603
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-31T15:40:24.490",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 193.447389571,
+        "el_deg": -1.110420334
+      },
+      "engine": {
+        "az_deg": 193.44738957159456,
+        "el_deg": -1.110420332848345
+      },
+      "residual": {
+        "az_on_sky_deg": 5.94470501230139e-10,
+        "el_deg": 1.151654993591933e-9,
+        "separation_deg": 1.2960244445651392e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-03-31T15:40:24.490",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 176.548256809,
+        "el_deg": -2.332005403
+      },
+      "engine": {
+        "az_deg": 176.54825658479388,
+        "el_deg": -2.3320123453145
+      },
+      "residual": {
+        "az_on_sky_deg": -2.2402045009854337e-7,
+        "el_deg": -0.000006942314499713831,
+        "separation_deg": 0.0000069459279995883104
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-04-08T00:58:46.531",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 103.553001045,
+        "el_deg": -1.100433773
+      },
+      "engine": {
+        "az_deg": 103.55300104231874,
+        "el_deg": -1.1004337741923613
+      },
+      "residual": {
+        "az_on_sky_deg": -2.6806958801805122e-9,
+        "el_deg": -1.1923613207898143e-9,
+        "separation_deg": 2.933986918402332e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-04-08T00:58:46.531",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 169.769681716,
+        "el_deg": -6.937656813
+      },
+      "engine": {
+        "az_deg": 169.76968141032384,
+        "el_deg": -6.937634592178263
+      },
+      "residual": {
+        "az_on_sky_deg": -3.034380579131786e-7,
+        "el_deg": 0.00002222082173730655,
+        "separation_deg": 0.000022222893451060343
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-04-15T10:17:08.571",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 13.386734443,
+        "el_deg": -0.901195996
+      },
+      "engine": {
+        "az_deg": 13.38673443857131,
+        "el_deg": -0.9011959960354629
+      },
+      "residual": {
+        "az_on_sky_deg": -4.428122956306069e-9,
+        "el_deg": -3.546285487487921e-11,
+        "separation_deg": 4.428287433859109e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-04-15T10:17:08.571",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 165.617986631,
+        "el_deg": 1.763901162
+      },
+      "engine": {
+        "az_deg": 165.61798635439115,
+        "el_deg": 1.7639129735643975
+      },
+      "residual": {
+        "az_on_sky_deg": -2.7647775955879703e-7,
+        "el_deg": 0.000011811564397445906,
+        "separation_deg": 0.00001181479976489769
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-04-22T19:35:30.612",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 283.078487469,
+        "el_deg": -1.206107375
+      },
+      "engine": {
+        "az_deg": 283.0784874788686,
+        "el_deg": -1.2061073721693087
+      },
+      "residual": {
+        "az_on_sky_deg": 9.866513180082237e-9,
+        "el_deg": 2.8306912369657766e-9,
+        "separation_deg": 1.0264521938473589e-8
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-04-22T19:35:30.612",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 176.541700866,
+        "el_deg": 4.653232307
+      },
+      "engine": {
+        "az_deg": 176.54170033842925,
+        "el_deg": 4.653206916939607
+      },
+      "residual": {
+        "az_on_sky_deg": -5.258319124404654e-7,
+        "el_deg": -0.000025390060392815883,
+        "separation_deg": 0.000025395504836781245
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-04-30T04:53:52.653",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 193.012393163,
+        "el_deg": -1.65496292
+      },
+      "engine": {
+        "az_deg": 193.01239316448437,
+        "el_deg": -1.654962920107464
+      },
+      "residual": {
+        "az_on_sky_deg": 1.4836762096654959e-9,
+        "el_deg": -1.0746403766859203e-10,
+        "separation_deg": 1.4876188637055917e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-04-30T04:53:52.653",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 175.88254543,
+        "el_deg": -5.260063626
+      },
+      "engine": {
+        "az_deg": 175.88254525960696,
+        "el_deg": -5.2600704474787445
+      },
+      "residual": {
+        "az_on_sky_deg": -1.6967548432449014e-7,
+        "el_deg": -0.000006821478744534204,
+        "separation_deg": 0.000006823588646986892
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-05-07T14:12:14.694",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 102.999318652,
+        "el_deg": -1.542186148
+      },
+      "engine": {
+        "az_deg": 102.9993186491793,
+        "el_deg": -1.5421861488443138
+      },
+      "residual": {
+        "az_on_sky_deg": -2.819662423236604e-9,
+        "el_deg": -8.443137300417902e-10,
+        "separation_deg": 2.943370863033978e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-05-07T14:12:14.694",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 167.278163695,
+        "el_deg": -5.131264777
+      },
+      "engine": {
+        "az_deg": 167.2781633563488,
+        "el_deg": -5.131242869690423
+      },
+      "residual": {
+        "az_on_sky_deg": -3.3729397301767597e-7,
+        "el_deg": 0.000021907309577073875,
+        "separation_deg": 0.000021909905982069852
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-05-14T23:30:36.735",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 12.728187579,
+        "el_deg": -1.252322068
+      },
+      "engine": {
+        "az_deg": 12.728187574574331,
+        "el_deg": -1.252322067953407
+      },
+      "residual": {
+        "az_on_sky_deg": -4.424544129239588e-9,
+        "el_deg": 4.659295171904887e-11,
+        "separation_deg": 4.424858966435768e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-05-14T23:30:36.735",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 166.585767689,
+        "el_deg": 4.689130974
+      },
+      "engine": {
+        "az_deg": 166.5857673331796,
+        "el_deg": 4.689142335031487
+      },
+      "residual": {
+        "az_on_sky_deg": -3.546293997860994e-7,
+        "el_deg": 0.000011361031487133744,
+        "separation_deg": 0.000011366564935787227
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-05-22T08:48:58.776",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 282.324706407,
+        "el_deg": -1.469939877
+      },
+      "engine": {
+        "az_deg": 282.32470641601157,
+        "el_deg": -1.4699398745960683
+      },
+      "residual": {
+        "az_on_sky_deg": 9.008535383873674e-9,
+        "el_deg": 2.403931720351693e-9,
+        "separation_deg": 9.323815488720638e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-05-22T08:48:58.776",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 178.726487605,
+        "el_deg": 1.418290417
+      },
+      "engine": {
+        "az_deg": 178.72648715726118,
+        "el_deg": 1.4182651395478278
+      },
+      "residual": {
+        "az_on_sky_deg": -4.476016151954308e-7,
+        "el_deg": -0.000025277452172067782,
+        "separation_deg": 0.00002528141482428547
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-05-29T18:07:20.816",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 192.164746245,
+        "el_deg": -1.813495672
+      },
+      "engine": {
+        "az_deg": 192.16474624638172,
+        "el_deg": -1.8134956730253373
+      },
+      "residual": {
+        "az_on_sky_deg": 1.3810577541962292e-9,
+        "el_deg": -1.0253373705637614e-9,
+        "separation_deg": 1.720037827552824e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-05-29T18:07:20.816",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 174.506367134,
+        "el_deg": -6.870545336
+      },
+      "engine": {
+        "az_deg": 174.50636699539018,
+        "el_deg": -6.870552347794122
+      },
+      "residual": {
+        "az_on_sky_deg": -1.3761447344982862e-7,
+        "el_deg": -0.000007011794122213644,
+        "separation_deg": 0.000007013144412256174
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-06-06T03:25:42.857",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 102.066910697,
+        "el_deg": -1.580040013
+      },
+      "engine": {
+        "az_deg": 102.06691069402956,
+        "el_deg": -1.5800400149139477
+      },
+      "residual": {
+        "az_on_sky_deg": -2.9692802909004173e-9,
+        "el_deg": -1.913947667020466e-9,
+        "separation_deg": 3.5327012780061654e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-06-06T03:25:42.857",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 165.533877195,
+        "el_deg": -2.125243763
+      },
+      "engine": {
+        "az_deg": 165.5338768038998,
+        "el_deg": -2.125221774286459
+      },
+      "residual": {
+        "az_on_sky_deg": -3.9083121204517085e-7,
+        "el_deg": 0.0000219887135406438,
+        "separation_deg": 0.000021992186616894242
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-06-13T12:44:04.898",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 11.721057417,
+        "el_deg": -1.195709296
+      },
+      "engine": {
+        "az_deg": 11.72105741206637,
+        "el_deg": -1.1957092963230036
+      },
+      "residual": {
+        "az_on_sky_deg": -4.932593385454338e-9,
+        "el_deg": -3.230036238477396e-10,
+        "separation_deg": 4.943121985482165e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-06-13T12:44:04.898",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 168.896695291,
+        "el_deg": 6.034967996
+      },
+      "engine": {
+        "az_deg": 168.8966948841041,
+        "el_deg": 6.034978230311507
+      },
+      "residual": {
+        "az_on_sky_deg": -4.046408275223113e-7,
+        "el_deg": 0.00001023431150759535,
+        "separation_deg": 0.000010242307661129938
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-06-20T22:02:26.939",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 281.260002305,
+        "el_deg": -1.323087063
+      },
+      "engine": {
+        "az_deg": 281.26000231341374,
+        "el_deg": -1.3230870603678615
+      },
+      "residual": {
+        "az_on_sky_deg": 8.411492269859457e-9,
+        "el_deg": 2.6321385071526038e-9,
+        "separation_deg": 8.813728716190297e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-06-20T22:02:26.939",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 179.381260874,
+        "el_deg": -2.288704814
+      },
+      "engine": {
+        "az_deg": 179.3812605041835,
+        "el_deg": -2.2887296184876753
+      },
+      "residual": {
+        "az_on_sky_deg": -3.6952145457546166e-7,
+        "el_deg": -0.000024804487675389453,
+        "separation_deg": 0.00002480723997083018
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-06-28T07:20:48.980",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 191.050750847,
+        "el_deg": -1.556774842
+      },
+      "engine": {
+        "az_deg": 191.0507508475008,
+        "el_deg": -1.556774843358913
+      },
+      "residual": {
+        "az_on_sky_deg": 5.00605676005616e-10,
+        "el_deg": -1.3589129821411916e-9,
+        "separation_deg": 1.4481995735757285e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-06-28T07:20:48.980",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 172.634871996,
+        "el_deg": -6.858953851
+      },
+      "engine": {
+        "az_deg": 172.63487186235182,
+        "el_deg": -6.8589613324758085
+      },
+      "residual": {
+        "az_on_sky_deg": -1.3269170021667701e-7,
+        "el_deg": -0.00000748147580864611,
+        "separation_deg": 0.000007482652428252926
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-07-05T16:39:11.020",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 100.919820739,
+        "el_deg": -1.215146825
+      },
+      "engine": {
+        "az_deg": 100.91982073453016,
+        "el_deg": -1.215146826952784
+      },
+      "residual": {
+        "az_on_sky_deg": -4.4688201893200105e-9,
+        "el_deg": -1.9527841566002735e-9,
+        "separation_deg": 4.876864925561406e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-07-05T16:39:11.020",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 164.972639863,
+        "el_deg": 1.424843592
+      },
+      "engine": {
+        "az_deg": 164.97263940682677,
+        "el_deg": 1.424866033633699
+      },
+      "residual": {
+        "az_on_sky_deg": -4.560321633382686e-7,
+        "el_deg": 0.000022441633698910834,
+        "separation_deg": 0.00002244626669276102
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-07-13T01:57:33.061",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 10.545530332,
+        "el_deg": -0.756249349
+      },
+      "engine": {
+        "az_deg": 10.545530327231587,
+        "el_deg": -0.7562493499547187
+      },
+      "residual": {
+        "az_on_sky_deg": -4.768065357739644e-9,
+        "el_deg": -9.547187485026143e-10,
+        "separation_deg": 4.86264296552744e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-07-13T01:57:33.061",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 171.846716306,
+        "el_deg": 5.199902464
+      },
+      "engine": {
+        "az_deg": 171.84671590070653,
+        "el_deg": 5.19991118892743
+      },
+      "residual": {
+        "az_on_sky_deg": -4.036254989848652e-7,
+        "el_deg": 0.000008724927430314722,
+        "separation_deg": 0.000008734258536091491
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-07-20T11:15:55.102",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 280.076771363,
+        "el_deg": -0.81198144
+      },
+      "engine": {
+        "az_deg": 280.0767713705996,
+        "el_deg": -0.8119814382685373
+      },
+      "residual": {
+        "az_on_sky_deg": 7.598860905453937e-9,
+        "el_deg": 1.731462750953483e-9,
+        "separation_deg": 7.793646668111023e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-07-20T11:15:55.102",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 178.650743955,
+        "el_deg": -5.356021594
+      },
+      "engine": {
+        "az_deg": 178.65074364140514,
+        "el_deg": -5.356045773910588
+      },
+      "residual": {
+        "az_on_sky_deg": -3.1222572513793745e-7,
+        "el_deg": -0.00002417991058756286,
+        "separation_deg": 0.000024181926327023792
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-07-27T20:34:17.143",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 189.873908429,
+        "el_deg": -0.957395464
+      },
+      "engine": {
+        "az_deg": 189.87390842913618,
+        "el_deg": -0.9573954651976345
+      },
+      "residual": {
+        "az_on_sky_deg": 1.361778179897612e-10,
+        "el_deg": -1.1976345470898764e-9,
+        "separation_deg": 1.2053497266361218e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-07-27T20:34:17.143",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 170.495915904,
+        "el_deg": -5.28780659
+      },
+      "engine": {
+        "az_deg": 170.49591574974724,
+        "el_deg": -5.287814771846564
+      },
+      "residual": {
+        "az_on_sky_deg": -1.5359635404634205e-7,
+        "el_deg": -0.000008181846563815043,
+        "separation_deg": 0.000008183288155069578
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-08-04T05:52:39.184",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 99.769889237,
+        "el_deg": -0.545599992
+      },
+      "engine": {
+        "az_deg": 99.76988923121064,
+        "el_deg": -0.5455999943927111
+      },
+      "residual": {
+        "az_on_sky_deg": -5.789126040118299e-9,
+        "el_deg": -2.3927111403310164e-9,
+        "separation_deg": 6.264080234669642e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-08-04T05:52:39.184",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 165.985690092,
+        "el_deg": 4.562042631
+      },
+      "engine": {
+        "az_deg": 165.9856895724034,
+        "el_deg": 4.562065866341342
+      },
+      "residual": {
+        "az_on_sky_deg": -5.179504057189396e-7,
+        "el_deg": 0.000023235341342520144,
+        "separation_deg": 0.000023241113568719445
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-08-11T15:11:01.224",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 9.420779481,
+        "el_deg": -0.049174972
+      },
+      "engine": {
+        "az_deg": 9.420779475749278,
+        "el_deg": -0.049174973532337
+      },
+      "residual": {
+        "az_on_sky_deg": -5.2507383531128745e-9,
+        "el_deg": -1.5323370003428316e-9,
+        "separation_deg": 5.4697448816757955e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-08-11T15:11:01.224",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 174.474063675,
+        "el_deg": 2.453117703
+      },
+      "engine": {
+        "az_deg": 174.47406332053822,
+        "el_deg": 2.453124933314425
+      },
+      "residual": {
+        "az_on_sky_deg": -3.541369675659916e-7,
+        "el_deg": 0.000007230314424955253,
+        "separation_deg": 0.000007238981949528561
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-08-19T00:29:23.265",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 278.997271499,
+        "el_deg": -0.068726556
+      },
+      "engine": {
+        "az_deg": 278.9972715051118,
+        "el_deg": -0.0687265552577507
+      },
+      "residual": {
+        "az_on_sky_deg": 6.111799999047407e-9,
+        "el_deg": 7.422492898090383e-10,
+        "separation_deg": 6.156707564578624e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-08-19T00:29:23.265",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 176.847757615,
+        "el_deg": -7.07158233
+      },
+      "engine": {
+        "az_deg": 176.84775732692856,
+        "el_deg": -7.071605979570089
+      },
+      "residual": {
+        "az_on_sky_deg": -2.858800944242124e-7,
+        "el_deg": -0.00002364957008893498,
+        "separation_deg": 0.000023651297909603424
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-08-26T09:47:45.306",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 188.857478996,
+        "el_deg": -0.168760221
+      },
+      "engine": {
+        "az_deg": 188.8574789946243,
+        "el_deg": -0.1687602223240562
+      },
+      "residual": {
+        "az_on_sky_deg": -1.3757184557195873e-9,
+        "el_deg": -1.3240562257710309e-9,
+        "separation_deg": 1.9093646180788242e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-08-26T09:47:45.306",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 168.414125479,
+        "el_deg": -2.525641678
+      },
+      "engine": {
+        "az_deg": 168.41412528130164,
+        "el_deg": -2.5256506825270644
+      },
+      "residual": {
+        "az_on_sky_deg": -1.9750629717880758e-7,
+        "el_deg": -0.000009004527064426782,
+        "separation_deg": 0.000009006692866156343
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-09-02T19:06:07.347",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 98.837033638,
+        "el_deg": 0.257204848
+      },
+      "engine": {
+        "az_deg": 98.837033630332,
+        "el_deg": 0.25720484530762233
+      },
+      "residual": {
+        "az_on_sky_deg": -7.667872569425454e-9,
+        "el_deg": -2.6923776541565303e-9,
+        "separation_deg": 8.126852677038247e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-09-02T19:06:07.347",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 168.602568911,
+        "el_deg": 6.202256005
+      },
+      "engine": {
+        "az_deg": 168.60256835556083,
+        "el_deg": 6.202280310526233
+      },
+      "residual": {
+        "az_on_sky_deg": -5.521879552212674e-7,
+        "el_deg": 0.00002430552623344795,
+        "separation_deg": 0.000024311797897489235
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-09-10T04:24:29.388",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 8.562849128,
+        "el_deg": 0.744753413
+      },
+      "engine": {
+        "az_deg": 8.562849121223477,
+        "el_deg": 0.7447534112041505
+      },
+      "residual": {
+        "az_on_sky_deg": -6.7759588682508906e-9,
+        "el_deg": -1.7958494691328042e-9,
+        "separation_deg": 7.009890180549331e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-09-10T04:24:29.388",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 176.168062934,
+        "el_deg": -1.18303009
+      },
+      "engine": {
+        "az_deg": 176.16806265018496,
+        "el_deg": -1.18302400599902
+      },
+      "residual": {
+        "az_on_sky_deg": -2.837546002910307e-7,
+        "el_deg": 0.000006084000979900139,
+        "separation_deg": 0.000006090614465083184
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-09-17T13:42:51.429",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 278.229864854,
+        "el_deg": 0.715780169
+      },
+      "engine": {
+        "az_deg": 278.2298648586093,
+        "el_deg": 0.7157801700066232
+      },
+      "residual": {
+        "az_on_sky_deg": 4.608959469491968e-9,
+        "el_deg": 1.0066232292160748e-9,
+        "separation_deg": 4.717549221171002e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-09-17T13:42:51.429",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 174.285732371,
+        "el_deg": -7.152578926
+      },
+      "engine": {
+        "az_deg": 174.28573207804646,
+        "el_deg": -7.152602264613851
+      },
+      "residual": {
+        "az_on_sky_deg": -2.906737366561688e-7,
+        "el_deg": -0.000023338613850398815,
+        "separation_deg": 0.000023340423896485747
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-09-24T23:01:13.469",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 188.198132759,
+        "el_deg": 0.604854296
+      },
+      "engine": {
+        "az_deg": 188.1981327567671,
+        "el_deg": 0.6048542950153407
+      },
+      "residual": {
+        "az_on_sky_deg": -2.232798758019888e-9,
+        "el_deg": -9.846592430307055e-10,
+        "separation_deg": 2.4402582334822407e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-09-24T23:01:13.469",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 166.82899978,
+        "el_deg": 0.805891717
+      },
+      "engine": {
+        "az_deg": 166.8289995199083,
+        "el_deg": 0.8058819502139748
+      },
+      "residual": {
+        "az_on_sky_deg": -2.600659966632771e-7,
+        "el_deg": -0.000009766786025156016,
+        "separation_deg": 0.00000977024787641862
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-02T08:19:35.510",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 98.300632124,
+        "el_deg": 0.981662439
+      },
+      "engine": {
+        "az_deg": 98.30063211574995,
+        "el_deg": 0.9816624354657633
+      },
+      "residual": {
+        "az_on_sky_deg": -8.248815580140923e-9,
+        "el_deg": -3.5342367921131768e-9,
+        "separation_deg": 8.974087825783228e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-02T08:19:35.510",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 172.207587156,
+        "el_deg": 5.592160343
+      },
+      "engine": {
+        "az_deg": 172.20758661486207,
+        "el_deg": 5.592185786325603
+      },
+      "residual": {
+        "az_on_sky_deg": -5.385625640065876e-7,
+        "el_deg": 0.000025443325602836353,
+        "separation_deg": 0.000025449024879025882
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-09T17:37:57.551",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 8.134612195,
+        "el_deg": 1.413516498
+      },
+      "engine": {
+        "az_deg": 8.134612188291708,
+        "el_deg": 1.4135164966870957
+      },
+      "residual": {
+        "az_on_sky_deg": -6.706277880035883e-9,
+        "el_deg": -1.3129042297777005e-9,
+        "separation_deg": 6.833559752091548e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-09T17:37:57.551",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 176.819265995,
+        "el_deg": -4.499722499
+      },
+      "engine": {
+        "az_deg": 176.8192657764015,
+        "el_deg": -4.499717034449081
+      },
+      "residual": {
+        "az_on_sky_deg": -2.1792474625233158e-7,
+        "el_deg": 0.000005464550918432565,
+        "separation_deg": 0.000005468894579951183
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-17T02:56:19.592",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 277.917716406,
+        "el_deg": 1.32900334
+      },
+      "engine": {
+        "az_deg": 277.91771641079623,
+        "el_deg": 1.3290033403939747
+      },
+      "residual": {
+        "az_on_sky_deg": 4.7949301112894505e-9,
+        "el_deg": 3.9397463069690275e-10,
+        "separation_deg": 4.81104187487978e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-17T02:56:19.592",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 171.298970061,
+        "el_deg": -5.667767542
+      },
+      "engine": {
+        "az_deg": 171.2989697382036,
+        "el_deg": -5.667790765065447
+      },
+      "residual": {
+        "az_on_sky_deg": -3.212183224572479e-7,
+        "el_deg": -0.000023223065446664748,
+        "separation_deg": 0.0000232252868667763
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-24T12:14:41.633",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 188.013686329,
+        "el_deg": 1.149895997
+      },
+      "engine": {
+        "az_deg": 188.01368632628302,
+        "el_deg": 1.1498959978076262
+      },
+      "residual": {
+        "az_on_sky_deg": -2.716454571103992e-9,
+        "el_deg": 8.07626188148447e-10,
+        "separation_deg": 2.8339257266345228e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-24T12:14:41.633",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 166.193139305,
+        "el_deg": 3.882203567
+      },
+      "engine": {
+        "az_deg": 166.19313897421807,
+        "el_deg": 3.8821933140460354
+      },
+      "residual": {
+        "az_on_sky_deg": -3.3002283241343386e-7,
+        "el_deg": -0.000010252953964506872,
+        "separation_deg": 0.000010258263990684616
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-31T21:33:03.673",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 98.248020484,
+        "el_deg": 1.422143976
+      },
+      "engine": {
+        "az_deg": 98.24802047473443,
+        "el_deg": 1.422143972661185
+      },
+      "residual": {
+        "az_on_sky_deg": -9.262736903781103e-9,
+        "el_deg": -3.3388150022517493e-9,
+        "separation_deg": 9.846093156583722e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-10-31T21:33:03.673",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 175.731025232,
+        "el_deg": 2.850841494
+      },
+      "engine": {
+        "az_deg": 175.73102475588612,
+        "el_deg": 2.850867759509523
+      },
+      "residual": {
+        "az_on_sky_deg": -4.755246426702289e-7,
+        "el_deg": 0.000026265509522893637,
+        "separation_deg": 0.000026269813744360668
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-11-08T06:51:25.714",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 8.19601842,
+        "el_deg": 1.762258255
+      },
+      "engine": {
+        "az_deg": 8.196018412694709,
+        "el_deg": 1.7622582535454756
+      },
+      "residual": {
+        "az_on_sky_deg": -7.30183366756999e-9,
+        "el_deg": -1.4545245008434904e-9,
+        "separation_deg": 7.445293810437853e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-11-08T06:51:25.714",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 176.54110076,
+        "el_deg": -6.581845029
+      },
+      "engine": {
+        "az_deg": 176.54110058672907,
+        "el_deg": -6.581839630260872
+      },
+      "residual": {
+        "az_on_sky_deg": -1.7212890006585697e-7,
+        "el_deg": 0.000005398739127748797,
+        "separation_deg": 0.000005401482440294595
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-11-15T16:09:47.755",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 278.09115321,
+        "el_deg": 1.588484918
+      },
+      "engine": {
+        "az_deg": 278.0911532137147,
+        "el_deg": 1.588484918924893
+      },
+      "residual": {
+        "az_on_sky_deg": 3.7131762374016896e-9,
+        "el_deg": 9.248930510352693e-10,
+        "separation_deg": 3.826661316340848e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-11-15T16:09:47.755",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 168.323985532,
+        "el_deg": -2.958611465
+      },
+      "engine": {
+        "az_deg": 168.32398515775773,
+        "el_deg": -2.9586346668971895
+      },
+      "residual": {
+        "az_on_sky_deg": -3.7374345543011745e-7,
+        "el_deg": -0.00002320189718929555,
+        "separation_deg": 0.000023204907183263582
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-11-23T01:28:09.796",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 188.299819506,
+        "el_deg": 1.299837615
+      },
+      "engine": {
+        "az_deg": 188.29981950244397,
+        "el_deg": 1.2998376160864555
+      },
+      "residual": {
+        "az_on_sky_deg": -3.5550955417533212e-9,
+        "el_deg": 1.0864555921585861e-9,
+        "separation_deg": 3.717429540307127e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-11-23T01:28:09.796",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 166.761472233,
+        "el_deg": 5.79109442
+      },
+      "engine": {
+        "az_deg": 166.76147184133697,
+        "el_deg": 5.79108412113685
+      },
+      "residual": {
+        "az_on_sky_deg": -3.896640898307727e-7,
+        "el_deg": -0.000010298863150737247,
+        "separation_deg": 0.000010306232112265568
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-11-30T10:46:31.837",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 98.638256043,
+        "el_deg": 1.438424841
+      },
+      "engine": {
+        "az_deg": 98.63825603376618,
+        "el_deg": 1.4384248381878915
+      },
+      "residual": {
+        "az_on_sky_deg": -9.230962553496273e-9,
+        "el_deg": -2.8121085460242057e-9,
+        "separation_deg": 9.649756390984212e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-11-30T10:46:31.837",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 178.26736409,
+        "el_deg": -0.982283405
+      },
+      "engine": {
+        "az_deg": 178.26736369651158,
+        "el_deg": -0.9822569612290879
+      },
+      "residual": {
+        "az_on_sky_deg": -3.934306233944488e-7,
+        "el_deg": 0.00002644377091209904,
+        "separation_deg": 0.00002644669748119669
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-12-07T20:04:53.878",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 8.674343292,
+        "el_deg": 1.673937595
+      },
+      "engine": {
+        "az_deg": 8.674343285249108,
+        "el_deg": 1.6739375936526921
+      },
+      "residual": {
+        "az_on_sky_deg": -6.748070836568544e-9,
+        "el_deg": -1.3473078208647848e-9,
+        "separation_deg": 6.881198177780671e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-12-07T20:04:53.878",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 175.434604825,
+        "el_deg": -6.991505839
+      },
+      "engine": {
+        "az_deg": 175.4346046728918,
+        "el_deg": -6.991500006731852
+      },
+      "residual": {
+        "az_on_sky_deg": -1.5097716898265363e-7,
+        "el_deg": 0.000005832268148431297,
+        "separation_deg": 0.00000583422195940895
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-12-15T05:23:15.918",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 278.645493058,
+        "el_deg": 1.402779495
+      },
+      "engine": {
+        "az_deg": 278.6454930630032,
+        "el_deg": 1.4027794967765517
+      },
+      "residual": {
+        "az_on_sky_deg": 5.001630933132068e-9,
+        "el_deg": 1.7765515725187697e-9,
+        "separation_deg": 5.3078298607591455e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-12-15T05:23:15.918",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 165.925477684,
+        "el_deg": 0.404316139
+      },
+      "engine": {
+        "az_deg": 165.92547724562414,
+        "el_deg": 0.4042929357083511
+      },
+      "residual": {
+        "az_on_sky_deg": -4.383649631219397e-7,
+        "el_deg": -0.000023203291648898894,
+        "separation_deg": 0.000023207432153094854
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-12-22T14:41:37.959",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 188.918828845,
+        "el_deg": 0.995730478
+      },
+      "engine": {
+        "az_deg": 188.91882884315152,
+        "el_deg": 0.9957304801853953
+      },
+      "residual": {
+        "az_on_sky_deg": -1.8482688374561544e-9,
+        "el_deg": 2.1853953091621747e-9,
+        "separation_deg": 2.8621378634814996e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-12-22T14:41:37.959",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 168.394382345,
+        "el_deg": 5.806501037
+      },
+      "engine": {
+        "az_deg": 168.39438192863358,
+        "el_deg": 5.806491171520285
+      },
+      "residual": {
+        "az_on_sky_deg": -4.1423016917135334e-7,
+        "el_deg": -0.000009865479714932235,
+        "separation_deg": 0.000009874172199954207
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-12-30T00:00:00.000",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 99.303500664,
+        "el_deg": 1.01196308
+      },
+      "engine": {
+        "az_deg": 99.30350065697846,
+        "el_deg": 1.0119630778045685
+      },
+      "residual": {
+        "az_on_sky_deg": -7.020431319556828e-9,
+        "el_deg": -2.1954313922378788e-9,
+        "separation_deg": 7.355720266888638e-9
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "utc": "2026-12-30T00:00:00.000",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 179.425373295,
+        "el_deg": -4.542039634
+      },
+      "engine": {
+        "az_deg": 179.42537297155238,
+        "el_deg": -4.542013631695817
+      },
+      "residual": {
+        "az_on_sky_deg": -3.22431905257823e-7,
+        "el_deg": 0.000026002304182703995,
+        "separation_deg": 0.000026004303202633723
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-02T00:00:00.000",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 157.88679582,
+        "el_deg": 0.831867845
+      },
+      "engine": {
+        "az_deg": 157.88679582158224,
+        "el_deg": 0.831867847253508
+      },
+      "residual": {
+        "az_on_sky_deg": 1.582126639377374e-9,
+        "el_deg": 2.2535080468344404e-9,
+        "separation_deg": 2.753405713908678e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-02T00:00:00.000",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 138.152900626,
+        "el_deg": 5.790272703
+      },
+      "engine": {
+        "az_deg": 138.15290022576113,
+        "el_deg": 5.7902633078439845
+      },
+      "residual": {
+        "az_on_sky_deg": -3.9819675420408775e-7,
+        "el_deg": -0.000009395156015834516,
+        "separation_deg": 0.000009403590656504534
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-09T09:18:22.041",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 68.275362014,
+        "el_deg": 1.405965691
+      },
+      "engine": {
+        "az_deg": 68.27536200209637,
+        "el_deg": 1.4059656895732044
+      },
+      "residual": {
+        "az_on_sky_deg": -1.190011030983776e-8,
+        "el_deg": -1.4267955705804525e-9,
+        "separation_deg": 1.1985270316708095e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-09T09:18:22.041",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 143.720091615,
+        "el_deg": -3.453360781
+      },
+      "engine": {
+        "az_deg": 143.7200912877484,
+        "el_deg": -3.4533359918044066
+      },
+      "residual": {
+        "az_on_sky_deg": -3.2665741902703093e-7,
+        "el_deg": 0.000024789195593566404,
+        "separation_deg": 0.000024791347749045417
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-16T18:36:44.082",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 338.346848975,
+        "el_deg": 1.607224032
+      },
+      "engine": {
+        "az_deg": 338.34684896299876,
+        "el_deg": 1.6072240310778707
+      },
+      "residual": {
+        "az_on_sky_deg": -1.1996515890223638e-8,
+        "el_deg": -9.221292618377674e-10,
+        "separation_deg": 1.203188990573035e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-16T18:36:44.082",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 135.09919631,
+        "el_deg": -6.794469936
+      },
+      "engine": {
+        "az_deg": 135.09919620428497,
+        "el_deg": -6.794460288702283
+      },
+      "residual": {
+        "az_on_sky_deg": -1.0497255927429331e-7,
+        "el_deg": 0.000009647297716242065,
+        "separation_deg": 0.000009647868804105767
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-24T03:55:06.122",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 248.321172673,
+        "el_deg": 0.744700504
+      },
+      "engine": {
+        "az_deg": 248.32117268376336,
+        "el_deg": 0.7447005058940807
+      },
+      "residual": {
+        "az_on_sky_deg": 1.0762505905530862e-8,
+        "el_deg": 1.8940806700840085e-9,
+        "separation_deg": 1.0927841631990465e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-24T03:55:06.122",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 132.385556707,
+        "el_deg": 2.552794335
+      },
+      "engine": {
+        "az_deg": 132.38555619640633,
+        "el_deg": 2.552770340358628
+      },
+      "residual": {
+        "az_on_sky_deg": -5.100870255307954e-7,
+        "el_deg": -0.000023994641372038217,
+        "separation_deg": 0.000024000062568533102
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-31T13:13:28.163",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 158.581675643,
+        "el_deg": 0.229855932
+      },
+      "engine": {
+        "az_deg": 158.58167564546048,
+        "el_deg": 0.22985593468264065
+      },
+      "residual": {
+        "az_on_sky_deg": 2.4603907429751755e-9,
+        "el_deg": 2.6826406374080847e-9,
+        "separation_deg": 3.6401080651733515e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-01-31T13:13:28.163",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 140.496203103,
+        "el_deg": 4.152591192
+      },
+      "engine": {
+        "az_deg": 140.4962027451605,
+        "el_deg": 4.15258293452853
+      },
+      "residual": {
+        "az_on_sky_deg": -3.5690013024911024e-7,
+        "el_deg": -0.000008257471470152211,
+        "separation_deg": 0.000008265180746086756
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-02-07T22:31:50.204",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 68.919288778,
+        "el_deg": 0.719319871
+      },
+      "engine": {
+        "az_deg": 68.91928876857948,
+        "el_deg": 0.7193198703168374
+      },
+      "residual": {
+        "az_on_sky_deg": -9.419803718797145e-9,
+        "el_deg": -6.831626375713995e-10,
+        "separation_deg": 9.444511008141412e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-02-07T22:31:50.204",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 141.163568681,
+        "el_deg": -6.083761594
+      },
+      "engine": {
+        "az_deg": 141.16356838416604,
+        "el_deg": -6.083737758313014
+      },
+      "residual": {
+        "az_on_sky_deg": -2.951621832843531e-7,
+        "el_deg": 0.000023835686985940185,
+        "separation_deg": 0.000023837514442139477
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-02-15T07:50:12.245",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 338.951281832,
+        "el_deg": 0.877204404
+      },
+      "engine": {
+        "az_deg": 338.95128182109454,
+        "el_deg": 0.8772044039873023
+      },
+      "residual": {
+        "az_on_sky_deg": -1.0904245496608172e-8,
+        "el_deg": -1.2697731754940378e-11,
+        "separation_deg": 1.0904217243633027e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-02-15T07:50:12.245",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 133.115044901,
+        "el_deg": -4.883591792
+      },
+      "engine": {
+        "az_deg": 133.11504476363632,
+        "el_deg": -4.883581070052119
+      },
+      "residual": {
+        "az_on_sky_deg": -1.3686504411198872e-7,
+        "el_deg": 0.00001072194788065417,
+        "separation_deg": 0.00001072282138213468
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-02-22T17:08:34.286",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 248.861277612,
+        "el_deg": -0.02455695
+      },
+      "engine": {
+        "az_deg": 248.861277624578,
+        "el_deg": -0.024556947134219628
+      },
+      "residual": {
+        "az_on_sky_deg": 1.2577969509734659e-8,
+        "el_deg": 2.8657803734233323e-9,
+        "separation_deg": 1.290033493656812e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-02-22T17:08:34.286",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 135.20916933,
+        "el_deg": 5.307601352
+      },
+      "engine": {
+        "az_deg": 135.20916876684095,
+        "el_deg": 5.3075767144775385
+      },
+      "residual": {
+        "az_on_sky_deg": -5.607445378637847e-7,
+        "el_deg": -0.000024637522461290473,
+        "separation_deg": 0.000024643902843835864
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-02T02:26:56.327",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 159.03010379,
+        "el_deg": -0.591570332
+      },
+      "engine": {
+        "az_deg": 159.0301037939801,
+        "el_deg": -0.5915703302008192
+      },
+      "residual": {
+        "az_on_sky_deg": 3.979850361317355e-9,
+        "el_deg": 1.7991808043404944e-9,
+        "separation_deg": 4.36766880554487e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-02T02:26:56.327",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 141.886605302,
+        "el_deg": 1.02026408
+      },
+      "engine": {
+        "az_deg": 141.88660501310548,
+        "el_deg": 1.020256664855444
+      },
+      "residual": {
+        "az_on_sky_deg": -2.888487105743103e-7,
+        "el_deg": -0.000007415144555933395,
+        "separation_deg": 0.00000742076831365329
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-09T11:45:18.367",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 69.263432774,
+        "el_deg": -0.11658547
+      },
+      "engine": {
+        "az_deg": 69.26343276657383,
+        "el_deg": -0.11658547101715629
+      },
+      "residual": {
+        "az_on_sky_deg": -7.42612255318255e-9,
+        "el_deg": -1.0171562897509645e-9,
+        "separation_deg": 7.49548225272509e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-09T11:45:18.367",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 138.228364736,
+        "el_deg": -7.376102219
+      },
+      "engine": {
+        "az_deg": 138.2283644468281,
+        "el_deg": -7.376079310962091
+      },
+      "residual": {
+        "az_on_sky_deg": -2.867789512584043e-7,
+        "el_deg": 0.00002290803790927498,
+        "separation_deg": 0.000022909832891109902
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-16T21:03:40.408",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 339.21079719,
+        "el_deg": 0.052569003
+      },
+      "engine": {
+        "az_deg": 339.21079717998447,
+        "el_deg": 0.052569002762192146
+      },
+      "residual": {
+        "az_on_sky_deg": -1.0015578813988934e-8,
+        "el_deg": -2.3780785673999105e-10,
+        "separation_deg": 1.0018358766462789e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-16T21:03:40.408",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 131.672138547,
+        "el_deg": -1.837579671
+      },
+      "engine": {
+        "az_deg": 131.6721383514669,
+        "el_deg": -1.8375681286172698
+      },
+      "residual": {
+        "az_on_sky_deg": -1.9543250757589472e-7,
+        "el_deg": 0.00001154238273026742,
+        "separation_deg": 0.000011544037117095904
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-24T06:22:02.449",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 249.018144001,
+        "el_deg": -0.834764124
+      },
+      "engine": {
+        "az_deg": 249.01814401416345,
+        "el_deg": -0.8347641209798549
+      },
+      "residual": {
+        "az_on_sky_deg": 1.3162060820755724e-8,
+        "el_deg": 3.020145133980634e-9,
+        "separation_deg": 1.3504134242029594e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-24T06:22:02.449",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 138.829479509,
+        "el_deg": 6.048063398
+      },
+      "engine": {
+        "az_deg": 138.82947893924273,
+        "el_deg": 6.048038249776465
+      },
+      "residual": {
+        "az_on_sky_deg": -5.665859273963752e-7,
+        "el_deg": -0.000025148223534721126,
+        "separation_deg": 0.000025154605274971653
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-31T15:40:24.490",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 159.062305529,
+        "el_deg": -1.38502064
+      },
+      "engine": {
+        "az_deg": 159.06230553366584,
+        "el_deg": -1.3850206393848978
+      },
+      "residual": {
+        "az_on_sky_deg": 4.664458355190865e-9,
+        "el_deg": 6.151021914035937e-10,
+        "separation_deg": 4.704841823373497e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-03-31T15:40:24.490",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 142.156574613,
+        "el_deg": -2.52334627
+      },
+      "engine": {
+        "az_deg": 142.15657439554656,
+        "el_deg": -2.523353214893337
+      },
+      "residual": {
+        "az_on_sky_deg": -2.172426251881729e-7,
+        "el_deg": -0.00000694489333730175,
+        "separation_deg": 0.000006948290280243764
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-04-08T00:58:46.531",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 69.168582255,
+        "el_deg": -0.854904672
+      },
+      "engine": {
+        "az_deg": 69.16858224866688,
+        "el_deg": -0.8549046732657524
+      },
+      "residual": {
+        "az_on_sky_deg": -6.33244769671066e-9,
+        "el_deg": -1.2657523917880553e-9,
+        "separation_deg": 6.457682783255454e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-04-08T00:58:46.531",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 135.350110062,
+        "el_deg": -7.09031821
+      },
+      "engine": {
+        "az_deg": 135.3501097599775,
+        "el_deg": -7.090295980819655
+      },
+      "residual": {
+        "az_on_sky_deg": -2.997128759520286e-7,
+        "el_deg": 0.000022229180345334498,
+        "separation_deg": 0.00002223120074598642
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-04-15T10:17:08.571",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 339.01028809,
+        "el_deg": -0.626838611
+      },
+      "engine": {
+        "az_deg": 339.0102880808303,
+        "el_deg": -0.6268386108639348
+      },
+      "residual": {
+        "az_on_sky_deg": -9.169204188010384e-9,
+        "el_deg": 1.3606527016207792e-10,
+        "separation_deg": 9.170175030689483e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-04-15T10:17:08.571",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 131.250132594,
+        "el_deg": 1.635670964
+      },
+      "engine": {
+        "az_deg": 131.25013232157,
+        "el_deg": 1.6356827856200542
+      },
+      "residual": {
+        "az_on_sky_deg": -2.7231903807373067e-7,
+        "el_deg": 0.000011821620054197624,
+        "separation_deg": 0.0000118247561644032
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-04-22T19:35:30.612",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 248.705095249,
+        "el_deg": -1.453880583
+      },
+      "engine": {
+        "az_deg": 248.7050952629496,
+        "el_deg": -1.4538805802861776
+      },
+      "residual": {
+        "az_on_sky_deg": 1.3945111592898723e-8,
+        "el_deg": 2.71382227801098e-9,
+        "separation_deg": 1.4206719620784924e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-04-22T19:35:30.612",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 142.188586048,
+        "el_deg": 4.461705064
+      },
+      "engine": {
+        "az_deg": 142.1885855265973,
+        "el_deg": 4.461679652605995
+      },
+      "residual": {
+        "az_on_sky_deg": -5.198225418846887e-7,
+        "el_deg": -0.00002541139400502601,
+        "separation_deg": 0.000025416710268087318
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-04-30T04:53:52.653",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 158.624907982,
+        "el_deg": -1.927682159
+      },
+      "engine": {
+        "az_deg": 158.62490798722993,
+        "el_deg": -1.927682159034844
+      },
+      "residual": {
+        "az_on_sky_deg": 5.226975873376437e-9,
+        "el_deg": -3.484412758325561e-11,
+        "separation_deg": 5.227106636545956e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-04-30T04:53:52.653",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 141.474456963,
+        "el_deg": -5.447638531
+      },
+      "engine": {
+        "az_deg": 141.4744567988267,
+        "el_deg": -5.44764535537979
+      },
+      "residual": {
+        "az_on_sky_deg": -1.634318338075216e-7,
+        "el_deg": -0.000006824379790160151,
+        "separation_deg": 0.000006826336458778241
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-05-07T14:12:14.694",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 68.612843721,
+        "el_deg": -1.294005675
+      },
+      "engine": {
+        "az_deg": 68.61284371446848,
+        "el_deg": -1.294005676111199
+      },
+      "residual": {
+        "az_on_sky_deg": -6.529870511544505e-9,
+        "el_deg": -1.111199132708407e-9,
+        "separation_deg": 6.62372830627666e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-05-07T14:12:14.694",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 132.868797094,
+        "el_deg": -5.269248793
+      },
+      "engine": {
+        "az_deg": 132.86879675881426,
+        "el_deg": -5.2692268739934836
+      },
+      "residual": {
+        "az_on_sky_deg": -3.337692947629353e-7,
+        "el_deg": 0.000021919006516490924,
+        "separation_deg": 0.000021921547587467136
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-05-14T23:30:36.735",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 338.353318261,
+        "el_deg": -0.980810327
+      },
+      "engine": {
+        "az_deg": 338.3533182520273,
+        "el_deg": -0.9808103266054877
+      },
+      "residual": {
+        "az_on_sky_deg": -8.971419020734937e-9,
+        "el_deg": 3.945123117077287e-10,
+        "separation_deg": 8.980080579284389e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-05-14T23:30:36.735",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 132.235458225,
+        "el_deg": 4.55498892
+      },
+      "engine": {
+        "az_deg": 132.23545787380905,
+        "el_deg": 4.555000292589849
+      },
+      "residual": {
+        "az_on_sky_deg": -3.5008170953099757e-7,
+        "el_deg": 0.00001137258984851286,
+        "separation_deg": 0.000011377976844546253
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-05-22T08:48:58.776",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 247.95248945,
+        "el_deg": -1.72128079
+      },
+      "engine": {
+        "az_deg": 247.95248946365453,
+        "el_deg": -1.7212807868045543
+      },
+      "residual": {
+        "az_on_sky_deg": 1.364831005899815e-8,
+        "el_deg": 3.195445685832965e-9,
+        "separation_deg": 1.4017472416463044e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-05-22T08:48:58.776",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 144.355259559,
+        "el_deg": 1.214986449
+      },
+      "engine": {
+        "az_deg": 144.35525911743542,
+        "el_deg": 1.214961155710481
+      },
+      "residual": {
+        "az_on_sky_deg": -4.414652899524169e-7,
+        "el_deg": -0.000025293289519057183,
+        "separation_deg": 0.00002529714186016447
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-05-29T18:07:20.816",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 157.776445488,
+        "el_deg": -2.08251265
+      },
+      "engine": {
+        "az_deg": 157.77644549348878,
+        "el_deg": -2.082512651255776
+      },
+      "residual": {
+        "az_on_sky_deg": 5.485175344396024e-9,
+        "el_deg": -1.2557759276887737e-9,
+        "separation_deg": 5.627066314279857e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-05-29T18:07:20.816",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 140.088733616,
+        "el_deg": -7.050394359
+      },
+      "engine": {
+        "az_deg": 140.0887334827366,
+        "el_deg": -7.050401372577401
+      },
+      "residual": {
+        "az_on_sky_deg": -1.322558223469115e-7,
+        "el_deg": -0.000007013577400627469,
+        "separation_deg": 0.000007014824270869472
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-06-06T03:25:42.857",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 67.680369346,
+        "el_deg": -1.327455227
+      },
+      "engine": {
+        "az_deg": 67.68036933842167,
+        "el_deg": -1.3274552281581673
+      },
+      "residual": {
+        "az_on_sky_deg": -7.57633074478347e-9,
+        "el_deg": -1.1581673398097792e-9,
+        "separation_deg": 7.664322708921841e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-06-06T03:25:42.857",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 131.14244125,
+        "el_deg": -2.252844989
+      },
+      "engine": {
+        "az_deg": 131.1424408625207,
+        "el_deg": -2.252822985993112
+      },
+      "residual": {
+        "az_on_sky_deg": -3.871798154146681e-7,
+        "el_deg": 0.000022003006888038357,
+        "separation_deg": 0.000022006413163418218
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-06-13T12:44:04.898",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 337.346038913,
+        "el_deg": -0.928624189
+      },
+      "engine": {
+        "az_deg": 337.34603890427945,
+        "el_deg": -0.9286241889721384
+      },
+      "residual": {
+        "az_on_sky_deg": -8.719317233454126e-9,
+        "el_deg": 2.7861601914480616e-11,
+        "separation_deg": 8.719420871562772e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-06-13T12:44:04.898",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 134.553887861,
+        "el_deg": 5.887036102
+      },
+      "engine": {
+        "az_deg": 134.55388745952192,
+        "el_deg": 5.8870463485419355
+      },
+      "residual": {
+        "az_on_sky_deg": -3.9936064374119904e-7,
+        "el_deg": 0.000010246541935821085,
+        "separation_deg": 0.000010254321557866882
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-06-20T22:02:26.939",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 246.886985691,
+        "el_deg": -1.579398874
+      },
+      "engine": {
+        "az_deg": 246.88698570344744,
+        "el_deg": -1.5793988713423122
+      },
+      "residual": {
+        "az_on_sky_deg": 1.2442729259706084e-8,
+        "el_deg": 2.6576878475736976e-9,
+        "separation_deg": 1.2723361173264439e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-06-20T22:02:26.939",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 144.990163561,
+        "el_deg": -2.495394464
+      },
+      "engine": {
+        "az_deg": 144.99016319807055,
+        "el_deg": -2.495419279150297
+      },
+      "residual": {
+        "az_on_sky_deg": -3.625852698929628e-7,
+        "el_deg": -0.00002481515029728598,
+        "separation_deg": 0.000024817799103554977
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-06-28T07:20:48.980",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 156.663439155,
+        "el_deg": -1.820841393
+      },
+      "engine": {
+        "az_deg": 156.66343915992096,
+        "el_deg": -1.8208413948457622
+      },
+      "residual": {
+        "az_on_sky_deg": 4.918450036043498e-9,
+        "el_deg": -1.8457622097400872e-9,
+        "separation_deg": 5.2533972086450706e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-06-28T07:20:48.980",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 138.21665867,
+        "el_deg": -7.028198111
+      },
+      "engine": {
+        "az_deg": 138.21665854148168,
+        "el_deg": -7.028205594409469
+      },
+      "residual": {
+        "az_on_sky_deg": -1.275526291813169e-7,
+        "el_deg": -0.000007483409468989066,
+        "separation_deg": 0.000007484496439936743
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-07-05T16:39:11.020",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 66.535100004,
+        "el_deg": -0.957239904
+      },
+      "engine": {
+        "az_deg": 66.53509999573454,
+        "el_deg": -0.9572399059148701
+      },
+      "residual": {
+        "az_on_sky_deg": -8.264334330802017e-9,
+        "el_deg": -1.9148700403093244e-9,
+        "separation_deg": 8.483251685769352e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-07-05T16:39:11.020",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 130.602722945,
+        "el_deg": 1.30053409
+      },
+      "engine": {
+        "az_deg": 130.60272249293004,
+        "el_deg": 1.300556551091452
+      },
+      "residual": {
+        "az_on_sky_deg": -4.519535716232578e-7,
+        "el_deg": 0.000022461091452097293,
+        "separation_deg": 0.000022465638010075943
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-07-13T01:57:33.061",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 336.168632777,
+        "el_deg": -0.494439165
+      },
+      "engine": {
+        "az_deg": 336.1686327675977,
+        "el_deg": -0.4944391660430001
+      },
+      "residual": {
+        "az_on_sky_deg": -9.402006133084512e-9,
+        "el_deg": -1.0430000751959767e-9,
+        "separation_deg": 9.459652744086024e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-07-13T01:57:33.061",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 137.498126133,
+        "el_deg": 5.034799045
+      },
+      "engine": {
+        "az_deg": 137.4981257341059,
+        "el_deg": 5.034807780971647
+      },
+      "residual": {
+        "az_on_sky_deg": -3.9735504308811046e-7,
+        "el_deg": 0.000008735971647411134,
+        "separation_deg": 0.000008745003808296857
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-07-20T11:15:55.102",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 245.701313934,
+        "el_deg": -1.073717081
+      },
+      "engine": {
+        "az_deg": 245.70131394516866,
+        "el_deg": -1.0737170794186204
+      },
+      "residual": {
+        "az_on_sky_deg": 1.1166633880423787e-8,
+        "el_deg": 1.5813796938601854e-9,
+        "separation_deg": 1.1278089868635181e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-07-20T11:15:55.102",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 144.242961633,
+        "el_deg": -5.558704881
+      },
+      "engine": {
+        "az_deg": 144.2429613251875,
+        "el_deg": -5.558729068027887
+      },
+      "residual": {
+        "az_on_sky_deg": -3.063649600173669e-7,
+        "el_deg": -0.000024187027887201396,
+        "separation_deg": 0.000024188968095564382
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-07-27T20:34:17.143",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 155.489200417,
+        "el_deg": -1.216127604
+      },
+      "engine": {
+        "az_deg": 155.48920042147444,
+        "el_deg": -1.2161276058133714
+      },
+      "residual": {
+        "az_on_sky_deg": 4.4734786764764336e-9,
+        "el_deg": -1.8133714529966483e-9,
+        "separation_deg": 4.826990652307045e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-07-27T20:34:17.143",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 136.086287833,
+        "el_deg": -5.444756819
+      },
+      "engine": {
+        "az_deg": 136.0862876832189,
+        "el_deg": -5.444765003545001
+      },
+      "residual": {
+        "az_on_sky_deg": -1.4910525452007223e-7,
+        "el_deg": -0.000008184545000844423,
+        "separation_deg": 0.00000818590308231782
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-08-04T05:52:39.184",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 65.38829779,
+        "el_deg": -0.282464271
+      },
+      "engine": {
+        "az_deg": 65.3882977793386,
+        "el_deg": -0.28246427309152705
+      },
+      "residual": {
+        "az_on_sky_deg": -1.0661194710507832e-8,
+        "el_deg": -2.0915270626531424e-9,
+        "separation_deg": 1.0864490290721138e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-08-04T05:52:39.184",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 131.634669129,
+        "el_deg": 4.431520546
+      },
+      "engine": {
+        "az_deg": 131.63466861341362,
+        "el_deg": 4.431543804831874
+      },
+      "residual": {
+        "az_on_sky_deg": -5.140450078248439e-7,
+        "el_deg": 0.000023258831873818053,
+        "separation_deg": 0.0000232645116509923
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-08-11T15:11:01.224",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 335.040682645,
+        "el_deg": 0.207481549
+      },
+      "engine": {
+        "az_deg": 335.0406826349828,
+        "el_deg": 0.20748154793430626
+      },
+      "residual": {
+        "az_on_sky_deg": -1.0017108966033333e-8,
+        "el_deg": -1.0656937277087053e-9,
+        "separation_deg": 1.0073738020107736e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-08-11T15:11:01.224",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 140.109158816,
+        "el_deg": 2.273153504
+      },
+      "engine": {
+        "az_deg": 140.10915846745846,
+        "el_deg": 2.2731607418288884
+      },
+      "residual": {
+        "az_on_sky_deg": -3.4826729084421704e-7,
+        "el_deg": 0.000007237828888229103,
+        "separation_deg": 0.000007246202943358384
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-08-19T00:29:23.265",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 244.6184385,
+        "el_deg": -0.33531559
+      },
+      "engine": {
+        "az_deg": 244.61843851025301,
+        "el_deg": -0.3353155890216373
+      },
+      "residual": {
+        "az_on_sky_deg": 1.025278556463572e-8,
+        "el_deg": 9.783627241688464e-10,
+        "separation_deg": 1.029938822895933e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-08-19T00:29:23.265",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 142.429887587,
+        "el_deg": -7.264422582
+      },
+      "engine": {
+        "az_deg": 142.4298873042458,
+        "el_deg": -7.264446235958281
+      },
+      "residual": {
+        "az_on_sky_deg": -2.804845471042022e-7,
+        "el_deg": -0.000023653958280966947,
+        "separation_deg": 0.000023655621190288996
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-08-26T09:47:45.306",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 154.476374476,
+        "el_deg": -0.42280051
+      },
+      "engine": {
+        "az_deg": 154.47637447875186,
+        "el_deg": -0.42280051114848954
+      },
+      "residual": {
+        "az_on_sky_deg": 2.751828668848453e-9,
+        "el_deg": -1.1484895257041217e-9,
+        "separation_deg": 2.981863760797188e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-08-26T09:47:45.306",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 134.020496807,
+        "el_deg": -2.670452554
+      },
+      "engine": {
+        "az_deg": 134.0204966131898,
+        "el_deg": -2.6704615622118606
+      },
+      "residual": {
+        "az_on_sky_deg": -1.9359966667892183e-7,
+        "el_deg": -0.000009008211860450643,
+        "separation_deg": 0.000009010291991570601
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-09-02T19:06:07.347",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 64.459040858,
+        "el_deg": 0.524502419
+      },
+      "engine": {
+        "az_deg": 64.45904084577181,
+        "el_deg": 0.5245024158711568
+      },
+      "residual": {
+        "az_on_sky_deg": -1.2227643902434036e-8,
+        "el_deg": -3.1288432955633994e-9,
+        "separation_deg": 1.2621635600270182e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-09-02T19:06:07.347",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 134.260786616,
+        "el_deg": 6.05606608
+      },
+      "engine": {
+        "az_deg": 134.2607860646706,
+        "el_deg": 6.056090411599914
+      },
+      "residual": {
+        "az_on_sky_deg": -5.48252426794372e-7,
+        "el_deg": 0.000024331599914440005,
+        "separation_deg": 0.000024337775886930463
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-09-10T04:24:29.388",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 334.179035168,
+        "el_deg": 0.997409086
+      },
+      "engine": {
+        "az_deg": 334.1790351575483,
+        "el_deg": 0.9974090844699262
+      },
+      "residual": {
+        "az_on_sky_deg": -1.0450102134496617e-8,
+        "el_deg": -1.5300738454016027e-9,
+        "separation_deg": 1.0561548714654911e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-09-10T04:24:29.388",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 141.782750316,
+        "el_deg": -1.372316345
+      },
+      "engine": {
+        "az_deg": 141.7827500381985,
+        "el_deg": -1.372310255684373
+      },
+      "residual": {
+        "az_on_sky_deg": -2.7772183909240666e-7,
+        "el_deg": 0.000006089315627066938,
+        "separation_deg": 0.000006095645513853551
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-09-17T13:42:51.429",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 243.847588471,
+        "el_deg": 0.445796226
+      },
+      "engine": {
+        "az_deg": 243.84758848090848,
+        "el_deg": 0.4457962270605355
+      },
+      "residual": {
+        "az_on_sky_deg": 9.908190110279426e-9,
+        "el_deg": 1.0605354927584187e-9,
+        "separation_deg": 9.964816787283535e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-09-17T13:42:51.429",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 139.86641509,
+        "el_deg": -7.331179406
+      },
+      "engine": {
+        "az_deg": 139.86641480206376,
+        "el_deg": -7.3312027489075
+      },
+      "residual": {
+        "az_on_sky_deg": -2.855824096918193e-7,
+        "el_deg": -0.00002334290749939072,
+        "separation_deg": 0.000023344654374501097
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-09-24T23:01:13.469",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 153.82066776,
+        "el_deg": 0.353897167
+      },
+      "engine": {
+        "az_deg": 153.82066776206764,
+        "el_deg": 0.35389716629804646
+      },
+      "residual": {
+        "az_on_sky_deg": 2.0675830765643393e-9,
+        "el_deg": -7.019535508412389e-10,
+        "separation_deg": 2.183508677469669e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-09-24T23:01:13.469",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 132.455232209,
+        "el_deg": 0.6704168
+      },
+      "engine": {
+        "az_deg": 132.4552319531978,
+        "el_deg": 0.6704070281037088
+      },
+      "residual": {
+        "az_on_sky_deg": -2.557846949669875e-7,
+        "el_deg": -0.000009771896291255189,
+        "separation_deg": 0.000009775243370007376
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-02T08:19:35.510",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 63.92580734,
+        "el_deg": 1.251318826
+      },
+      "engine": {
+        "az_deg": 63.92580732702309,
+        "el_deg": 1.251318823042408
+      },
+      "residual": {
+        "az_on_sky_deg": -1.2973803108762496e-8,
+        "el_deg": -2.957592171171086e-9,
+        "separation_deg": 1.3306667976352739e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-02T08:19:35.510",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 137.861118907,
+        "el_deg": 5.424977976
+      },
+      "engine": {
+        "az_deg": 137.8611183716563,
+        "el_deg": 5.425003446936299
+      },
+      "residual": {
+        "az_on_sky_deg": -5.329458136861196e-7,
+        "el_deg": 0.00002547093629878816,
+        "separation_deg": 0.000025476511283604157
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-09T17:37:57.551",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 333.747616551,
+        "el_deg": 1.664150682
+      },
+      "engine": {
+        "az_deg": 333.7476165397619,
+        "el_deg": 1.6641506806145698
+      },
+      "residual": {
+        "az_on_sky_deg": -1.1233431317294688e-8,
+        "el_deg": -1.3854302149951536e-9,
+        "separation_deg": 1.1318469993306501e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-09T17:37:57.551",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 142.415693301,
+        "el_deg": -4.692487683
+      },
+      "engine": {
+        "az_deg": 142.4156930883823,
+        "el_deg": -4.692482216048816
+      },
+      "residual": {
+        "az_on_sky_deg": -2.119050236889488e-7,
+        "el_deg": 0.000005466951184196489,
+        "separation_deg": 0.000005471056477545364
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-17T02:56:19.592",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 243.532785783,
+        "el_deg": 1.057649626
+      },
+      "engine": {
+        "az_deg": 243.5327857916158,
+        "el_deg": 1.057649626850697
+      },
+      "residual": {
+        "az_on_sky_deg": 8.614289120329724e-9,
+        "el_deg": 8.50697068344175e-10,
+        "separation_deg": 8.656226708955922e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-17T02:56:19.592",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 136.887306259,
+        "el_deg": -5.82936622
+      },
+      "engine": {
+        "az_deg": 136.88730594004127,
+        "el_deg": -5.829389450005659
+      },
+      "residual": {
+        "az_on_sky_deg": -3.1730936373641547e-7,
+        "el_deg": -0.00002323000565951361,
+        "separation_deg": 0.000023232172696477643
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-24T12:14:41.633",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 153.638807712,
+        "el_deg": 0.899803562
+      },
+      "engine": {
+        "az_deg": 153.63880771286583,
+        "el_deg": 0.8998035626594297
+      },
+      "residual": {
+        "az_on_sky_deg": 8.657321863069324e-10,
+        "el_deg": 6.594297330408949e-10,
+        "separation_deg": 1.0882844413492222e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-24T12:14:41.633",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 131.837984216,
+        "el_deg": 3.750449942
+      },
+      "engine": {
+        "az_deg": 131.83798388853972,
+        "el_deg": 3.7504396831912654
+      },
+      "residual": {
+        "az_on_sky_deg": -3.2675898468315517e-7,
+        "el_deg": -0.000010258808734509017,
+        "separation_deg": 0.000010264011306151233
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-31T21:33:03.673",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 63.875123752,
+        "el_deg": 1.692026932
+      },
+      "engine": {
+        "az_deg": 63.875123738289005,
+        "el_deg": 1.6920269295270116
+      },
+      "residual": {
+        "az_on_sky_deg": -1.3704995412972956e-8,
+        "el_deg": -2.4729884806617974e-9,
+        "separation_deg": 1.3926356120233714e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-10-31T21:33:03.673",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 141.368105031,
+        "el_deg": 2.663849174
+      },
+      "engine": {
+        "az_deg": 141.36810456091564,
+        "el_deg": 2.6638754637234436
+      },
+      "residual": {
+        "az_on_sky_deg": -4.6957641328261637e-7,
+        "el_deg": 0.00002628972344353997,
+        "separation_deg": 0.00002629391680062163
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-11-08T06:51:25.714",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 333.80738343,
+        "el_deg": 2.013178255
+      },
+      "engine": {
+        "az_deg": 333.8073834177659,
+        "el_deg": 2.01317825364928
+      },
+      "residual": {
+        "az_on_sky_deg": -1.2226516790704378e-8,
+        "el_deg": -1.3507199803086678e-9,
+        "separation_deg": 1.2300924806430083e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-11-08T06:51:25.714",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 142.125855919,
+        "el_deg": -6.773016389
+      },
+      "engine": {
+        "az_deg": 142.12585575192688,
+        "el_deg": -6.773010988588017
+      },
+      "residual": {
+        "az_on_sky_deg": -1.6590717683983312e-7,
+        "el_deg": 0.000005400411983380593,
+        "separation_deg": 0.000005402959816117667
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-11-15T16:09:47.755",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 243.705069109,
+        "el_deg": 1.317885497
+      },
+      "engine": {
+        "az_deg": 243.70506911771093,
+        "el_deg": 1.3178854975534045
+      },
+      "residual": {
+        "az_on_sky_deg": 8.708608656309954e-9,
+        "el_deg": 5.534044333899146e-10,
+        "separation_deg": 8.726214804399193e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-11-15T16:09:47.755",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 133.92775358,
+        "el_deg": -3.102873884
+      },
+      "engine": {
+        "az_deg": 133.92775320914697,
+        "el_deg": -3.1028970961176134
+      },
+      "residual": {
+        "az_on_sky_deg": -3.703093717853732e-7,
+        "el_deg": -0.000023212117613358174,
+        "separation_deg": 0.000023215071248547027
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-11-23T01:28:09.796",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 153.925621238,
+        "el_deg": 1.048393766
+      },
+      "engine": {
+        "az_deg": 153.92562123881896,
+        "el_deg": 1.0483937672400259
+      },
+      "residual": {
+        "az_on_sky_deg": 8.188628764470062e-10,
+        "el_deg": 1.2400258597722313e-9,
+        "separation_deg": 1.4859769394022614e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-11-23T01:28:09.796",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 132.417770463,
+        "el_deg": 5.655868689
+      },
+      "engine": {
+        "az_deg": 132.4177700750221,
+        "el_deg": 5.655858383697727
+      },
+      "residual": {
+        "az_on_sky_deg": -3.8608917015228566e-7,
+        "el_deg": -0.000010305302272861638,
+        "separation_deg": 0.000010312532171139554
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-11-30T10:46:31.837",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 64.265477327,
+        "el_deg": 1.706590381
+      },
+      "engine": {
+        "az_deg": 64.26547731323535,
+        "el_deg": 1.7065903786012808
+      },
+      "residual": {
+        "az_on_sky_deg": -1.375852845240541e-8,
+        "el_deg": -2.398719223251078e-9,
+        "separation_deg": 1.396608028254191e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-11-30T10:46:31.837",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 143.883229137,
+        "el_deg": -1.183041529
+      },
+      "engine": {
+        "az_deg": 143.88322875015498,
+        "el_deg": -1.1830150677235214
+      },
+      "residual": {
+        "az_on_sky_deg": -3.8676258431705037e-7,
+        "el_deg": 0.00002646127647865093,
+        "separation_deg": 0.00002646410282159434
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-12-07T20:04:53.878",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 334.286186041,
+        "el_deg": 1.927105199
+      },
+      "engine": {
+        "az_deg": 334.28618602943885,
+        "el_deg": 1.9271051975492113
+      },
+      "residual": {
+        "az_on_sky_deg": -1.155461682101713e-8,
+        "el_deg": -1.4507888224102317e-9,
+        "separation_deg": 1.1645325127131237e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-12-07T20:04:53.878",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 141.016627656,
+        "el_deg": -7.176540985
+      },
+      "engine": {
+        "az_deg": 141.01662750948609,
+        "el_deg": -7.176535151723394
+      },
+      "residual": {
+        "az_on_sky_deg": -1.4536611248916133e-7,
+        "el_deg": 0.000005833276605748949,
+        "separation_deg": 0.00000583508759568865
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-12-15T05:23:15.918",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 244.260157975,
+        "el_deg": 1.134617293
+      },
+      "engine": {
+        "az_deg": 244.26015798420877,
+        "el_deg": 1.1346172940800774
+      },
+      "residual": {
+        "az_on_sky_deg": 9.206941990661529e-9,
+        "el_deg": 1.0800773608821146e-9,
+        "separation_deg": 9.270080398725547e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-12-15T05:23:15.918",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 131.549295259,
+        "el_deg": 0.274283644
+      },
+      "engine": {
+        "az_deg": 131.5492948241604,
+        "el_deg": 0.27426042777276605
+      },
+      "residual": {
+        "az_on_sky_deg": -4.3483466616924e-7,
+        "el_deg": -0.00002321622723394645,
+        "separation_deg": 0.00002322029905294835
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-12-22T14:41:37.959",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 154.543150649,
+        "el_deg": 0.741391501
+      },
+      "engine": {
+        "az_deg": 154.54315065088187,
+        "el_deg": 0.7413915032817536
+      },
+      "residual": {
+        "az_on_sky_deg": 1.881700681197799e-9,
+        "el_deg": 2.281753674893139e-9,
+        "separation_deg": 2.957556085292481e-9
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-12-22T14:41:37.959",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 134.050354731,
+        "el_deg": 5.661544729
+      },
+      "engine": {
+        "az_deg": 134.05035431959118,
+        "el_deg": 5.6615348573145345
+      },
+      "residual": {
+        "az_on_sky_deg": -4.094019420184112e-7,
+        "el_deg": -0.000009871685465512314,
+        "separation_deg": 0.000009880171250145212
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-12-30T00:00:00.000",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 64.928892799,
+        "el_deg": 1.277176768
+      },
+      "engine": {
+        "az_deg": 64.92889278774307,
+        "el_deg": 1.2771767660105415
+      },
+      "residual": {
+        "az_on_sky_deg": -1.1254133021152825e-8,
+        "el_deg": -1.9894583758173212e-9,
+        "separation_deg": 1.1428623500486645e-8
+      }
+    },
+    {
+      "site_id": "connecting-ridge",
+      "utc": "2026-12-30T00:00:00.000",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 145.022239439,
+        "el_deg": -4.748895548
+      },
+      "engine": {
+        "az_deg": 145.02223912238057,
+        "el_deg": -4.748869534780711
+      },
+      "residual": {
+        "az_on_sky_deg": -3.155325113541882e-7,
+        "el_deg": 0.00002601321928885625,
+        "separation_deg": 0.00002601513287628512
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-02T00:00:00.000",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 88.356519601,
+        "el_deg": 1.367327551
+      },
+      "engine": {
+        "az_deg": 88.35651959394717,
+        "el_deg": 1.367327554164927
+      },
+      "residual": {
+        "az_on_sky_deg": -7.050895791084862e-9,
+        "el_deg": 3.164926987153649e-9,
+        "separation_deg": 7.728584313186888e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-02T00:00:00.000",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 68.700256391,
+        "el_deg": 6.670346605
+      },
+      "engine": {
+        "az_deg": 68.70025596042723,
+        "el_deg": 6.6703372342044425
+      },
+      "residual": {
+        "az_on_sky_deg": -4.2765816404521686e-7,
+        "el_deg": -0.000009370795557295253,
+        "separation_deg": 0.000009380549073184279
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-09T09:18:22.041",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 358.705560238,
+        "el_deg": 2.523453509
+      },
+      "engine": {
+        "az_deg": 358.7055602073484,
+        "el_deg": 2.523453507354695
+      },
+      "residual": {
+        "az_on_sky_deg": -3.0621839713901066e-8,
+        "el_deg": -1.6453047813058674e-9,
+        "separation_deg": 3.0665985511460354e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-09T09:18:22.041",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 74.12194737,
+        "el_deg": -2.661128322
+      },
+      "engine": {
+        "az_deg": 74.12194701940342,
+        "el_deg": -2.661103508944872
+      },
+      "residual": {
+        "az_on_sky_deg": -3.502184831506733e-7,
+        "el_deg": 0.00002481305512835874,
+        "separation_deg": 0.000024815526547017036
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-16T18:36:44.082",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 268.768934029,
+        "el_deg": 1.080262103
+      },
+      "engine": {
+        "az_deg": 268.7689340262459,
+        "el_deg": 1.0802621018341578
+      },
+      "residual": {
+        "az_on_sky_deg": -2.753574153463391e-9,
+        "el_deg": -1.165842089534408e-9,
+        "separation_deg": 2.9902025784304424e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-16T18:36:44.082",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 65.460228287,
+        "el_deg": -5.868956139
+      },
+      "engine": {
+        "az_deg": 65.46022815369732,
+        "el_deg": -5.868946474677536
+      },
+      "residual": {
+        "az_on_sky_deg": -1.3260398175621323e-7,
+        "el_deg": 0.00000966432246407578,
+        "separation_deg": 0.00000966523214874001
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-24T03:55:06.122",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 178.771214228,
+        "el_deg": -0.373300061
+      },
+      "engine": {
+        "az_deg": 178.77121425722177,
+        "el_deg": -0.3733000590555584
+      },
+      "residual": {
+        "az_on_sky_deg": 2.9221217172749045e-8,
+        "el_deg": 1.9444416077263327e-9,
+        "separation_deg": 2.9285793478942874e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-24T03:55:06.122",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 62.878550169,
+        "el_deg": 3.515822043
+      },
+      "engine": {
+        "az_deg": 62.87854962719754,
+        "el_deg": 3.5157980773332573
+      },
+      "residual": {
+        "az_on_sky_deg": -5.407827530815374e-7,
+        "el_deg": -0.00002396566674267575,
+        "separation_deg": 0.000023971767318613066
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-31T13:13:28.163",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 89.03961499,
+        "el_deg": 0.751880301
+      },
+      "engine": {
+        "az_deg": 89.03961498384903,
+        "el_deg": 0.7518803040059221
+      },
+      "residual": {
+        "az_on_sky_deg": -6.150383058938553e-9,
+        "el_deg": 3.005922066812161e-9,
+        "separation_deg": 6.8456968059004736e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-01-31T13:13:28.163",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 71.021113848,
+        "el_deg": 4.996456713
+      },
+      "engine": {
+        "az_deg": 71.02111346275281,
+        "el_deg": 4.99644847319981
+      },
+      "residual": {
+        "az_on_sky_deg": -3.837832702717678e-7,
+        "el_deg": -0.000008239800189713264,
+        "separation_deg": 0.000008248733040717861
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-02-07T22:31:50.204",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 359.356079206,
+        "el_deg": 1.842703087
+      },
+      "engine": {
+        "az_deg": 359.35607917819715,
+        "el_deg": 1.8427030862296407
+      },
+      "residual": {
+        "az_on_sky_deg": -2.7788420681089884e-8,
+        "el_deg": -7.703593318808544e-10,
+        "separation_deg": 2.7799180522704205e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-02-07T22:31:50.204",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 71.525375095,
+        "el_deg": -5.24985638
+      },
+      "engine": {
+        "az_deg": 71.5253747736028,
+        "el_deg": -5.249832506467636
+      },
+      "residual": {
+        "az_on_sky_deg": -3.2004902673824954e-7,
+        "el_deg": 0.0000238735323634387,
+        "separation_deg": 0.00002387567755819444
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-02-15T07:50:12.245",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 269.387440893,
+        "el_deg": 0.362205113
+      },
+      "engine": {
+        "az_deg": 269.38744089079995,
+        "el_deg": 0.3622051121865469
+      },
+      "residual": {
+        "az_on_sky_deg": -2.200023722495045e-9,
+        "el_deg": -8.134531381820409e-10,
+        "separation_deg": 2.3455564062567346e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-02-15T07:50:12.245",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 63.506239171,
+        "el_deg": -3.930371552
+      },
+      "engine": {
+        "az_deg": 63.50623900450965,
+        "el_deg": -3.9303608159275085
+      },
+      "residual": {
+        "az_on_sky_deg": -1.6609871010756955e-7,
+        "el_deg": 0.000010736072491468462,
+        "separation_deg": 0.00001073735727936624
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-02-22T17:08:34.286",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 179.304325521,
+        "el_deg": -1.14744524
+      },
+      "engine": {
+        "az_deg": 179.3043255515645,
+        "el_deg": -1.1474452377087903
+      },
+      "residual": {
+        "az_on_sky_deg": 3.055834992609236e-8,
+        "el_deg": 2.2912096664384762e-9,
+        "separation_deg": 3.064411497140972e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-02-22T17:08:34.286",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 65.744424836,
+        "el_deg": 6.231172018
+      },
+      "engine": {
+        "az_deg": 65.74442424180899,
+        "el_deg": 6.231147429737051
+      },
+      "residual": {
+        "az_on_sky_deg": -5.9068063292004e-7,
+        "el_deg": -0.00002458826294837735,
+        "separation_deg": 0.00002459535684496373
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-02T02:26:56.327",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 89.471871651,
+        "el_deg": -0.0781724
+      },
+      "engine": {
+        "az_deg": 89.47187164673244,
+        "el_deg": -0.07817239737904919
+      },
+      "residual": {
+        "az_on_sky_deg": -4.267572542360732e-9,
+        "el_deg": 2.6209508174890317e-9,
+        "separation_deg": 5.0081406718492896e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-02T02:26:56.327",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 72.36225601,
+        "el_deg": 1.842130576
+      },
+      "engine": {
+        "az_deg": 72.36225569622374,
+        "el_deg": 1.8421231709710633
+      },
+      "residual": {
+        "az_on_sky_deg": -3.136140788767748e-7,
+        "el_deg": -0.0000074050289367022515,
+        "separation_deg": 0.000007411666975752355
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-09T11:45:18.367",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 359.70778702,
+        "el_deg": 1.009907618
+      },
+      "engine": {
+        "az_deg": 359.7077869934955,
+        "el_deg": 1.0099076166143304
+      },
+      "residual": {
+        "az_on_sky_deg": -2.6500377452581162e-8,
+        "el_deg": -1.3856695790792628e-9,
+        "separation_deg": 2.6536589118689144e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-09T11:45:18.367",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 68.574849467,
+        "el_deg": -6.496571162
+      },
+      "engine": {
+        "az_deg": 68.57484915295325,
+        "el_deg": -6.496548207952564
+      },
+      "residual": {
+        "az_on_sky_deg": -3.120300909903061e-7,
+        "el_deg": 0.000022954047436130054,
+        "separation_deg": 0.000022956168158159565
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-16T21:03:40.408",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 269.663086765,
+        "el_deg": -0.457176829
+      },
+      "engine": {
+        "az_deg": 269.66308676363366,
+        "el_deg": -0.4571768285652033
+      },
+      "residual": {
+        "az_on_sky_deg": -1.366244921348469e-9,
+        "el_deg": 4.347966986451013e-10,
+        "separation_deg": 1.4337876746315871e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-16T21:03:40.408",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 62.105937481,
+        "el_deg": -0.864919869
+      },
+      "engine": {
+        "az_deg": 62.10593725525376,
+        "el_deg": -0.8649083212285409
+      },
+      "residual": {
+        "az_on_sky_deg": -2.2572052730604046e-7,
+        "el_deg": 0.000011547771459063938,
+        "separation_deg": 0.000011549977291234205
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-24T06:22:02.449",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 179.453950048,
+        "el_deg": -1.95903007
+      },
+      "engine": {
+        "az_deg": 179.45395008035382,
+        "el_deg": -1.9590300669316094
+      },
+      "residual": {
+        "az_on_sky_deg": 3.2334886158570273e-8,
+        "el_deg": 3.0683906526718374e-9,
+        "separation_deg": 3.248017328045911e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-24T06:22:02.449",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 69.381850091,
+        "el_deg": 6.917785338
+      },
+      "engine": {
+        "az_deg": 69.38184949236292,
+        "el_deg": 6.917760244720222
+      },
+      "residual": {
+        "az_on_sky_deg": -5.94279066264792e-7,
+        "el_deg": -0.000025093279777621547,
+        "separation_deg": 0.0000251003158857272
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-31T15:40:24.490",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 89.488489936,
+        "el_deg": -0.872101867
+      },
+      "engine": {
+        "az_deg": 89.48848993214015,
+        "el_deg": -0.8721018667640236
+      },
+      "residual": {
+        "az_on_sky_deg": -3.859448392018938e-9,
+        "el_deg": 2.35976460594145e-10,
+        "separation_deg": 3.866592517575068e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-03-31T15:40:24.490",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 72.574830659,
+        "el_deg": -1.70560541
+      },
+      "engine": {
+        "az_deg": 72.57483041679538,
+        "el_deg": -1.7056123535330774
+      },
+      "residual": {
+        "az_on_sky_deg": -2.4209727016019037e-7,
+        "el_deg": -0.000006943533077397035,
+        "separation_deg": 0.000006947752349334162
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-04-08T00:58:46.531",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 359.619505776,
+        "el_deg": 0.270773771
+      },
+      "engine": {
+        "az_deg": 359.61950575088156,
+        "el_deg": 0.2707737699428912
+      },
+      "residual": {
+        "az_on_sky_deg": -2.5118144175727775e-8,
+        "el_deg": -1.0571087893929132e-9,
+        "separation_deg": 2.514039734526722e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-04-08T00:58:46.531",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 65.706357836,
+        "el_deg": -6.168380065
+      },
+      "engine": {
+        "az_deg": 65.70635750688857,
+        "el_deg": -6.16835779211877
+      },
+      "residual": {
+        "az_on_sky_deg": -3.2720603912639866e-7,
+        "el_deg": 0.000022272881230023245,
+        "separation_deg": 0.000022275284556073626
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-04-15T10:17:08.571",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 269.475943006,
+        "el_deg": -1.140390861
+      },
+      "engine": {
+        "az_deg": 269.47594300604237,
+        "el_deg": -1.1403908602322934
+      },
+      "residual": {
+        "az_on_sky_deg": 4.2283126970573364e-11,
+        "el_deg": 7.67706564985815e-10,
+        "separation_deg": 7.688727136720479e-10
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-04-15T10:17:08.571",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 61.730032843,
+        "el_deg": 2.613891259
+      },
+      "engine": {
+        "az_deg": 61.73003253918794,
+        "el_deg": 2.61390307613004
+      },
+      "residual": {
+        "az_on_sky_deg": -3.0349594037284736e-7,
+        "el_deg": 0.000011817130040281398,
+        "separation_deg": 0.000011821026697419983
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-04-22T19:35:30.612",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 179.135140547,
+        "el_deg": -2.575297084
+      },
+      "engine": {
+        "az_deg": 179.13514057943576,
+        "el_deg": -2.575297080709699
+      },
+      "residual": {
+        "az_on_sky_deg": 3.2403005312196784e-8,
+        "el_deg": 3.290300920610889e-9,
+        "separation_deg": 3.256964613847323e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-04-22T19:35:30.612",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 72.720375892,
+        "el_deg": 5.278471449
+      },
+      "engine": {
+        "az_deg": 72.72037534507847,
+        "el_deg": 5.278446080974362
+      },
+      "residual": {
+        "az_on_sky_deg": -5.446022585359924e-7,
+        "el_deg": -0.00002536802563835039,
+        "separation_deg": 0.000025373870741698775
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-04-30T04:53:52.653",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 89.040635408,
+        "el_deg": -1.406090725
+      },
+      "engine": {
+        "az_deg": 89.04063540534948,
+        "el_deg": -1.406090725288101
+      },
+      "residual": {
+        "az_on_sky_deg": -2.6496968359321454e-9,
+        "el_deg": -2.881008764887838e-10,
+        "separation_deg": 2.6653400255743105e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-04-30T04:53:52.653",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 71.846065967,
+        "el_deg": -4.618732132
+      },
+      "engine": {
+        "az_deg": 71.84606577819395,
+        "el_deg": -4.6187389614740555
+      },
+      "residual": {
+        "az_on_sky_deg": -1.8819296991897933e-7,
+        "el_deg": -0.000006829474055614071,
+        "separation_deg": 0.000006832066486118278
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-05-07T14:12:14.694",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 359.067841773,
+        "el_deg": -0.173313657
+      },
+      "engine": {
+        "az_deg": 359.0678417476739,
+        "el_deg": -0.17331365760856252
+      },
+      "residual": {
+        "az_on_sky_deg": -2.532590097301555e-8,
+        "el_deg": -6.08562505943766e-10,
+        "separation_deg": 2.5333264593118196e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-05-07T14:12:14.694",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 63.254939041,
+        "el_deg": -4.312644504
+      },
+      "engine": {
+        "az_deg": 63.25493867751613,
+        "el_deg": -4.312622552133777
+      },
+      "residual": {
+        "az_on_sky_deg": -3.624546957160439e-7,
+        "el_deg": 0.00002195186622255818,
+        "separation_deg": 0.00002195485832505403
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-05-14T23:30:36.735",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 268.82591882,
+        "el_deg": -1.507152748
+      },
+      "engine": {
+        "az_deg": 268.8259188200573,
+        "el_deg": -1.5071527472564843
+      },
+      "residual": {
+        "az_on_sky_deg": 5.727834386993713e-11,
+        "el_deg": 7.435156934576526e-10,
+        "separation_deg": 7.45719090625998e-10
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-05-14T23:30:36.735",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 62.755624264,
+        "el_deg": 5.520031808
+      },
+      "engine": {
+        "az_deg": 62.75562388062428,
+        "el_deg": 5.520043168930256
+      },
+      "residual": {
+        "az_on_sky_deg": -3.815978080314071e-7,
+        "el_deg": 0.00001136093025611018,
+        "separation_deg": 0.000011367337120337386
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-05-22T08:48:58.776",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 178.379551201,
+        "el_deg": -2.835758497
+      },
+      "engine": {
+        "az_deg": 178.37955123276274,
+        "el_deg": -2.8357584938927753
+      },
+      "residual": {
+        "az_on_sky_deg": 3.1723843331315415e-8,
+        "el_deg": 3.107224699760991e-9,
+        "separation_deg": 3.1875660874540194e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-05-22T08:48:58.776",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 74.834884832,
+        "el_deg": 1.996293389
+      },
+      "engine": {
+        "az_deg": 74.83488436655699,
+        "el_deg": 1.9962681148210633
+      },
+      "residual": {
+        "az_on_sky_deg": -4.651605231493248e-7,
+        "el_deg": -0.000025274178936829372,
+        "separation_deg": 0.000025278459115375157
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-05-29T18:07:20.816",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 88.189552535,
+        "el_deg": -1.544358698
+      },
+      "engine": {
+        "az_deg": 88.18955253150791,
+        "el_deg": -1.5443586994281358
+      },
+      "residual": {
+        "az_on_sky_deg": -3.4908501138205442e-9,
+        "el_deg": -1.42813583181578e-9,
+        "separation_deg": 3.7716524911393594e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-05-29T18:07:20.816",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 70.436849125,
+        "el_deg": -6.199484105
+      },
+      "engine": {
+        "az_deg": 70.43684896666552,
+        "el_deg": -6.199491128548565
+      },
+      "residual": {
+        "az_on_sky_deg": -1.5740855082804883e-7,
+        "el_deg": -0.00000702354856496612,
+        "separation_deg": 0.000007025312227967095
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-06-06T03:25:42.857",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 358.135955553,
+        "el_deg": -0.215394089
+      },
+      "engine": {
+        "az_deg": 358.1359555272321,
+        "el_deg": -0.21539409051280445
+      },
+      "residual": {
+        "az_on_sky_deg": -2.5767621807716048e-8,
+        "el_deg": -1.5128044372758609e-9,
+        "separation_deg": 2.5812023906891284e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-06-06T03:25:42.857",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 61.57087615,
+        "el_deg": -1.273169996
+      },
+      "engine": {
+        "az_deg": 61.57087573312509,
+        "el_deg": -1.273147977914262
+      },
+      "residual": {
+        "az_on_sky_deg": -4.167719380529827e-7,
+        "el_deg": 0.000022018085737984805,
+        "separation_deg": 0.000022022029844152513
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-06-13T12:44:04.898",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 267.817613965,
+        "el_deg": -1.474556231
+      },
+      "engine": {
+        "az_deg": 267.8176139652285,
+        "el_deg": -1.474556230432897
+      },
+      "residual": {
+        "az_on_sky_deg": 2.2843487278269836e-10,
+        "el_deg": 5.671030312015546e-10,
+        "separation_deg": 6.113560206365312e-10
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-06-13T12:44:04.898",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 65.096527555,
+        "el_deg": 6.81996076
+      },
+      "engine": {
+        "az_deg": 65.09652712138305,
+        "el_deg": 6.819970995242561
+      },
+      "residual": {
+        "az_on_sky_deg": -4.305487592028009e-7,
+        "el_deg": 0.000010235242561051905,
+        "separation_deg": 0.000010244294143608193
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-06-20T22:02:26.939",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 177.314653055,
+        "el_deg": -2.683746637
+      },
+      "engine": {
+        "az_deg": 177.31465308552555,
+        "el_deg": -2.683746635098249
+      },
+      "residual": {
+        "az_on_sky_deg": 3.0492117502490186e-8,
+        "el_deg": 1.9017512009611437e-9,
+        "separation_deg": 3.0551306370752024e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-06-20T22:02:26.939",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 75.407290276,
+        "el_deg": -1.724454044
+      },
+      "engine": {
+        "az_deg": 75.40728989001369,
+        "el_deg": -1.7244788636404291
+      },
+      "residual": {
+        "az_on_sky_deg": -3.8581155783880907e-7,
+        "el_deg": -0.000024819640429107892,
+        "separation_deg": 0.000024822638891745322
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-06-28T07:20:48.980",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 87.082127309,
+        "el_deg": -1.261227655
+      },
+      "engine": {
+        "az_deg": 87.08212730448216,
+        "el_deg": -1.2612276571715648
+      },
+      "residual": {
+        "az_on_sky_deg": -4.516820389583801e-9,
+        "el_deg": -2.1715649278775118e-9,
+        "separation_deg": 5.0116523334710426e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-06-28T07:20:48.980",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 68.568478325,
+        "el_deg": -6.148504697
+      },
+      "engine": {
+        "az_deg": 68.56847817076331,
+        "el_deg": -6.148512192766298
+      },
+      "residual": {
+        "az_on_sky_deg": -1.5334943239468957e-7,
+        "el_deg": -0.0000074957662983266005,
+        "separation_deg": 0.000007497334756458233
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-07-05T16:39:11.020",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 356.987408065,
+        "el_deg": 0.143798695
+      },
+      "engine": {
+        "az_deg": 356.9874080384336,
+        "el_deg": 0.14379869280465657
+      },
+      "residual": {
+        "az_on_sky_deg": -2.656625656948802e-8,
+        "el_deg": -2.195343434818753e-9,
+        "separation_deg": 2.665685447418542e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-07-05T16:39:11.020",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 61.077706369,
+        "el_deg": 2.287232035
+      },
+      "engine": {
+        "az_deg": 61.07770588585982,
+        "el_deg": 2.287254488199413
+      },
+      "residual": {
+        "az_on_sky_deg": -4.827552725472854e-7,
+        "el_deg": 0.00002245319941263091,
+        "separation_deg": 0.000022458388555549258
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-07-13T01:57:33.061",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 266.63186546,
+        "el_deg": -1.063123354
+      },
+      "engine": {
+        "az_deg": 266.63186545968216,
+        "el_deg": -1.063123354693879
+      },
+      "residual": {
+        "az_on_sky_deg": -3.1781368068102604e-10,
+        "el_deg": -6.938789542942914e-10,
+        "separation_deg": 7.631718625381146e-10
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-07-13T01:57:33.061",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 68.032965327,
+        "el_deg": 5.924783853
+      },
+      "engine": {
+        "az_deg": 68.03296489769477,
+        "el_deg": 5.92479258434005
+      },
+      "residual": {
+        "az_on_sky_deg": -4.270120227664218e-7,
+        "el_deg": 0.000008731340050083247,
+        "separation_deg": 0.000008741775468170538
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-07-20T11:15:55.102",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 176.133302144,
+        "el_deg": -2.166362378
+      },
+      "engine": {
+        "az_deg": 176.13330217402037,
+        "el_deg": -2.1663623762287636
+      },
+      "residual": {
+        "az_on_sky_deg": 2.999891761677306e-8,
+        "el_deg": 1.7712364908106792e-9,
+        "separation_deg": 3.005115254411388e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-07-20T11:15:55.102",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 74.609144004,
+        "el_deg": -4.774992078
+      },
+      "engine": {
+        "az_deg": 74.60914367283641,
+        "el_deg": -4.7750162887655385
+      },
+      "residual": {
+        "az_on_sky_deg": -3.300142453969588e-7,
+        "el_deg": -0.000024210765538157375,
+        "separation_deg": 0.00002421301462600986
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-07-27T20:34:17.143",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 85.919929508,
+        "el_deg": -0.634159943
+      },
+      "engine": {
+        "az_deg": 85.91992950272346,
+        "el_deg": -0.6341599443658664
+      },
+      "residual": {
+        "az_on_sky_deg": -5.276224001857357e-9,
+        "el_deg": -1.3658664199667214e-9,
+        "separation_deg": 5.450143546453248e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-07-27T20:34:17.143",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 66.465345302,
+        "el_deg": -4.533517068
+      },
+      "engine": {
+        "az_deg": 66.46534512578282,
+        "el_deg": -4.53352526303443
+      },
+      "residual": {
+        "az_on_sky_deg": -1.756658764630761e-7,
+        "el_deg": -0.000008195034429725467,
+        "separation_deg": 0.000008196916967637942
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-08-04T05:52:39.184",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 355.833945285,
+        "el_deg": 0.807077853
+      },
+      "engine": {
+        "az_deg": 355.8339452568791,
+        "el_deg": 0.8070778507289671
+      },
+      "residual": {
+        "az_on_sky_deg": -2.8118104229060454e-8,
+        "el_deg": -2.2710329172781485e-9,
+        "separation_deg": 2.8209762390455543e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-08-04T05:52:39.184",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 62.152129365,
+        "el_deg": 5.40460802
+      },
+      "engine": {
+        "az_deg": 62.15212881822046,
+        "el_deg": 5.404631252442445
+      },
+      "residual": {
+        "az_on_sky_deg": -5.443488072442375e-7,
+        "el_deg": 0.000023232442444509616,
+        "separation_deg": 0.00002323881876266928
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-08-11T15:11:01.224",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 265.490658589,
+        "el_deg": -0.382822304
+      },
+      "engine": {
+        "az_deg": 265.4906585883782,
+        "el_deg": -0.38282230536337725
+      },
+      "residual": {
+        "az_on_sky_deg": -6.218531215178938e-10,
+        "el_deg": -1.3633772444343606e-9,
+        "separation_deg": 1.498476016423385e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-08-11T15:11:01.224",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 70.604078158,
+        "el_deg": 3.123210599
+      },
+      "engine": {
+        "az_deg": 70.60407778307373,
+        "el_deg": 3.123217840268095
+      },
+      "residual": {
+        "az_on_sky_deg": -3.743693454495764e-7,
+        "el_deg": 0.000007241268094926312,
+        "separation_deg": 0.000007250938977638471
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-08-19T00:29:23.265",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 175.057621303,
+        "el_deg": -1.416882586
+      },
+      "engine": {
+        "az_deg": 175.05762133185556,
+        "el_deg": -1.4168825849577338
+      },
+      "residual": {
+        "az_on_sky_deg": 2.8846715743728837e-8,
+        "el_deg": 1.0422662732878507e-9,
+        "separation_deg": 2.8865569260165677e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-08-19T00:29:23.265",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 72.770442158,
+        "el_deg": -6.450771132
+      },
+      "engine": {
+        "az_deg": 72.77044185127087,
+        "el_deg": -6.4507948221521385
+      },
+      "residual": {
+        "az_on_sky_deg": -3.0478715686292707e-7,
+        "el_deg": -0.000023690152138655662,
+        "separation_deg": 0.000023692112686114623
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-08-26T09:47:45.306",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 84.922407988,
+        "el_deg": 0.178207924
+      },
+      "engine": {
+        "az_deg": 84.9224079810774,
+        "el_deg": 0.17820792324010873
+      },
+      "residual": {
+        "az_on_sky_deg": -6.92258543765773e-9,
+        "el_deg": -7.598912610262687e-10,
+        "separation_deg": 6.964153752641157e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-08-26T09:47:45.306",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 64.441537525,
+        "el_deg": -1.729823712
+      },
+      "engine": {
+        "az_deg": 64.44153730305746,
+        "el_deg": -1.729832724629033
+      },
+      "residual": {
+        "az_on_sky_deg": -2.2184137111840126e-7,
+        "el_deg": -0.000009012629033078312,
+        "separation_deg": 0.000009015358877665889
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-09-02T19:06:07.347",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 354.896186001,
+        "el_deg": 1.604390471
+      },
+      "engine": {
+        "az_deg": 354.8961859710085,
+        "el_deg": 1.6043904674445668
+      },
+      "residual": {
+        "az_on_sky_deg": -2.997973979460235e-8,
+        "el_deg": -3.5554332811216227e-9,
+        "separation_deg": 3.018984532186795e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-09-02T19:06:07.347",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 64.805164345,
+        "el_deg": 6.993112537
+      },
+      "engine": {
+        "az_deg": 64.80516376305692,
+        "el_deg": 6.993136832203266
+      },
+      "residual": {
+        "az_on_sky_deg": -5.776139460283934e-7,
+        "el_deg": 0.000024295203266078147,
+        "separation_deg": 0.000024302068627152706
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-09-10T04:24:29.388",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 264.614302924,
+        "el_deg": 0.390702274
+      },
+      "engine": {
+        "az_deg": 264.6143029236142,
+        "el_deg": 0.3907022726514669
+      },
+      "residual": {
+        "az_on_sky_deg": -3.858441563076771e-10,
+        "el_deg": -1.3485331185059124e-9,
+        "separation_deg": 1.402628422523154e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-09-10T04:24:29.388",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 72.219920449,
+        "el_deg": -0.548626631
+      },
+      "engine": {
+        "az_deg": 72.21992014609272,
+        "el_deg": -0.5486205343220801
+      },
+      "residual": {
+        "az_on_sky_deg": -3.028933241811389e-7,
+        "el_deg": 0.000006096677919842364,
+        "separation_deg": 0.000006104197413367628
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-09-17T13:42:51.429",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 174.294949584,
+        "el_deg": -0.627666972
+      },
+      "engine": {
+        "az_deg": 174.29494961148683,
+        "el_deg": -0.6276669707623053
+      },
+      "residual": {
+        "az_on_sky_deg": 2.7485213246876434e-8,
+        "el_deg": 1.237694724487426e-9,
+        "separation_deg": 2.7513040591711325e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-09-17T13:42:51.429",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 70.210513098,
+        "el_deg": -6.4767883
+      },
+      "engine": {
+        "az_deg": 70.21051278566483,
+        "el_deg": -6.476811681825289
+      },
+      "residual": {
+        "az_on_sky_deg": -3.103417093150055e-7,
+        "el_deg": -0.000023381825289270353,
+        "separation_deg": 0.000023383884747140716
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-09-24T23:01:13.469",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 84.281379906,
+        "el_deg": 0.967089732
+      },
+      "engine": {
+        "az_deg": 84.28137989769195,
+        "el_deg": 0.9670897322585131
+      },
+      "residual": {
+        "az_on_sky_deg": -8.30682329092121e-9,
+        "el_deg": 2.58513099815616e-10,
+        "separation_deg": 8.310893384063775e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-09-24T23:01:13.469",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 62.922649932,
+        "el_deg": 1.632526125
+      },
+      "engine": {
+        "az_deg": 62.92264964559558,
+        "el_deg": 1.632516358494952
+      },
+      "residual": {
+        "az_on_sky_deg": -2.862881784178766e-7,
+        "el_deg": -0.000009766505048025564,
+        "separation_deg": 0.000009770700167586683
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-02T08:19:35.510",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 354.355032746,
+        "el_deg": 2.325521335
+      },
+      "engine": {
+        "az_deg": 354.3550327146008,
+        "el_deg": 2.325521331768096
+      },
+      "residual": {
+        "az_on_sky_deg": -3.137330798482307e-8,
+        "el_deg": -3.2319040776940255e-9,
+        "separation_deg": 3.1539416065493007e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-02T08:19:35.510",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 68.402315263,
+        "el_deg": 6.309473446
+      },
+      "engine": {
+        "az_deg": 68.40231470001531,
+        "el_deg": 6.309498886958821
+      },
+      "residual": {
+        "az_on_sky_deg": -5.595746115836105e-7,
+        "el_deg": 0.000025440958820510673,
+        "separation_deg": 0.000025447112006499028
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-09T17:37:57.551",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 264.170535364,
+        "el_deg": 1.049236583
+      },
+      "engine": {
+        "az_deg": 264.1705353626602,
+        "el_deg": 1.0492365809919617
+      },
+      "residual": {
+        "az_on_sky_deg": -1.339574736272616e-9,
+        "el_deg": -2.008038180179028e-9,
+        "separation_deg": 2.4138526620053788e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-09T17:37:57.551",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 72.798528014,
+        "el_deg": -3.878798913
+      },
+      "engine": {
+        "az_deg": 72.79852777740548,
+        "el_deg": -3.8787934360036824
+      },
+      "residual": {
+        "az_on_sky_deg": -2.360526387448941e-7,
+        "el_deg": 0.000005476996317366201,
+        "separation_deg": 0.000005482080761765874
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-17T02:56:19.592",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 173.986762436,
+        "el_deg": -0.012466492
+      },
+      "engine": {
+        "az_deg": 173.98676246250608,
+        "el_deg": -0.012466491088835414
+      },
+      "residual": {
+        "az_on_sky_deg": 2.6506085587374038e-8,
+        "el_deg": 9.1116458475482e-10,
+        "separation_deg": 2.6521736525206597e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-17T02:56:19.592",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 67.25948683,
+        "el_deg": -4.92985599
+      },
+      "engine": {
+        "az_deg": 67.25948648526419,
+        "el_deg": -4.929879251349709
+      },
+      "residual": {
+        "az_on_sky_deg": -3.4346048343144797e-7,
+        "el_deg": -0.000023261349708647572,
+        "separation_deg": 0.000023263885217122607
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-24T12:14:41.633",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 84.109739781,
+        "el_deg": 1.516304112
+      },
+      "engine": {
+        "az_deg": 84.10973977211864,
+        "el_deg": 1.5163041135108926
+      },
+      "residual": {
+        "az_on_sky_deg": -8.878219524060476e-9,
+        "el_deg": 1.510892522205154e-9,
+        "separation_deg": 9.00590167184347e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-24T12:14:41.633",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 62.34660466,
+        "el_deg": 4.720834373
+      },
+      "engine": {
+        "az_deg": 62.34660430104789,
+        "el_deg": 4.7208241314108745
+      },
+      "residual": {
+        "az_on_sky_deg": -3.577343572090356e-7,
+        "el_deg": -0.000010241589125215,
+        "separation_deg": 0.000010247834975390164
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-31T21:33:03.673",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 354.29960388,
+        "el_deg": 2.765662865
+      },
+      "engine": {
+        "az_deg": 354.2996038482229,
+        "el_deg": 2.765662862128041
+      },
+      "residual": {
+        "az_on_sky_deg": -3.1740049899187476e-8,
+        "el_deg": -2.8719591149695134e-9,
+        "separation_deg": 3.186980618225162e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-10-31T21:33:03.673",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 71.870025444,
+        "el_deg": 3.493943519
+      },
+      "engine": {
+        "az_deg": 71.87002494764474,
+        "el_deg": 3.4939697976331976
+      },
+      "residual": {
+        "az_on_sky_deg": -4.954326532539092e-7,
+        "el_deg": 0.000026278633197485135,
+        "separation_deg": 0.00002628330299288035
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-11-08T06:51:25.714",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 264.223737434,
+        "el_deg": 1.39932148
+      },
+      "engine": {
+        "az_deg": 264.22373743241263,
+        "el_deg": 1.3993214778495098
+      },
+      "residual": {
+        "az_on_sky_deg": -1.5868222634540982e-9,
+        "el_deg": -2.150490230334867e-9,
+        "separation_deg": 2.6725848371765256e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-11-08T06:51:25.714",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 72.475022125,
+        "el_deg": -5.954485362
+      },
+      "engine": {
+        "az_deg": 72.47502193312823,
+        "el_deg": -5.954479951771383
+      },
+      "residual": {
+        "az_on_sky_deg": -1.9083655539314468e-7,
+        "el_deg": 0.000005410228617108714,
+        "separation_deg": 0.000005413593286674214
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-11-15T16:09:47.755",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 174.161801621,
+        "el_deg": 0.245899309
+      },
+      "engine": {
+        "az_deg": 174.16180164743986,
+        "el_deg": 0.2458993101579884
+      },
+      "residual": {
+        "az_on_sky_deg": 2.643967697531448e-8,
+        "el_deg": 1.1579883996137852e-9,
+        "separation_deg": 2.6464951709908564e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-11-15T16:09:47.755",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 64.342748298,
+        "el_deg": -2.160934776
+      },
+      "engine": {
+        "az_deg": 64.34274790022732,
+        "el_deg": -2.16095800091804
+      },
+      "residual": {
+        "az_on_sky_deg": -3.974898643539237e-7,
+        "el_deg": -0.000023224918039854714,
+        "separation_deg": 0.000023228319269638083
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-11-23T01:28:09.796",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 84.399355825,
+        "el_deg": 1.659497349
+      },
+      "engine": {
+        "az_deg": 84.39935581636179,
+        "el_deg": 1.6594973509079975
+      },
+      "residual": {
+        "az_on_sky_deg": -8.634530303113948e-9,
+        "el_deg": 1.9079975377422898e-9,
+        "separation_deg": 8.842892099454687e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-11-23T01:28:09.796",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 62.953258281,
+        "el_deg": 6.618427621
+      },
+      "engine": {
+        "az_deg": 62.953257861394135,
+        "el_deg": 6.618417341314402
+      },
+      "residual": {
+        "az_on_sky_deg": -4.1680948072372925e-7,
+        "el_deg": -0.000010279685598746369,
+        "separation_deg": 0.000010288132297388589
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-11-30T10:46:31.837",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 354.690066777,
+        "el_deg": 2.784374638
+      },
+      "engine": {
+        "az_deg": 354.69006674601155,
+        "el_deg": 2.7843746357507997
+      },
+      "residual": {
+        "az_on_sky_deg": -3.0951946481399047e-8,
+        "el_deg": -2.2492003814988948e-9,
+        "separation_deg": 3.103350401905391e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-11-30T10:46:31.837",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 74.322893791,
+        "el_deg": -0.39368979
+      },
+      "engine": {
+        "az_deg": 74.32289338019508,
+        "el_deg": -0.39366331548843436
+      },
+      "residual": {
+        "az_on_sky_deg": -4.1079518933702485e-7,
+        "el_deg": 0.00002647451156562175,
+        "separation_deg": 0.000026477698452608505
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-12-07T20:04:53.878",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 264.703924065,
+        "el_deg": 1.322248403
+      },
+      "engine": {
+        "az_deg": 264.70392406383763,
+        "el_deg": 1.322248401863298
+      },
+      "residual": {
+        "az_on_sky_deg": -1.162024727482465e-9,
+        "el_deg": -1.1367018437624665e-9,
+        "separation_deg": 1.625593719708709e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-12-07T20:04:53.878",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 71.361088617,
+        "el_deg": -6.340228684
+      },
+      "engine": {
+        "az_deg": 71.36108844681878,
+        "el_deg": -6.340222839167689
+      },
+      "residual": {
+        "az_on_sky_deg": -1.6914035226953647e-7,
+        "el_deg": 0.00000584483231147459,
+        "separation_deg": 0.0000058472791271760525
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-12-15T05:23:15.918",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 174.714781913,
+        "el_deg": 0.05673113
+      },
+      "engine": {
+        "az_deg": 174.71478194080933,
+        "el_deg": 0.05673113090568393
+      },
+      "residual": {
+        "az_on_sky_deg": 2.7809378490451365e-8,
+        "el_deg": 9.056839306298414e-10,
+        "separation_deg": 2.78240759230022e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-12-15T05:23:15.918",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 62.011046465,
+        "el_deg": 1.248550294
+      },
+      "engine": {
+        "az_deg": 62.011046000762185,
+        "el_deg": 1.248527087989229
+      },
+      "residual": {
+        "az_on_sky_deg": -4.641275944780014e-7,
+        "el_deg": -0.000023206010770993046,
+        "separation_deg": 0.000023210651656636357
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-12-22T14:41:37.959",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 85.011135177,
+        "el_deg": 1.34093379
+      },
+      "engine": {
+        "az_deg": 85.01113516913028,
+        "el_deg": 1.340933792605471
+      },
+      "residual": {
+        "az_on_sky_deg": -7.867588804273539e-9,
+        "el_deg": 2.6054709501011075e-9,
+        "separation_deg": 8.287756158306945e-9
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-12-22T14:41:37.959",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 64.588878988,
+        "el_deg": 6.601578947
+      },
+      "engine": {
+        "az_deg": 64.58887854541454,
+        "el_deg": 6.6015691016692495
+      },
+      "residual": {
+        "az_on_sky_deg": -4.3965095434911714e-7,
+        "el_deg": -0.00000984533075065741,
+        "separation_deg": 0.000009855142340689226
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-12-30T00:00:00.000",
+      "body": "sun",
+      "horizons": {
+        "az_deg": 355.358386208,
+        "el_deg": 2.361920597
+      },
+      "engine": {
+        "az_deg": 355.35838617852676,
+        "el_deg": 2.361920595046285
+      },
+      "residual": {
+        "az_on_sky_deg": -2.9448273345222017e-8,
+        "el_deg": -1.9537149675841192e-9,
+        "separation_deg": 2.951295638435945e-8
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim",
+      "utc": "2026-12-30T00:00:00.000",
+      "body": "earth",
+      "horizons": {
+        "az_deg": 75.401261026,
+        "el_deg": -3.978313658
+      },
+      "engine": {
+        "az_deg": 75.40126068611458,
+        "el_deg": -3.9782876126445528
+      },
+      "residual": {
+        "az_on_sky_deg": -3.390664517495357e-7,
+        "el_deg": 0.000026045355447035234,
+        "separation_deg": 0.00002604756238921865
+      }
+    }
+  ]
+}
