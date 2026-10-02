@@ -36,6 +36,41 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 8 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** M3-06 (Deep space sky)
+
+**What I did:**
+- Built the `DeepSpaceSky.tsx` component to handle the celestial background for the main `MoonScene`.
+- Integrated Drei's `<Stars>` component as a placeholder for the J2000 star catalog point cloud.
+- Created a glowing Sun sprite using layered additive-blended spheres to simulate a bloom effect without heavy post-processing.
+- Added a basic Earth sphere using standard shading so its phase is naturally rendered by the scene's directional sun light.
+- Positioned both bodies dynamically at a far distance from the camera along their respective direction vectors (currently using mock directions until real ephemeris data is wired).
+- Replaced the simple static placeholder mesh in `MoonScene` with `DeepSpaceSky`.
+
+**Files changed:**
+- `packages/scene/src/DeepSpaceSky.tsx` (new)
+- `packages/scene/src/MoonScene.tsx`
+
+**How I verified it:** 
+- `pnpm typecheck` passed.
+- Vite dev server shows the stars, glowing sun, and Earth phase.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) wrote the sky component and updated the scene.
+
+**Proposed decisions:** 
+- Used simple layered transparent spheres with `AdditiveBlending` for the Sun bloom to keep performance high and avoid the complexity of a full screen-space post-processing bloom pass, which can be overkill for a single bright object.
+
+**Blockers / questions:**
+- We need the true `sunDirection` and `earthDirection` driven by the real ephemeris engine for true physical accuracy.
+
+**Next 3 tasks:**
+1. M3-08: Site pins with extruded horizon rings and masts.
+2. M3-10: Hero sequence.
+3. M3-11: Perf pass.
+
+---
+
 ### Session 7 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** M3-05 (Overlay layers)
