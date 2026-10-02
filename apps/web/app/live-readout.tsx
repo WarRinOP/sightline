@@ -3,33 +3,76 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Site, SunEarthState } from "@sightline/contracts";
 import { siteLocation } from "@sightline/contracts";
-import { MOCK_EPOCH_ET, createMockEngineClient } from "@sightline/engine";
+import { etToUtcIso, utcIsoToEt } from "@sightline/engine";
+import { connectEngine, type EngineConnection } from "../workers/engineBridge";
 
 const TICK_MS = 200;
-// Two mock hours per tick, so a mock lunar day passes in about a minute.
+// Two hours per tick: the engine's samples are hourly and interpolated, and a lunar day (29.5
+// days) passes in about a minute and a half.
 const TICK_STEP_S = 2 * 3600;
-const DAY_S = 86_400;
 
 const toDeg = (rad: number) => (rad * 180) / Math.PI;
 const signed = (deg: number) => `${deg >= 0 ? "+" : "−"}${Math.abs(deg).toFixed(2)}°`;
+const compass = (rad: number) => `${toDeg(rad).toFixed(1)}°`;
+
+type Connection =
+  | { status: "loading" }
+  | { status: "error"; message: string }
+  | { status: "ready"; engine: EngineConnection };
 
 export function LiveReadout({ sites }: { sites: Site[] }) {
-  const engine = useMemo(() => createMockEngineClient(), []);
+  const [connection, setConnection] = useState<Connection>({ status: "loading" });
   const [siteId, setSiteId] = useState(sites[0]?.id ?? "");
-  const [epoch_et, setEpochEt] = useState(MOCK_EPOCH_ET);
+  const [epoch_et, setEpochEt] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
-  const [state, setState] = useState<SunEarthState | null>(null);
+  const [real, setReal] = useState<SunEarthState | null>(null);
 
-  // Start paused for people who ask for reduced motion.
+  // Start the engine worker. StrictMode mounts twice in development; the first one is terminated.
   useEffect(() => {
-    setPlaying(!window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    let cancelled = false;
+    let opened: EngineConnection | undefined;
+    connectEngine().then(
+      (engine) => {
+        if (cancelled) {
+          engine.terminate();
+          return;
+        }
+        opened = engine;
+        // Open on the current moment when the ephemeris covers it, otherwise on its first sample.
+        const now_et = utcIsoToEt(new Date().toISOString().slice(0, 19));
+        const { start_et, end_et } = engine.coverage;
+        setEpochEt(now_et >= start_et && now_et <= end_et ? now_et : start_et);
+        setConnection({ status: "ready", engine });
+        // Start paused for people who ask for reduced motion.
+        setPlaying(!window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+      },
+      (error: unknown) => {
+        if (!cancelled) {
+          setConnection({
+            status: "error",
+            message: error instanceof Error ? error.message : String(error),
+          });
+        }
+      },
+    );
+    return () => {
+      cancelled = true;
+      opened?.terminate();
+    };
   }, []);
 
+  const engine = connection.status === "ready" ? connection.engine : null;
+
   useEffect(() => {
-    if (!playing) return;
-    const id = window.setInterval(() => setEpochEt((e) => e + TICK_STEP_S), TICK_MS);
+    if (!playing || !engine) return;
+    const { start_et, end_et } = engine.coverage;
+    const id = window.setInterval(
+      () =>
+        setEpochEt((e) => (e === null || e + TICK_STEP_S > end_et ? start_et : e + TICK_STEP_S)),
+      TICK_MS,
+    );
     return () => window.clearInterval(id);
-  }, [playing]);
+  }, [playing, engine]);
 
   const location = useMemo(() => {
     const site = sites.find((s) => s.id === siteId);
@@ -37,18 +80,22 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
   }, [sites, siteId]);
 
   useEffect(() => {
-    if (!location) return;
+    if (!engine || !location || epoch_et === null) return;
     let cancelled = false;
-    void engine.getSunEarth(epoch_et, location, 0).then((s) => {
-      if (!cancelled) setState(s);
+    void engine.client.getSunEarth(epoch_et, location, 0).then((state) => {
+      if (!cancelled) setReal(state);
     });
     return () => {
       cancelled = true;
     };
   }, [engine, epoch_et, location]);
 
+  const provenance = engine?.client.provenance;
+  // The tag comes from the data, never from a constant: a simulated ephemeris shows the purple one.
+  const realTag = provenance?.simulated ? "Simulated" : "Real · NAIF SPICE";
+
   return (
-    <section aria-labelledby="readout-title" className="space-y-4">
+    <section aria-labelledby="readout-title" className="space-y-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h2 id="readout-title" className="font-condensed text-xl font-semibold tracking-wide">
           Live readout
@@ -56,7 +103,8 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
         <button
           type="button"
           onClick={() => setPlaying((p) => !p)}
-          className="rounded-lg border border-hairline px-3 py-1 font-condensed text-xs font-semibold uppercase tracking-widest text-text-2 hover:text-text-1"
+          disabled={!engine}
+          className="rounded-lg border border-hairline px-3 py-1 font-condensed text-xs font-semibold uppercase tracking-widest text-text-2 hover:text-text-1 disabled:opacity-50"
         >
           {playing ? "Pause" : "Play"}
         </button>
@@ -86,26 +134,90 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
         ))}
       </fieldset>
 
-      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Readout
-          label="Sun elevation"
-          value={state ? signed(toDeg(state.sun_elevation_rad)) : "…"}
-        />
-        <Readout
-          label="Earth elevation"
-          value={state ? signed(toDeg(state.earth_elevation_rad)) : "…"}
-        />
-        <Readout
-          label="Sun disk visible"
-          value={state ? `${(state.sun_disk_fraction * 100).toFixed(0)} %` : "…"}
-        />
-        <Readout label="Link to Earth" value={state ? (state.dsn_visible ? "yes" : "no") : "…"} />
-      </dl>
+      <div className="space-y-3" role="group" aria-labelledby="real-title">
+        <div className="flex flex-wrap items-center gap-3">
+          <h3
+            id="real-title"
+            className="font-condensed text-sm font-semibold uppercase tracking-widest text-text-2"
+          >
+            Sun and Earth directions
+          </h3>
+          <Tag simulated={provenance?.simulated ?? false} text={realTag} hidden={!provenance} />
+        </div>
 
-      <p className="font-mono text-xs tabular-nums text-text-3">
-        mock epoch + {((epoch_et - MOCK_EPOCH_ET) / DAY_S).toFixed(1)} days
-      </p>
+        {connection.status === "error" ? (
+          <p role="alert" className="text-sm text-alert">
+            The engine could not start: {connection.message}
+          </p>
+        ) : (
+          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Readout
+              label="Sun elevation"
+              value={real ? signed(toDeg(real.sun_elevation_rad)) : "…"}
+            />
+            <Readout label="Sun azimuth" value={real ? compass(real.sun_azimuth_rad) : "…"} />
+            <Readout
+              label="Earth elevation"
+              value={real ? signed(toDeg(real.earth_elevation_rad)) : "…"}
+            />
+            <Readout label="Earth azimuth" value={real ? compass(real.earth_azimuth_rad) : "…"} />
+          </dl>
+        )}
+
+        <p className="font-mono text-xs tabular-nums text-text-3">
+          {epoch_et === null ? "…" : `${etToUtcIso(epoch_et).slice(0, 19).replace("T", " ")} UTC`}
+          {provenance
+            ? ` · ${provenance.spice_kernels.length} SPICE kernels · ${provenance.data_version}`
+            : ""}
+        </p>
+        <p className="text-xs text-text-3">
+          Elevation is measured from a flat horizon at the site&apos;s height; azimuth is clockwise
+          from local north (grid north at the pole). Terrain is not in these numbers.
+        </p>
+      </div>
+
+      <div className="space-y-3" role="group" aria-labelledby="terrain-title">
+        <div className="flex flex-wrap items-center gap-3">
+          <h3
+            id="terrain-title"
+            className="font-condensed text-sm font-semibold uppercase tracking-widest text-text-2"
+          >
+            Light and link at this site
+          </h3>
+          <Tag simulated={false} text="Not computed yet" />
+        </div>
+        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Readout label="Sun disk visible" value="—" />
+          <Readout label="Link to Earth" value="—" />
+        </dl>
+        <p className="text-xs text-text-3">
+          These need the terrain horizon (task S1-05 / M2-05), so no number is shown rather than one
+          that ignores the terrain or contradicts the directions above.
+        </p>
+      </div>
     </section>
+  );
+}
+
+function Tag({
+  simulated,
+  text,
+  hidden = false,
+}: {
+  simulated: boolean;
+  text: string;
+  hidden?: boolean;
+}) {
+  if (hidden) return null;
+  // The words carry the meaning; colour only reinforces it. Purple is reserved for SIMULATED.
+  const style = simulated ? "bg-sim text-void" : "border border-hairline text-text-1";
+  return (
+    <span
+      role="status"
+      className={`rounded-md px-2 py-0.5 font-condensed text-xs font-semibold uppercase tracking-widest ${style}`}
+    >
+      {text}
+    </span>
   );
 }
 

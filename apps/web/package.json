@@ -8,11 +8,13 @@
     "dev:mock": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit -p ."
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run test/"
   },
   "dependencies": {
     "@sightline/contracts": "workspace:*",
     "@sightline/engine": "workspace:*",
+    "comlink": "4.4.2",
     "next": "16.3.8",
     "react": "19.3.0",
     "react-dom": "19.3.0"
@@ -23,6 +25,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "tailwindcss": "4.3.3",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vitest": "5.0.3"
   }
 }
