@@ -36,6 +36,44 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 4 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** M3-02 (Quadtree LOD terrain)
+
+**What I did:**
+- Implemented `TerrainQuadtree.tsx`, a dynamic LOD terrain renderer that consumes the `@sightline/contracts` `TileSource` API.
+- Quadtree loads `level 0` root tile and dynamically subdivides into 4 children tiles when the camera gets close.
+- Converted the raw `Uint16Array` tile heights into a 3D `PlaneGeometry` displacement map on the fly.
+- Updated `MoonScene.tsx` to replace the static `<planeGeometry>` with the new `<TerrainQuadtree>`.
+- Updated `dev.tsx` to import and use `createMockTileSource()` directly from `@sightline/engine` so we have a realistic synthetic testing environment.
+- Added `@sightline/engine` as a `devDependency` to `packages/scene`.
+
+**Files changed:**
+- `packages/scene/src/TerrainQuadtree.tsx`
+- `packages/scene/src/MoonScene.tsx`
+- `packages/scene/src/dev.tsx`
+- `packages/scene/package.json`
+
+**How I verified it:** 
+- Workspace `pnpm typecheck` passed (after fixing some BufferAttribute type assertions).
+- Verified `TerrainQuadtree` compiles cleanly.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) wrote `TerrainQuadtree.tsx` and modified R3F components.
+
+**Proposed decisions:** 
+- Used dynamic subdivision within React Three Fiber components (`<group>` spawning 4 child `<TerrainNode>` elements).
+- Heights mapped directly to the Y axis on a rotated `PlaneGeometry`.
+
+**Blockers / questions:**
+- Geomorphing and Skirts (M3-02) are not yet implemented to hide seams between different LOD levels. Is a basic distance subdivision enough for the Stage 1 prototype?
+
+**Next 3 tasks:**
+1. Fix terrain edge seams (skirts/geomorphing) if necessary.
+2. Hook up real `SunEarthState` data for dynamic lighting (M2-08, blocked).
+3. Test shadow/lighting parity with M3-09.
+
+---
+
 ### Session 3 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** S1-07 (Lander's Eye fisheye)
