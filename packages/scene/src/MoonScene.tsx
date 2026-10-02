@@ -55,7 +55,7 @@ function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" 
       
       {/* Real Terrain mesh will go here */}
       <group position={[0, 1737400, 0]}>
-        <TerrainQuadtree tileSource={tileSource} sunDirection={sunDirection} />
+        <TerrainQuadtree tileSource={tileSource} sunDirection={sunDirection} inputs={inputs} />
       </group>
 
       {/* Site pin */}

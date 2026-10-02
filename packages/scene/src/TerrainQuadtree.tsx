@@ -1,11 +1,13 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import type { TileSource, TileManifest, TileData, TileCoord } from "@sightline/contracts";
+import type { SceneInputs } from "./types";
 
 interface TerrainQuadtreeProps {
   tileSource: TileSource;
   sunDirection: THREE.Vector3;
+  inputs: React.MutableRefObject<SceneInputs>;
 }
 
 interface TerrainNodeProps {
@@ -14,12 +16,17 @@ interface TerrainNodeProps {
   coord: TileCoord;
   bounds: { x_min: number; y_min: number; x_max: number; y_max: number };
   sunDirection: THREE.Vector3;
+  inputs: React.MutableRefObject<SceneInputs>;
 }
 
-function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: TerrainNodeProps) {
+function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection, inputs }: TerrainNodeProps) {
   const { camera } = useThree();
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [isSubdivided, setIsSubdivided] = useState(false);
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const uniformsRef = useRef<{ uLayerMode: { value: number }, uSunDirection?: { value: THREE.Vector3 } }>({ 
+    uLayerMode: { value: 0 } 
+  });
 
   useEffect(() => {
     let canceled = false;
@@ -46,6 +53,21 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
     
     if (shouldSubdivide !== isSubdivided) {
       setIsSubdivided(shouldSubdivide);
+    }
+
+    // Update overlay layer uniform
+    if (inputs.current) {
+      const layers = inputs.current.layers;
+      let mode = 0;
+      if (layers.slope) mode = 1;
+      else if (layers.psr) mode = 2;
+      else if (layers.illum) mode = 3;
+      else if (layers.dte) mode = 4;
+      
+      if (uniformsRef.current.uLayerMode.value !== mode) {
+        uniformsRef.current.uLayerMode.value = mode;
+        // Material needs update is not required for uniforms, they update automatically!
+      }
     }
   });
 
@@ -98,6 +120,7 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
           coord={{ level: nextLevel, x: coord.x * 2, y: coord.y * 2 + 1 }}
           bounds={{ x_min: bounds.x_min, y_min: midY, x_max: midX, y_max: bounds.y_max }} 
           sunDirection={sunDirection}
+          inputs={inputs}
         />
         {/* Top Right (y max, x max) */}
         <TerrainNode 
@@ -105,6 +128,7 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
           coord={{ level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 + 1 }}
           bounds={{ x_min: midX, y_min: midY, x_max: bounds.x_max, y_max: bounds.y_max }} 
           sunDirection={sunDirection}
+          inputs={inputs}
         />
         {/* Bottom Left (y min, x min) */}
         <TerrainNode 
@@ -112,6 +136,7 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
           coord={{ level: nextLevel, x: coord.x * 2, y: coord.y * 2 }}
           bounds={{ x_min: bounds.x_min, y_min: bounds.y_min, x_max: midX, y_max: midY }} 
           sunDirection={sunDirection}
+          inputs={inputs}
         />
         {/* Bottom Right (y min, x max) */}
         <TerrainNode 
@@ -119,6 +144,7 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
           coord={{ level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 }}
           bounds={{ x_min: midX, y_min: bounds.y_min, x_max: bounds.x_max, y_max: midY }} 
           sunDirection={sunDirection}
+          inputs={inputs}
         />
       </group>
     );
@@ -136,9 +162,10 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
         wireframe={false} 
         flatShading 
         onBeforeCompile={(shader) => {
-          shader.uniforms.uSunDirection = { value: sunDirection };
+          shader.uniforms.uSunDirection = uniformsRef.current.uSunDirection || { value: sunDirection };
           shader.uniforms.uHeightTexture = { value: heightTexture };
           shader.uniforms.uBounds = { value: new THREE.Vector4(bounds.x_min, bounds.y_min, bounds.x_max, bounds.y_max) };
+          shader.uniforms.uLayerMode = uniformsRef.current.uLayerMode;
           
           shader.vertexShader = `
             varying vec3 vTerrainWorldPos;
@@ -155,7 +182,17 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
             uniform vec3 uSunDirection;
             uniform sampler2D uHeightTexture;
             uniform vec4 uBounds; // x_min, y_min, x_max, y_max
+            uniform int uLayerMode;
             varying vec3 vTerrainWorldPos;
+            
+            // Helper for color ramps
+            vec3 magma(float t) {
+              return vec3(t, t * 0.5, 0.2 + 0.8 * t); // basic proxy
+            }
+            vec3 viridis(float t) {
+              return vec3(0.2 + 0.6 * t, 0.8 * t, 0.5 - 0.5 * t);
+            }
+            
             ${shader.fragmentShader}
           `;
           
@@ -171,18 +208,14 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
             float lommelSeeliger = cosI / (cosI + cosE);
             
             // Near-field shadow ray-march (M3-04)
-            // March along uSunDirection
             float shadowMask = 1.0;
             if (cosI > 0.0) {
               vec3 rayPos = vTerrainWorldPos;
               vec3 rayDir = normalize(uSunDirection);
-              float stepSize = (uBounds.z - uBounds.x) / 64.0; // approx tile pixel size
+              float stepSize = (uBounds.z - uBounds.x) / 64.0; 
               
               for (int i = 1; i <= 8; i++) {
                 rayPos += rayDir * stepSize;
-                
-                // Map world XZ to texture UV (uBounds: x_min, y_min, x_max, y_max)
-                // Note: World Z corresponds to Terrain Y, which is mapped to uBounds y
                 float u = (rayPos.x - uBounds.x) / (uBounds.z - uBounds.x);
                 float v = (-rayPos.z - uBounds.y) / (uBounds.w - uBounds.y);
                 
@@ -198,7 +231,36 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
               shadowMask = 0.0;
             }
             
-            gl_FragColor.rgb = gl_FragColor.rgb * (0.5 + 1.5 * lommelSeeliger) * shadowMask;
+            vec3 finalColor = gl_FragColor.rgb * (0.5 + 1.5 * lommelSeeliger) * shadowMask;
+            
+            // Apply overlays based on uLayerMode
+            if (uLayerMode == 1) {
+              // Slope: normal dot up
+              float slope = 1.0 - dot(geometryNormal, vec3(0.0, 1.0, 0.0));
+              // Slope is typically 0 to 45 deg on moon (0 to 0.3)
+              float normSlope = clamp(slope / 0.3, 0.0, 1.0);
+              finalColor = mix(finalColor, magma(normSlope), 0.7);
+            } else if (uLayerMode == 2) {
+              // PSR (Permanently Shadowed Regions): proxy with deep craters for now
+              // Local height < 0 and high slope
+              float slope = 1.0 - dot(geometryNormal, vec3(0.0, 1.0, 0.0));
+              float h = vTerrainWorldPos.y - 1737400.0; // rough moon radius offset proxy
+              if (h < -50.0 && slope > 0.1) {
+                finalColor = mix(finalColor, vec3(0.0, 0.2, 0.8), 0.7);
+              }
+            } else if (uLayerMode == 3) {
+              // Illumination %: proxy using current shadow mask and some elevation
+              float hNorm = clamp((vTerrainWorldPos.y - 1737000.0) / 1000.0, 0.0, 1.0);
+              float illum = shadowMask * 0.5 + hNorm * 0.5;
+              finalColor = mix(finalColor, viridis(illum), 0.7);
+            } else if (uLayerMode == 4) {
+              // DTE (Direct To Earth) %: proxy using Earth direction 
+              // Since we don't have Earth direction here, just use a generic color map
+              float dte = clamp(geometryNormal.y, 0.0, 1.0);
+              finalColor = mix(finalColor, vec3(0.1, 0.6, 0.3) * dte, 0.7);
+            }
+            
+            gl_FragColor.rgb = finalColor;
             `
           );
         }}
@@ -207,7 +269,7 @@ function TerrainNode({ tileSource, manifest, coord, bounds, sunDirection }: Terr
   );
 }
 
-export function TerrainQuadtree({ tileSource, sunDirection }: TerrainQuadtreeProps) {
+export function TerrainQuadtree({ tileSource, sunDirection, inputs }: TerrainQuadtreeProps) {
   const [manifest, setManifest] = useState<TileManifest | null>(null);
 
   useEffect(() => {
@@ -233,6 +295,7 @@ export function TerrainQuadtree({ tileSource, sunDirection }: TerrainQuadtreePro
           y_max: manifest.bounds_m.y_max_m
         }}
         sunDirection={sunDirection}
+        inputs={inputs}
       />
     </group>
   );
