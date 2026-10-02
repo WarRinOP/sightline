@@ -37,6 +37,10 @@ jobs:
         with:
           python-version: "3.12"
       - run: uv sync --project pipeline --locked
+      # 62 MiB from NAIF, verified against the pinned hashes. The tests that need the kernels
+      # (ephemeris and golden reproducibility) skip without it. The DEMs are too slow to fetch
+      # on every run, so the tests that need them skip in CI.
+      - run: uv run --project pipeline sightline fetch --only spice --strict
       - run: uv run --project pipeline ruff check pipeline
       - run: uv run --project pipeline ruff format --check pipeline
       - run: uv run mypy sightline_pipeline
