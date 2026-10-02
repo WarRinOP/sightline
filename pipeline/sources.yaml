@@ -106,3 +106,30 @@ datasets:
     license: "NAIF generic kernels: public, no restrictions"
     citation: "NASA/JPL NAIF generic kernels"
     verified_at: 2026-10-02
+
+  # ---- DEM: Stage 1 terrain (PGDA; DECISIONS D-006). Sizes from HEAD on 2026-10-02. ----
+  - id: pgda78-site04-surf
+    group: dem
+    url: https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/Site04/Site04_final_adj_5mpp_surf.tif
+    role: terrain-near
+    expected_bytes: 40980806
+    expected_content_type: image/tiff
+    sha256: 38ff70dbdf2f066c2cfa94a646c3a59d653ce7f6b4528b15fc1b43ee397ce758
+    md5: null
+    license: "US Government work; no copyright in the US. NASA data use policy: credit requested."
+    citation: "Barker, M.K., et al. (2021) Planetary and Space Science 203:105119, doi:10.1016/j.pss.2020.105119"
+    verified_at: 2026-10-02
+    note: "PGDA product 78, Site04 (named 'Shackleton rim' by PGDA). 5 m/px, south-polar stereographic, MOON_ME of DE421."
+
+  - id: pgda90-ldem-80s-80m
+    group: dem
+    url: https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_80MPP_ADJ.TIF
+    role: terrain-mid
+    expected_bytes: 189158392
+    expected_content_type: image/tiff
+    sha256: 82030dcbdd7c4bb0c7d858e9b4b293b9f2cda5a543ba31ec0f42784bd6beee5a
+    md5: null
+    license: "US Government work; no copyright in the US. NASA data use policy: credit requested."
+    citation: "Barker, M.K., et al. (2023) 'A New View of the Lunar South Pole from LOLA', Planetary Science Journal (DOI still to verify, task P1-04d)"
+    verified_at: 2026-10-02
+    note: "PGDA product 90, 80 m/px track-adjusted LOLA DEM, 80S to the pole. Same frame as the 5 m site DEMs."

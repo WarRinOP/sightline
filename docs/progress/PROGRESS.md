@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); real site coordinates (P1-04b); DEM downloads (rest of S1-02) |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); site coordinate source (D-019, S1-02a) |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -31,7 +31,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | P0 Setup | Folded into S1 | — |
 | P1 Lock-in | In progress (P1-04 data verification done early; follow-ups P1-04a–e open) | 15% |
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
-| M1 Data Pipeline | In progress (`fetch` built; SPICE kernels downloaded and pinned) | 15% |
+| M1 Data Pipeline | In progress (`fetch` built; SPICE kernels and 2 DEMs downloaded and pinned) | 20% |
 | M2 Engine | Not started | 0% |
 | M3 Visual Canvas | Not started | 0% |
 | M4 Command Center UI | Not started | 0% |
@@ -77,6 +77,42 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 012 — 2026-10-02 — PGDA benchmark, PR #2, DEM downloads, coordinate check (Claude Code)
+
+**Phase / tasks:** S1-02 (DEM part), M1-02, D-018 update, D-019. Branch `dev1/S1-02b-dem-downloads` (stacked on `dev1/S1-02-downloads-and-pipeline`).
+
+**Done:**
+
+- Recorded the PGDA benchmark in D-018 (relay not needed for Stage 1) and in P0-12.
+- Pushed S1-02 and opened **PR #2** (https://github.com/WarRinOP/sightline/pull/2) with the download metrics. Not merged yet.
+- Added the `dem` group to `sources.yaml` (`pgda78-site04-surf`, `pgda90-ldem-80s-80m`), downloaded both, pinned their SHA-256.
+- Checked the three site coordinates from the brief against the DEMs. They do not verify (D-019). Nothing from the brief went into the catalog.
+
+**Verified by:**
+
+- `curl -I` on 2026-10-02: Site04 40,980,806 B, Site01 40,980,810 B, Site11 40,980,806 B, `LDEM_80S_80MPP_ADJ.TIF` 189,158,392 B; all 200, `image/tiff`, `Accept-Ranges: bytes`.
+- Range probes of 4 MiB: HTTP 206 at 140 KB/s (Site04) and 102 KB/s (LDEM).
+- PR #2 CI: `pipeline` pass (14 s), `web` pass (24 s).
+- `sightline fetch --only dem`: 2 downloaded, 230,139,198 B, about 12 min, 314 KB/s overall; sizes and Content-Type matched. `shasum -a 256` of both files equals the pinned values.
+- `rasterio` (scratch environment, not a project dependency) opens both files: Site04 3200 x 3200 float32, 5 m, bounds (-9000, -15000, 7000, 1000), no NaN, -2848 to +1805 m; LDEM 7600 x 7600 float32 tiled COG, 80 m, overviews 2/4/8/16, bounds +/-304 km, no NaN, -7295 to +7026 m.
+- `sightline fetch --only dem --only spice --strict`: 10 datasets `cached ... pinned`, 0 B downloaded, exit 0, 10 s.
+- Coordinate check: see the D-019 table. 5 m and 80 m heights agree where both cover a point.
+- `ruff check`, `ruff format --check`, `mypy --strict`: clean; `pytest`: 31 passed.
+- **NOT VERIFIED:** this branch on GitHub CI (no PR yet); the DEM hashes are trust on first use (no PGDA checksum found); where Site11 sits relative to the "de Gerlache rim" on the ground (only the file's georeference was read); the identity of the brief's coordinates (they may be real coordinates of something else; the check only shows they do not match these DEM tiles and elevations).
+
+**Decisions logged:** D-018 updated, D-019 proposed
+
+**Blockers / risks:**
+
+- Site coordinates need the team lead's choice (D-019, S1-02a). S1-03 can start on placeholders labelled SIMULATED, but real-looking output for named sites needs a verified source.
+- Stage 1 is Oct 7 (5 days). Contracts freeze on Oct 3: a real site catalog (with `source_url`) must be a data file (CLAUDE.md §7.1), so check whether the contract needs a change before the freeze.
+
+**Next 3 tasks:**
+
+1. Merge PR #2; then open the PR for `dev1/S1-02b-dem-downloads`.
+2. S1-02a: team lead picks option A or B (D-019); then `sightline sites` (M1-06) and the catalog file.
+3. S1-03: ephemeris from the kernels (`sightline ephem`, M1-05) and the engine's `time`, `frames` and `getSunEarth`.
 
 ### Session 011 — 2026-10-02 — S1-01 wrap-up and S1-02 SPICE downloads (Claude Code)
 

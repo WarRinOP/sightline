@@ -258,3 +258,13 @@ def test_the_real_sources_file_is_valid_and_complete() -> None:
     names = {d.filename for d in spice}
     assert "moon_pa_de440_200625.bpc" in names
     assert "pck00011.tpc" in names
+
+
+def test_the_dem_group_lists_the_two_stage_1_files() -> None:
+    dem = load_sources().select(["dem"])
+    assert {d.id: d.expected_bytes for d in dem} == {
+        "pgda78-site04-surf": 40_980_806,
+        "pgda90-ldem-80s-80m": 189_158_392,
+    }
+    assert all(d.expected_content_type == "image/tiff" for d in dem)
+    assert all(d.url.startswith("https://pgda.gsfc.nasa.gov/data/") for d in dem)

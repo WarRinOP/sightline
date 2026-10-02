@@ -20,7 +20,8 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
   - [ ] **S1-01c** Install `three@0.186.x`, `@react-three/fiber`, `@react-three/drei` and `@types/three@0.186.0` for Dev 2 (approved in D-017; versions of the R3F packages still to check). *Dev 1, when Dev 2 asks.*
   - [ ] **S1-01d** Favicon (the browser logs a 404 for it) and self-hosted IBM Plex / Instrument Serif subsets. *Dev 3 (S1-08).*
 
-- [~] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.* *Done 2026-10-02 (branch `dev1/S1-02-downloads-and-pipeline`, D-018):* `sightline fetch` built; all 8 SPICE kernels (65,010,769 B) downloaded, size and type checked, SHA-256 pinned. *Open:* one site DEM and the 80 m mid tier (`sources.yaml` entries still to HEAD-verify; PGDA speed not re-measured).
+- [x] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.* *Done 2026-10-02 (D-018): 8 SPICE kernels (65,010,769 B, PR #2) and `pgda78-site04-surf` plus `pgda90-ldem-80s-80m` (230,139,198 B, branch `dev1/S1-02b-dem-downloads`), all size- and type-checked, SHA-256 pinned, strict re-run of all 10 datasets passes. Not downloaded: the other site DEMs, validation maps, the far tier.*
+  - [ ] **S1-02a** Site coordinates for the 3 presets: choose option A or B of D-019; the coordinates in the brief failed the DEM check. Then the `sightline sites` catalog (M1-06). *Team lead decision, then Dev 1.*
 
 - [ ] **S1-03** Real ephemeris for 3 sites, engine `time`/`frames`/`getSunEarth`. *Dev 1, Oct 2–4.*
 
