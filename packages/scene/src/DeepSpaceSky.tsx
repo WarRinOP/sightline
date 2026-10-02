@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
 import * as THREE from "three";
+import { Palette } from "./palette";
 
 interface DeepSpaceSkyProps {
   sunDirection: THREE.Vector3;
@@ -21,13 +22,11 @@ export function DeepSpaceSky({
     if (sunRef.current) {
       // 20000 km away
       sunRef.current.position.copy(sunDirection).multiplyScalar(20000);
-      sunRef.current.position.y += 1737400; // Offset by moon radius to stay above scene origin
     }
     if (earthRef.current) {
       earthRef.current.position.copy(earthDirection).multiplyScalar(15000);
-      earthRef.current.position.y += 1737400;
       // Make earth look at origin
-      earthRef.current.lookAt(0, 1737400, 0);
+      earthRef.current.lookAt(0, 0, 0);
     }
   });
 
@@ -38,12 +37,12 @@ export function DeepSpaceSky({
       {/* Sun */}
       <mesh ref={sunRef}>
         <sphereGeometry args={[500, 32, 32]} />
-        <meshBasicMaterial color="#FFFAFA" />
+        <meshBasicMaterial color={Palette.stars} />
         {/* Simple bloom hack using a slightly larger transparent sphere */}
         <mesh>
           <sphereGeometry args={[700, 32, 32]} />
           <meshBasicMaterial
-            color="#FFEA00"
+            color={Palette.sunInner}
             transparent
             opacity={0.3}
             blending={THREE.AdditiveBlending}
@@ -53,7 +52,7 @@ export function DeepSpaceSky({
         <mesh>
           <sphereGeometry args={[1200, 32, 32]} />
           <meshBasicMaterial
-            color="#FFB300"
+            color={Palette.sunOuter}
             transparent
             opacity={0.1}
             blending={THREE.AdditiveBlending}
@@ -66,7 +65,7 @@ export function DeepSpaceSky({
       <mesh ref={earthRef}>
         <sphereGeometry args={[200, 32, 32]} />
         {/* Earth phase is naturally created by the sunDirectional light hitting this standard material */}
-        <meshStandardMaterial color="#4A90E2" roughness={0.7} metalness={0.1} />
+        <meshStandardMaterial color={Palette.earth} roughness={0.7} metalness={0.1} />
       </mesh>
     </>
   );

@@ -3,6 +3,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrthographicCamera, Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { FisheyeSkyProps } from "./types";
+import { Palette } from "./palette";
 
 function FisheyeContent() {
   const sunRef = useRef<THREE.Mesh>(null);
@@ -20,44 +21,44 @@ function FisheyeContent() {
 
   return (
     <>
-      <color attach="background" args={["#000000"]} />
+      <color attach="background" args={[Palette.skyBackground]} />
 
       {/* Outer horizon ring */}
       <mesh>
         <ringGeometry args={[45, 50, 64]} />
-        <meshBasicMaterial color="#333333" side={THREE.DoubleSide} />
+        <meshBasicMaterial color={Palette.skyGrid} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Compass / Horizon markers */}
-      <Text position={[0, 40, 0]} fontSize={5} color="#AAAAAA">
+      <Text position={[0, 40, 0]} fontSize={5} color={Palette.skyText}>
         N
       </Text>
-      <Text position={[0, -40, 0]} fontSize={5} color="#AAAAAA">
+      <Text position={[0, -40, 0]} fontSize={5} color={Palette.skyText}>
         S
       </Text>
-      <Text position={[40, 0, 0]} fontSize={5} color="#AAAAAA">
+      <Text position={[40, 0, 0]} fontSize={5} color={Palette.skyText}>
         E
       </Text>
-      <Text position={[-40, 0, 0]} fontSize={5} color="#AAAAAA">
+      <Text position={[-40, 0, 0]} fontSize={5} color={Palette.skyText}>
         W
       </Text>
 
       {/* Sun marker */}
       <mesh ref={sunRef} position={[20, 20, 0]}>
         <circleGeometry args={[2, 32]} />
-        <meshBasicMaterial color="#FFC857" />
+        <meshBasicMaterial color={Palette.skySun} />
       </mesh>
 
       {/* Earth marker */}
       <mesh ref={earthRef} position={[-20, 10, 0]}>
         <circleGeometry args={[1.5, 32]} />
-        <meshBasicMaterial color="#4CC9F0" />
+        <meshBasicMaterial color={Palette.skyEarth} />
       </mesh>
 
       {/* "Now" marker in the center */}
       <mesh position={[0, 0, 0]}>
         <circleGeometry args={[0.5, 32]} />
-        <meshBasicMaterial color="#FF0000" />
+        <meshBasicMaterial color={Palette.skyCenterPin} />
       </mesh>
 
       {/* Camera: orthographic, looking down */}

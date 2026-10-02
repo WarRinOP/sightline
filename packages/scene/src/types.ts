@@ -6,6 +6,9 @@ export interface SceneInputs {
   epoch_et: number;
   selected_site_id: SiteId | null;
   layers: Readonly<Record<string, boolean>>;
+  sun: { az_rad: number; el_rad: number } | null;
+  earth: { az_rad: number; el_rad: number } | null;
+  horizon_mask: number[] | null;
 }
 
 /** Imperative camera control (seam S3). */

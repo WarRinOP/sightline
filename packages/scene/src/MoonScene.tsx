@@ -2,12 +2,12 @@ import { useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import type { MoonSceneProps, CameraHandle } from "./types";
-import { locationToScenePosition } from "./math";
+import { locationToScenePosition, getLocalDirectionInScene } from "./math";
 import { TerrainQuadtree } from "./TerrainQuadtree";
 import { DeepSpaceSky } from "./DeepSpaceSky";
 import { SitePin } from "./SitePin";
+import { Palette } from "./palette";
 
 function SceneContent({
   sites,
@@ -17,9 +17,9 @@ function SceneContent({
 }: Omit<MoonSceneProps, "ref" | "onReady" | "onPickLocation"> & {
   cameraRef?: React.Ref<CameraHandle>;
 }) {
-  const [sunDirection] = useState(new THREE.Vector3(1, 0.5, 0));
+  const [sunDirection, setSunDirection] = useState(new THREE.Vector3(1, 0.5, 0));
   const pinGroupRef = useRef<THREE.Group>(null);
-  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const controlsRef = useRef<React.ElementRef<typeof OrbitControls>>(null);
 
   // Hero sequence state
   const isPlayingHero = useRef(false);
@@ -45,6 +45,24 @@ function SceneContent({
         }
       },
       playHeroSequence: () => {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReducedMotion) {
+          if (inputs.current) {
+            const selectedId = inputs.current.selected_site_id;
+            const site = sites.find((s) => s.id === selectedId);
+            if (site) {
+              const lat_rad = (site.lat_deg * Math.PI) / 180;
+              const lon_rad = (site.lon_deg * Math.PI) / 180;
+              const [x, y, z] = locationToScenePosition(lat_rad, lon_rad, site.elev_m);
+              camera.position.set(x + 1000, y + 500, z + 1000);
+              if (controlsRef.current) {
+                controlsRef.current.target.set(x, y, z);
+                controlsRef.current.update();
+              }
+            }
+          }
+          return;
+        }
         isPlayingHero.current = true;
         heroStartTime.current = performance.now();
       },
@@ -54,7 +72,7 @@ function SceneContent({
 
   useFrame(() => {
     // Position pin based on selected_site_id
-    const targetPos = new THREE.Vector3(0, 1737400, 0);
+    const targetPos = new THREE.Vector3(0, 0, 0);
     if (inputs.current) {
       const selectedId = inputs.current.selected_site_id;
       const site = sites.find((s) => s.id === selectedId);
@@ -65,6 +83,19 @@ function SceneContent({
         targetPos.set(x, y, z);
         if (pinGroupRef.current) {
           pinGroupRef.current.position.copy(targetPos);
+        }
+
+        // Update Sun direction based on inputs
+        if (inputs.current.sun) {
+          const newSunDir = getLocalDirectionInScene(
+            lat_rad,
+            lon_rad,
+            inputs.current.sun.az_rad,
+            inputs.current.sun.el_rad,
+          );
+          if (newSunDir.distanceTo(sunDirection) > 0.001) {
+            setSunDirection(newSunDir);
+          }
         }
       }
     }
@@ -107,7 +138,7 @@ function SceneContent({
 
   return (
     <>
-      <color attach="background" args={["#05070A"]} />
+      <color attach="background" args={[Palette.sceneBackground]} />
 
       {/* Deep Space Sky */}
       <DeepSpaceSky sunDirection={sunDirection} />
@@ -122,7 +153,7 @@ function SceneContent({
       <ambientLight intensity={0.1} />
 
       {/* Real Terrain mesh */}
-      <group position={[0, 1737400, 0]}>
+      <group>
         <TerrainQuadtree tileSource={tileSource} sunDirection={sunDirection} inputs={inputs} />
       </group>
 
@@ -132,6 +163,7 @@ function SceneContent({
           label={
             sites.find((s) => s.id === inputs.current?.selected_site_id)?.name || "Target Site"
           }
+          horizonMask={inputs.current?.horizon_mask}
         />
       </group>
 
@@ -153,7 +185,7 @@ export function MoonScene({ sites, tileSource, inputs, ref, onReady }: MoonScene
 
   return (
     <div style={{ width: "100%", height: "100%", display: "block" }}>
-      <Canvas shadows camera={{ position: [0, 1737400 + 5000, 10000], fov: 45 }}>
+      <Canvas shadows camera={{ position: [0, 5000, 10000], fov: 45, near: 0.1, far: 500000 }}>
         <SceneContent sites={sites} tileSource={tileSource} inputs={inputs} cameraRef={ref} />
       </Canvas>
     </div>

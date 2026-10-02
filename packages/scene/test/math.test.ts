@@ -2,17 +2,22 @@ import { describe, it, expect } from "vitest";
 import { locationToScenePosition } from "../src/math";
 
 describe("locationToScenePosition", () => {
-  it("converts lat/lon to scene coordinates using reference radius", () => {
-    // Equator, prime meridian
-    const [x1, y1, z1] = locationToScenePosition(0, 0, 0);
-    expect(x1).toBeCloseTo(1737400);
-    expect(y1).toBeCloseTo(0);
-    expect(z1).toBeCloseTo(0);
+  it("converts lat/lon to scene coordinates using polar-stereographic projection", () => {
+    // Shackleton crest
+    const lat = -89.7804 * (Math.PI / 180);
+    const lon = (203.803 - 360) * (Math.PI / 180);
+    const [x, y, z] = locationToScenePosition(lat, lon, 100);
 
-    // North pole
-    const [x2, y2, z2] = locationToScenePosition(Math.PI / 2, 0, 100);
-    expect(x2).toBeCloseTo(0);
-    expect(y2).toBeCloseTo(1737500);
-    expect(z2).toBeCloseTo(0);
+    // Scene y should be the elevation
+    expect(y).toBe(100);
+
+    // Scene x and -z (which is stereographic y) should match expected coordinates within 1m
+    expect(x).toBeGreaterThan(-2689);
+    expect(x).toBeLessThan(-2687);
+
+    // Remember z = -stereographic_y
+    const stereoY = -z;
+    expect(stereoY).toBeGreaterThan(-6094);
+    expect(stereoY).toBeLessThan(-6092);
   });
 });

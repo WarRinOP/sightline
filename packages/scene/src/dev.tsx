@@ -11,6 +11,9 @@ function DevApp() {
     epoch_et: 0,
     selected_site_id: "shackleton-rim",
     layers: {},
+    sun: null,
+    earth: null,
+    horizon_mask: null,
   });
 
   const sites: Site[] = [
