@@ -36,6 +36,40 @@ Owner: Dev 2 (Aktaruzzaman, GitHub `rimonxyg`). Newest entry at the top. Rules: 
 
 ## Log
 
+### Session 3 — 2026-10-02 — Dev 2 Aktaruzzaman
+
+**Task IDs:** S1-07 (Lander's Eye fisheye)
+
+**What I did:**
+- Created `FisheyeSky.tsx` component fulfilling S1-07 requirements.
+- Implemented an orthographic camera looking up (or down into a scene) to simulate the fisheye view.
+- Added N/S/E/W compass markers on the horizon ring.
+- Added animated Sun and Earth markers (simulated for now pending timeline data hooks).
+- Rendered `<FisheyeSky>` alongside `<MoonScene>` in the local `dev.tsx` preview.
+
+**Files changed:**
+- `packages/scene/src/FisheyeSky.tsx`
+- `packages/scene/src/dev.tsx`
+
+**How I verified it:** 
+- `pnpm typecheck` passed cleanly across the workspace.
+- The `vite` dev server preview works.
+
+**AI tool used:** Antigravity (Gemini Pro 3.1) generated `FisheyeSky.tsx`.
+
+**Proposed decisions:** 
+- Used an OrthographicCamera to perfectly project the spherical sky dome onto a flat circle view, matching typical fisheye outputs.
+
+**Blockers / questions:**
+- Awaiting the `EngineClient` timeline hooks from Dev 1 so we can animate the Sun/Earth accurately in the Fisheye component.
+
+**Next 3 tasks:**
+1. Wait for terrain loader integration details.
+2. Implement Moon shading and sun direction updates in `MoonScene` using real data.
+3. Test shadow/lighting parity with M3-09 probe tests once data arrives.
+
+---
+
 ### Session 2 — 2026-10-02 — Dev 2 Aktaruzzaman
 
 **Task IDs:** S1-06 (part 2: Contracts Integration)
