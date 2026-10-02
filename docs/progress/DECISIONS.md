@@ -473,6 +473,25 @@ Reported, not pass or fail: our longest continuous illumination and shadow perio
 
 ---
 
+### D-032 · 2026-10-03 · Accepted
+
+**Context:** With the scene fixed (D-031) and Dev 3 not started, Dev 1 built the Stage 1 web screens (S1-06b, S1-08 to S1-10) in `apps/web`, which D-031 reassigned.
+
+**Decision:**
+
+1. **3D view in the Lab** (`app/scene-panel.tsx`, loaded with `next/dynamic`, no server render, because three.js needs the browser). It builds the tile source with `fetchTileCoverage()` then `createLolaTileSource({ coverage })` (the served coverage: the full pyramid locally, the committed subset on a deployment), and writes the engine's `SunEarthState` for the selected site, the site and the slope toggle into the scene's `inputs` ref (no React state per frame). `horizon` is the engine's `HorizonMask`. The previous site's Sun and Earth are cleared when the site changes, so one site's state is never drawn at another. `apps/web` now depends on `@sightline/scene` and `next.config.ts` transpiles it.
+2. **Sky chart** (the Fisheye) is in the Lab under the 3D view. Its camera zoom now follows the canvas size (it was fixed for a half-screen panel and showed an empty circle at 288 px).
+3. **Mission barcode and time scrubber** (`app/timeline-barcode.tsx`, `lib/barcode.ts`): three rows (sunlight, link to Earth, both at once) over the whole ephemeris, from the lander-profile timeline already computed for the page. Each pixel column is the share of the hours under it that are lit, linked or both (opacity 0.25 to 1); an empty stripe is dark or no link. Meaning is carried by the row labels and position, not colour alone. Colours are read from the CSS variables at draw time (no hex in components). Click or drag sets the time (and pauses); the range input below is the keyboard control.
+4. **Evidence page** (`app/evidence/page.tsx`, `lib/evidence.ts`, `lib/evidence-data.ts`): reads `fixtures/golden/horizons_residuals.json` (parsed with the contract's `HorizonsResidualsSchema`) and `illumination_benchmark.json` at build time, so every figure comes from a committed file. It shows the Horizons comparison (Earth's 95.3 milliarcseconds stated as such, not "sub-milliarcsecond"), the seven Barker regions with the criteria, the AVGVISIB rank correlation, and a "What this does not show" list taken from D-025. The cause given for the Earth gap is the one METHODS §5.1 measured (the engine's stellar-aberration approximation), not the light-time guess in my first draft, which I removed. A benchmark row with a missing field fails the build instead of showing a blank.
+5. **Stale intro fixed:** the Lab's first paragraph no longer says the terrain part is "not yet checked against published maps" (D-025 wording instead). README and diagram updated to match what exists.
+6. **Cut:** Story mode, window finder, Analyst, Earth-link figures (S1-05h), and the CSV and permalink work.
+
+**Verified:** `next build` and `next start` (the Lab, the Evidence page, 100 static tile routes) and, in a real browser against `next dev` and `next start`, the Lab with real tiles (terrain, horizon ring, Sun and Earth, Fisheye, barcode, scrubber, Hero flight) and the Evidence page. Measured about 30 frames a second in headless Chromium with software rendering (not a real GPU).
+
+**Not verified:** performance on real hardware; Safari and Firefox; keyboard use of the scene; a screen-reader pass; the Lab on a phone; the barcode against a second timeline implementation (its reducer has unit tests); a deployment (Vercel's working directory and file tracing, D-028); the Hero flight on the other two sites.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._

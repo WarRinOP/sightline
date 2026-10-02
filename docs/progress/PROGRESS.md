@@ -78,6 +78,38 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 
 ## Session Log
 
+### Session 024 — 2026-10-03 — Web integration: 3D view, barcode, Evidence page (Claude Code)
+
+**Phase / tasks:** S1-06b, S1-08 (in part), S1-09, S1-10 (reassigned to Dev 1 by D-031). Branch `dev1/S1-06b-web-integration`, stacked on `dev1/S1-06-scene-fixes` (PR #16).
+
+**Done:**
+
+- The Lab page now shows a 3D terrain view on the real LOLA tiles with the engine's Sun and Earth and the real horizon ring, a sky chart (Fisheye), the readouts, a mission barcode of the year with a time scrubber, and a link to a new Evidence page (D-032).
+- `/evidence`: the Horizons comparison, the seven Barker regions with their criteria, the AVGVISIB rank correlation and "what this does not show", all read from the committed validation files.
+- The Fisheye's zoom follows its canvas size. The Lab's stale intro sentence is fixed. README and diagram updated.
+- 10 new web tests (barcode reducer, Evidence tables; the web package now has 25).
+
+**Verified by:**
+
+- `pnpm verify`: see the PR (run after these changes).
+- Real browser (`playwright-cli`) against `next dev` and `next start`: the terrain renders from real tiles at Shackleton with the pink horizon ring and the pin; Sun and Earth numbers update with time; the Fisheye shows the horizon curve, the Sun at the rim and hides the Earth when it is below the horizon (link "no"); the barcode shows the year (a long dark stretch at Shackleton) and the cursor follows the time; the Hero flight descends toward the pin; `/evidence` renders all three tables. Console: only a missing favicon and a three.js deprecation.
+- About 30 frames a second measured in headless Chromium with software rendering (not a GPU).
+- **NOT VERIFIED:** performance on real hardware; Safari and Firefox; a phone; keyboard use of the 3D view; a screen-reader pass; a deployment; the Hero flight on the other two sites; the barcode's colours for colour-blind viewers (rows are labelled, the opacity carries the share); CI on this branch.
+
+**Decisions logged:** D-032
+
+**Blockers / risks:**
+
+- This PR is stacked on PR #16; merge #16 first.
+- The terrain shadows are visual only (8-step march), and that is stated on the page.
+- Story mode, window finder and the Analyst are cut; the video must not show them.
+
+**Next 3 tasks:**
+
+1. Merge #16, then this PR; tag `v0.1-stage1` (S1-13).
+2. Video captures (S1-12): the Lab at Shackleton, the Hero flight, the barcode scrub, the Evidence page; the team lead records the voice-over.
+3. Polish: favicon, a phone check, the other two sites' views; the Dev 3 handover note.
+
 ### Session 023 — 2026-10-03 — Review of Dev 2's PR #15, scene fixes (Claude Code)
 
 **Phase / tasks:** S1-06 (scene), S1-06a and S1-06c closed. Branch `dev1/S1-06-scene-fixes`, from the head of Dev 2's `dev2/integration` (their commits are kept). The team lead said go and restated the early-start authorisation (D-010 still has no written confirmation); Dev 3 has not started.
