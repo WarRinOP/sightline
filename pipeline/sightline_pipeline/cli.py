@@ -1,6 +1,7 @@
 """Command-line entry point `sightline`. Subcommands are stubs until their tasks land."""
 
 import argparse
+import json
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -56,6 +57,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("sites", "write the site catalog from the PGDA site DEM tile centres"),
         ("ephem", "sample Sun, Earth and DSN states in MOON_ME from SPICE"),
         ("golden", "write the reference fixtures the engine's parity tests use"),
+        ("horizons", "ask JPL Horizons for the Sun and Earth at the 3 sites (3 sites x 50 epochs)"),
     ):
         p = sub.add_parser(name, help=help_text, description=help_text)
         p.add_argument("--sources", type=Path, default=DEFAULT_SOURCES_PATH, help=argparse.SUPPRESS)
@@ -73,9 +75,11 @@ def build_parser() -> argparse.ArgumentParser:
             )
             p.add_argument("--step", type=int, default=3600, metavar="SECONDS", help="sample step")
             p.add_argument("--out-dir", type=Path, default=DEFAULT_ENGINE_DATA_DIR)
-        if name == "golden":
+        if name in ("golden", "horizons"):
             p.add_argument("--out-dir", type=Path, default=DEFAULT_GOLDEN_DIR)
             p.add_argument("--sites", type=Path, default=DEFAULT_ENGINE_DATA_DIR / "sites.json")
+        if name == "horizons":
+            p.add_argument("--refresh", action="store_true", help="ignore the cache and ask again")
     for name, (help_text, task) in _COMMANDS.items():
         sub.add_parser(name, help=f"{help_text} (stub, {task})", description=help_text)
     return parser
@@ -135,6 +139,7 @@ def _run_pipeline_step(args: argparse.Namespace) -> int:
     # Imported here so `--help` and `fetch` work without loading SPICE and GDAL.
     from sightline_pipeline.ephem import write_ephemeris
     from sightline_pipeline.golden import write_golden
+    from sightline_pipeline.horizons import HorizonsError, write_reference
     from sightline_pipeline.sites import write_sites
 
     try:
@@ -158,10 +163,29 @@ def _run_pipeline_step(args: argparse.Namespace) -> int:
             )
             for p in paths:
                 print(f"wrote {p} ({p.stat().st_size:,} B)")
+        elif args.command == "horizons":
+            with make_client() as client:
+                path = write_reference(
+                    args.raw_dir,
+                    sources,
+                    args.sites,
+                    args.out_dir,
+                    client,
+                    refresh=args.refresh,
+                    progress=lambda m: print(m, file=sys.stderr, flush=True),
+                )
+            doc = json.loads(path.read_text(encoding="utf-8"))
+            print(f"wrote {path} ({path.stat().st_size:,} B), {len(doc['cases'])} cases")
+            print(f"requests made this run: {doc['api']['requests_made_this_run']}")
+            for body, st in doc["horizons_vs_spice_separation_deg"].items():
+                print(
+                    f"Horizons vs SPICE, {body}: max {st['max']:.2e} deg, "
+                    f"mean {st['mean']:.2e} deg, rms {st['rms']:.2e} deg"
+                )
         else:
             for p in write_golden(args.raw_dir, sources, args.out_dir, args.sites):
                 print(f"wrote {p} ({p.stat().st_size:,} B)")
-    except (FileNotFoundError, ValueError) as e:
+    except (FileNotFoundError, ValueError, HorizonsError) as e:
         print(f"sightline {args.command}: {e}", file=sys.stderr)
         return FAILED
     except FetchError as e:
@@ -174,7 +198,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "fetch":
         return _run_fetch(args)
-    if args.command in ("sites", "ephem", "golden"):
+    if args.command in ("sites", "ephem", "golden", "horizons"):
         return _run_pipeline_step(args)
     task = _COMMANDS[args.command][1]
     print(

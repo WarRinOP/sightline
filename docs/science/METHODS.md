@@ -4,8 +4,8 @@ How the numbers are made. Written for the people who will check them. Each secti
 validated and what is not. Decisions behind these choices: `docs/progress/DECISIONS.md`.
 
 **Status (2026-10-02):** time, lunar frames, the Sun/Earth/DSN ephemeris and `getSunEarth` are
-real and checked against SPICE. The terrain horizon, illumination percentages, communication
-windows and the Horizons comparison are not built yet.
+real and checked against SPICE and against JPL Horizons. The terrain horizon, illumination
+percentages and communication windows are not built yet.
 
 ---
 
@@ -52,8 +52,15 @@ windows and the Horizons comparison are not built yet.
 2. The direction to the Sun and to the Earth: the Moon-centre apparent state minus the site vector.
    This keeps topocentric parallax for both bodies (about 0.26° for Earth at the pole, and a
    2 km rim height alone moves Earth's direction by about 3e-4°, which is why `Location` has
-   `elev_m`). LT+S is evaluated at the Moon's centre, not at the site; §5 shows that costs less
-   than 3e-5°.
+   `elev_m`). LT+S is evaluated along the line of sight from the Moon's centre, not from the site.
+   Measured against SPICE with the observer on the site (S1-04): the geometry is exact (0° with
+   no correction), light time costs at most 3.1e-6° for Earth, and stellar aberration brings the
+   total to 2.7e-5° for Earth (2.3e-8° for the Sun). The size is what you would expect if the
+   aberration shift (about 1e-4 rad) is applied along the centre's line of sight rather than the
+   site's: the two lines of sight differ by Earth's parallax of 0.26° (4.5e-3 rad), giving about
+   1e-4 × 4.5e-3 rad = 2.6e-5°, while the Sun's parallax of 1.2e-5 rad makes the same effect
+   negligible. We measured that aberration is responsible; we did not separately test that
+   mechanism.
 3. Azimuth clockwise from local north in [0, 2π); elevation above the local tangent plane.
    **Pole convention:** the local basis stays finite at ±90° and uses the longitude given, so at the
    exact pole "north" is the horizontal direction along that meridian (grid north).
@@ -108,6 +115,37 @@ draconic cycle); Earth stays within about 10° of the horizon. With a 0° mask a
 whenever Earth is above the horizon (the best complex is never below about 8.7°); with a 10° mask
 there are short gaps, about 0.5% of the Earth-up time.
 
-**Not validated yet:** a comparison with JPL Horizons (task S1-04); any terrain-dependent result;
+### 5.1 Against JPL Horizons (S1-04)
+
+An independent implementation: DE441 (the engine uses DE440), Horizons' own `MEAN_ME` lunar
+orientation, light bending included. `sightline horizons` asks for the Sun (10) and Earth (399) from
+each site (`CENTER='coord@301'`, geodetic coordinates on the 1737.4 km sphere, `QUANTITIES='4'`,
+UT, no atmosphere), 50 epochs evenly spread from 2026-01-02 to 2026-12-30, at the site's ground
+height with no mast. Horizons echoes how it read the site, the Moon's shape and orientation; the
+command refuses to continue if the echo differs from what was asked. Answers are cached under
+`data/raw/horizons/`, requests are serial and at least 1 s apart, and each request carries at most 25
+times (50 times made the URL 2,249 characters long and the gateway answered HTTP 502; 25 worked).
+
+Acceptance tolerance: **0.02°** on every case, written in DATA_VERIFICATION_REPORT §4.1 on
+2026-10-01 before any residual existed. Engine minus Horizons, 3 sites × 50 epochs × 2 bodies = 300
+rows, degrees (`fixtures/golden/horizons_residuals.json`):
+
+| | Azimuth on the sky: max / mean / rms | Elevation: max / mean / rms | Separation: max / mean / rms |
+|---|---|---|---|
+| Sun | 3.2e-8 / -1.8e-9 / 1.4e-8 | 3.6e-9 / -9.1e-11 / 1.8e-9 | **3.3e-8** / 1.0e-8 / 1.4e-8 |
+| Earth | 5.9e-7 / -3.4e-7 / 3.6e-7 | 2.6e-5 / +3.1e-7 / 1.8e-5 | **2.6e-5** / 1.6e-5 / 1.8e-5 |
+
+The largest gap in any case is 2.65e-5° (the Earth), 755 times inside the tolerance. Horizons against
+SPICE (the pipeline's own route) differs by at most 1.0e-8° for the Sun and 4.8e-7° for the Earth,
+so the Earth gap is the engine's stellar-aberration approximation (§3), not a disagreement between
+Horizons and SPICE. The two negative controls in the test show it can fail: a 10-minute time shift
+and a 0.01° longitude error both break the tolerance.
+
+**A mistake worth recording.** The first version of the separation used `acos(u·v)`. A cosine within
+one rounding step of 1.0 cannot give an angle below 8.5377e-7° (`acos(1−2⁻⁵³)`), so every smaller
+difference was reported as exactly that, and the same "maximum" appeared in three comparisons and for
+both bodies. The statistics above use `atan2(|u×v|, u·v)`, which resolves angles down to 1e-12°.
+
+**Not validated yet:** any terrain-dependent result;
 the Earth orientation predict kernel's accuracy beyond its use for station directions; the engine
 in a browser worker (the checks above run in Node).

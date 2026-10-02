@@ -47,11 +47,42 @@ class Dataset(BaseModel):
         return PurePosixPath(urlparse(self.url).path).name
 
 
+class Api(BaseModel):
+    """A web service we query (as opposed to a file we download)."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]*$")
+    url: str
+    role: str
+    # `signature.version` the service reports; a change means the behaviour may have changed.
+    signature_version: str
+    min_interval_s: float = Field(gt=0)
+    license: str
+    citation: str
+    verified_at: date
+    note: str | None = None
+
+    @field_validator("url")
+    @classmethod
+    def _https_only(cls, v: str) -> str:
+        if urlparse(v).scheme != "https":
+            raise ValueError("url must be https")
+        return v
+
+
 class Sources(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     schema_version: Literal[1]
     datasets: list[Dataset]
+    apis: list[Api] = []
+
+    def api(self, api_id: str) -> Api:
+        for a in self.apis:
+            if a.id == api_id:
+                return a
+        raise KeyError(f"unknown api id: {api_id!r}")
 
     @model_validator(mode="after")
     def _unique_ids(self) -> "Sources":

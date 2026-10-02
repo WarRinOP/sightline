@@ -20,6 +20,7 @@ from the deterministic engine or from a cited source. Where data is synthetic, i
 | 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5` | Dev 1 (team lead), supervising | S1-02 | The `sightline fetch` downloader and the `sources.yaml` registry in `pipeline/`, with its tests; it also ran the download of the 8 NAIF SPICE kernels | Unit tests with a mocked network; a real download whose size, content type and NAIF-published MD5 were checked, then re-checked with system `md5` and `shasum`; results in `docs/progress/PROGRESS.md` (session 011) |
 | 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5` | Dev 1 (team lead), supervising | S1-02 (DEM part) | `sources.yaml` entries for two PGDA DEMs and their download; a read-only check of three site coordinates against the DEM files (the check found they do not match, so none were used) | Sizes and content types by `HEAD`; hashes by `shasum`; rasters opened and sampled with `rasterio` in a scratch environment; results in `docs/progress/PROGRESS.md` (session 012) and D-019 |
 | 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5`, with the SPICE toolkit (`spiceypy`) | Dev 1 (team lead), supervising | S1-03 | The pipeline steps `sites`, `ephem` and `golden`; the engine's time, frames, ephemeris reader, sky geometry and real engine client; their unit and parity tests; `docs/science/METHODS.md`. It also found, by testing, that two of its own assertions were wrong and corrected them | Parity of every output with SPICE (Sun and Earth direction within 3e-5°, time within 1 µs, DSN elevation within 0.19°), regeneration tests that rebuild the committed data, `pnpm verify` and the pipeline checks; results in `docs/progress/PROGRESS.md` (session 013) and D-020 |
+| 2026-10-02 | Claude Code (Anthropic), model `claude-sonnet-5-5`, querying the JPL Horizons web service | Dev 1 (team lead), supervising | S1-04 | The `sightline horizons` command (query, parser, cache, checks), its tests, the engine-versus-Horizons test and residuals file, the residuals schema, and the documentation. It found and corrected two bugs of its own: a separation formula that could not report angles below 8.5e-7 degrees, and a wrong first explanation of the Earth gap | Horizons' own echo of the site, Moon shape and orientation is checked on every request; 300 residuals against a tolerance written before any residual existed; two negative controls; results in `docs/progress/PROGRESS.md` (session 014), D-021 and `docs/science/METHODS.md` §5.1 |
 
 Earlier Claude Code sessions (2026-10-01) wrote planning and documentation only: the master plan,
 the work split, the data-source verification report and the contributor rules. No application code.
@@ -64,6 +65,14 @@ glue code; it did not write or alter any of the kernels or SPICE's own algorithm
 pipeline produces (`ephemeris_2026_3600s.bin`, `leapseconds.json`, `sites.json`,
 `fixtures/golden/*.json`) can be regenerated with `sightline ephem`, `sites` and `golden`, and the
 tests rebuild them and compare.
+
+### JPL Horizons as an independent check (S1-04, 2026-10-02)
+
+The engine's Sun and Earth directions are compared with the answers of NASA/JPL's Horizons service,
+which is a separate implementation (its own ephemeris version and lunar orientation model). The AI
+wrote the code that asks, parses and compares; the numbers it compares come from Horizons and from
+SPICE. The comparison file (`fixtures/golden/horizons_residuals.json`) is rebuilt by a command and
+the tests fail if the committed copy differs from what the engine produces.
 
 ## AI inside the product
 

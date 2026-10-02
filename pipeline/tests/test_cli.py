@@ -5,7 +5,7 @@ import pytest
 from sightline_pipeline import __version__
 from sightline_pipeline.cli import FAILED, NOT_IMPLEMENTED, build_parser, main
 
-COMMANDS = ["fetch", "sites", "ephem", "golden", "dem", "tiles", "mock"]
+COMMANDS = ["fetch", "sites", "ephem", "golden", "horizons", "dem", "tiles", "mock"]
 STUBS = ["dem", "tiles", "mock"]
 
 
@@ -94,7 +94,7 @@ datasets:
     assert "no pinned sha256" in capsys.readouterr().err
 
 
-@pytest.mark.parametrize("command", ["sites", "ephem", "golden"])
+@pytest.mark.parametrize("command", ["sites", "ephem", "golden", "horizons"])
 def test_pipeline_steps_fail_cleanly_when_the_data_is_missing(
     command: str, tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
