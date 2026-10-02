@@ -17,7 +17,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 - [x] **S1-01** Scaffold, contracts, mock engine, mock tiles, CI. *Dev 1, Oct 1–2.* *Done 2026-10-02: PR #1 merged, CI green (`web`, `pipeline`). Built on `dev1/S1-01-scaffold-and-contracts` (D-016); `pnpm verify` and the pipeline checks pass.* Covers M0-03, M0-04, M0-06 (partly: mock engine and tiles; no JSON export) and M0-05 (zod schemas only).
   - [ ] **S1-01a** Contracts: JSON Schema export and the pydantic mirror (rest of M0-05). *Dev 1.*
   - [x] **S1-01b** *(2026-10-02)* `web` and `pipeline` are required status checks on `main` (not strict: branches need not be up to date). *Dev 1.*
-  - [ ] **S1-01c** Install `three@0.186.x`, `@react-three/fiber`, `@react-three/drei` and `@types/three@0.186.0` for Dev 2 (approved in D-017; versions of the R3F packages still to check). *Dev 1, when Dev 2 asks.*
+  - [x] **S1-01c** *(2026-10-03, D-029)* `three@0.186.1`, `@react-three/fiber@9.8.1`, `@react-three/drei@10.7.9`, `@types/three@0.186.0` (and `react-dom`, `@types/react-dom`, `vitest`) installed in `packages/scene`, exact-pinned; licences of the closure checked. `vite` not added (own entry needed). *Dev 1.*
   - [ ] **S1-01d** Favicon (the browser logs a 404 for it) and self-hosted IBM Plex / Instrument Serif subsets. *Dev 3 (S1-08).*
 
 - [x] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.* *Done 2026-10-02 (D-018; PR #2 merged, PR #3 open): 8 SPICE kernels (65,010,769 B, PR #2) and `pgda78-site04-surf` plus `pgda90-ldem-80s-80m` (230,139,198 B, PR #3); `pgda78-site01-surf` and `pgda78-site11-surf` (81,961,616 B) added in S1-03, all size- and type-checked, SHA-256 pinned, strict re-run of all 10 datasets passes. Not downloaded: the other site DEMs, validation maps, the far tier.*
@@ -41,7 +41,10 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
   - [ ] **S1-05h** Earth visibility and DSN link have no published reference compared yet (the AVGVISIB Earth map, `pds-avgvisib-85s-60m_earth`, is in the report but not fetched). Do before any link figure is cited. *Dev 1.*
   - [ ] **S1-05f** Dev 3: read `statistics.longest_day_s` and `longest_day_start_et` in the mission barcode (S1-09), and show what "lit" means (D-024 item 6). *Dev 3.*
 
-- [ ] **S1-06** Terrain scene, sun light from `getSunEarth`, pin, orbit camera, 20 s Hero capture. *Dev 2, Oct 1–5.*
+- [~] **S1-06** Terrain scene, sun light from `getSunEarth`, pin, orbit camera, 20 s Hero capture. *Dev 2, Oct 1–5.* *PR #13 (18 commits) reviewed 2026-10-02: **not merged**; changes requested (CI lint fails; wrong pin/camera frame; missing-tile holes; border-blind mesh; invented overlays and horizon ring; no real Sun/Earth path; hex colours; deps and lockfile edited against D-017). Seam decision D-030.*
+  - [ ] **S1-06a** Dev 2: the fix list sent by the team lead (lint and Prettier green, `pnpm verify`; pin/`flyTo`/Hero in tile-plane coordinates; pole-centred frame; sparse-tile fallback with cache and disposal; border-aware mesh and UV; remove proxy overlays and fake ring; `sun_earth` and `horizon` per D-030; camera near/far; `palette.ts`; reduced motion; tests; filled PR template; take `main`'s `package.json` and lockfile). *Dev 2.*
+  - [ ] **S1-06b** Dev 3: write `sun_earth` into the scene `inputs` ref from `getSunEarth`, pass `horizon` from `getHorizon` and `tileSource` from `createLolaTileSource` (D-028, D-030); pass the new `sites` prop. *Dev 3.*
+  - [ ] **S1-06c** Dev 1: re-review PR #13 when pushed (lint, tests, a browser check of the pin, `flyTo` and tile fallback against `next start`). *Dev 1.*
 
 - [ ] **S1-07** Lander's Eye fisheye. *Dev 2, Oct 4–6 (stretch).*
 

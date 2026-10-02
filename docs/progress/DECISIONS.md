@@ -425,6 +425,39 @@ Reported, not pass or fail: our longest continuous illumination and shadow perio
 
 ---
 
+### D-029 · 2026-10-03 · Accepted
+
+**Context:** Dev 2 needs `three`, `@react-three/fiber`, `@react-three/drei` and `@types/three` in `packages/scene` (approved in D-017, which also said Dev 1 installs them, exact-pinned, and Dev 2 does not). Dev 2's PR #13 installed them itself with range specifiers (`^`, `~`) and edited the lockfile; the PR is not being merged as it stands (review below), so the dependency change is made here, separately.
+
+**Decision:**
+
+1. **Installed, exact-pinned, in `packages/scene`:** `three@0.186.1`, `@react-three/fiber@9.8.1`, `@react-three/drei@10.7.9` (dependencies); `@types/three@0.186.0`, `@types/react-dom@19.3.0`, `react-dom@19.3.0`, `vitest@5.0.3`, `@sightline/engine` (workspace, for the local preview harness only) (dev dependencies). Evidence (`pnpm view`, 2026-10-03): all four 3D packages exist and are MIT. `three`, `@react-three/*` are on the allowed list (CLAUDE.md §7.4); `@types/three` was approved in D-017; `@types/react-dom`, `react-dom` and `vitest` are already in the repository at these versions (`apps/web`).
+2. **Licences of the whole production closure of `@sightline/scene`** (`pnpm licenses list --prod`, 63 packages): MIT 54, Apache-2.0 5, ISC 3, BSD-3-Clause 1. All permissive (§7.5b). `drei` pulls in many transitive packages (+54 in the lockfile); none was chosen by us.
+3. **`vite` is not added.** Dev 2's `packages/scene/index.html` and `src/dev.tsx` (a preview page) need a dev server; today `vite` is present only because `vitest` depends on it. Adding `vite` (not on the allowed list) needs its own entry; ask if the preview is wanted. The `test` script is `vitest run test/ --passWithNoTests` (the other packages run `vitest run test/`; `--passWithNoTests` because the scene has no test yet on `main`).
+4. Dev 2 must merge `main` into `dev2/integration` and take `main`'s `package.json` and `pnpm-lock.yaml` for these files (dropping the range specifiers).
+
+**Consequences:** No scene code uses these yet on `main`. The scene package is the only one that gets `three`; the web app does not import the scene yet, so its bundle is unchanged.
+
+---
+
+### D-030 · 2026-10-03 · Accepted
+
+**Context:** Review of Dev 2's PR #13 (see PROGRESS session 022): the scene has no way to receive the real Sun, Earth or horizon, so it shows a fixed Sun direction, a made-up horizon ring and an animated fake sky in the Fisheye. `SceneInputs` (seam S3) lives in `packages/scene/src/types.ts`, not in the frozen contracts, so it can change after the Oct 3 contracts freeze. Decided so Dev 2 and Dev 3 build the same thing.
+
+**Decision (seam S3, additions only):**
+
+1. **`SceneInputs` gains `sun_earth: SunEarthState | null`** (the contract type from `getSunEarth` for the selected site: `sun_azimuth_rad`, `sun_elevation_rad`, `sun_disk_fraction`, `earth_azimuth_rad`, `earth_elevation_rad`, `earth_visible`, `dsn_visible`, `epoch_et`, `simulated`). The app writes it into the `inputs` ref whenever the engine answers; the scene reads it in `useFrame`. `null` means no data: the scene draws no Sun, no Earth and no shadow state, and says "no data". It never falls back to a default direction. Azimuth is clockwise from local north, elevation above the local horizontal at the site (the engine's convention, METHODS §3).
+2. **`MoonScene` and `FisheyeSky` get a prop `horizon: HorizonMask | null`** (contract type from `getHorizon`; changes only with the site or mast, so a prop, not per-frame). `null`: no horizon ring and no mask, never a generated one. The scene reads `horizon.mask_elevation_rad` with `azimuth_step_rad`, index 0 at north.
+3. **`simulated`:** if `sun_earth.simulated`, `horizon.simulated` or the tile manifest's `simulated` is true, the scene draws the purple SIMULATED badge. Any data the scene makes up itself is not allowed at all (CLAUDE.md §7.9).
+4. **Scene frame** (pole-centred): `x = tile-plane x`, `z = -tile-plane y`, `y = height above the reference sphere` (no 1,737,400 m offset: float32 has 0.125 m resolution at that magnitude). Tile-plane coordinates of a place: `rho = 2R tan((pi/2 + lat)/2)`, `x = rho sin(lon)`, `y = rho cos(lon)`, `R = 1,737,400 m` (pipeline `project()`); Shackleton crest (lat -89.780403, lon 203.803049) gives (-2688, -6093) m.
+5. **Direction of the Sun or Earth in the scene:** from the azimuth and elevation at the selected site. In MOON_ME, with the site's latitude `phi` and longitude `lambda`: east `E = (-sin l, cos l, 0)`, north `N = (-sin p cos l, -sin p sin l, cos p)`, up `U = (cos p cos l, cos p sin l, sin p)`; direction `d = cos(el) (sin(az) E + cos(az) N) + sin(el) U`; scene vector `(d_Y, -d_Z, -d_X)` (a proper rotation: the matrix has determinant +1). Checked by hand for Shackleton: the site's up `U` maps to (-0.00154, 1.0000, 0.00351), which equals (x/R, 1, -y/R) = (-0.001547, 1, 0.003507): the up of the site tilts 0.2° from the scene's y axis, and the Sun is only 0 to 2° above the horizon there, so the engine's elevation must be applied in the site's frame, not the pole's. A test: azimuth 0, elevation 0 gives a direction `v` with `dot(v, U_scene) = 0`.
+6. **Limit, to be stated in the scene:** the Sun direction is exact at the selected site; far from it the flat scene is an approximation (the local vertical turns 0.66° per 20 km).
+7. **Dev 3 writes** `sun_earth` into the ref (from `getSunEarth` for the selected site at the current time) and passes `horizon` (from `getHorizon`) and the `tileSource` (D-028). `MoonScene`'s new `sites` prop and `CameraHandle.playHeroSequence()` (Dev 2's additions) are accepted as part of S3.
+
+**Consequences:** The scene can show the real Sun, Earth and horizon for the selected site. Dev 2's proxy overlays (PSR, illumination, direct-to-Earth) are not accepted until the engine supplies real layers; those toggles stay off. Nothing in `packages/contracts` changes.
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._
