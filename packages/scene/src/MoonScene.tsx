@@ -1,5 +1,5 @@
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { MoonSceneProps, CameraHandle } from "./types";
@@ -8,25 +8,83 @@ import { TerrainQuadtree } from "./TerrainQuadtree";
 import { DeepSpaceSky } from "./DeepSpaceSky";
 import { SitePin } from "./SitePin";
 
-function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" | "onReady" | "onPickLocation">) {
+function SceneContent({ sites, tileSource, inputs, cameraRef }: Omit<MoonSceneProps, "ref" | "onReady" | "onPickLocation"> & { cameraRef?: React.Ref<CameraHandle> }) {
   const [sunDirection, setSunDirection] = useState(new THREE.Vector3(1, 0.5, 0));
   const pinGroupRef = useRef<THREE.Group>(null);
   const controlsRef = useRef<any>(null);
+  
+  // Hero sequence state
+  const isPlayingHero = useRef(false);
+  const heroStartTime = useRef(0);
+  const { camera } = useThree();
+
+  useImperativeHandle(cameraRef, () => ({
+    flyTo: (location) => {
+      // Basic fly-to implementation
+      if (controlsRef.current) {
+        const [x, y, z] = locationToScenePosition(location.lat_rad, location.lon_rad, location.elev_m || 0);
+        
+        // Move camera to a safe distance
+        camera.position.set(x + 1000, y + 500, z + 1000);
+        controlsRef.current.target.set(x, y, z);
+        controlsRef.current.update();
+      }
+    },
+    playHeroSequence: () => {
+      isPlayingHero.current = true;
+      heroStartTime.current = performance.now();
+    }
+  }), [camera]);
 
   useFrame(() => {
-    // We would poll inputs.current.epoch_et here to move the sun,
-    // but without getSunEarth locally, we'll keep it static or simulated for now.
-    
     // Position pin based on selected_site_id
-    if (pinGroupRef.current && inputs.current) {
+    let targetPos = new THREE.Vector3(0, 1737400, 0);
+    if (inputs.current) {
       const selectedId = inputs.current.selected_site_id;
       const site = sites.find(s => s.id === selectedId);
       if (site) {
-        // use site.lat_deg, lon_deg, elev_m
         const lat_rad = (site.lat_deg * Math.PI) / 180;
         const lon_rad = (site.lon_deg * Math.PI) / 180;
         const [x, y, z] = locationToScenePosition(lat_rad, lon_rad, site.elev_m);
-        pinGroupRef.current.position.set(x, y, z);
+        targetPos.set(x, y, z);
+        if (pinGroupRef.current) {
+          pinGroupRef.current.position.copy(targetPos);
+        }
+      }
+    }
+
+    // Handle hero sequence camera animation (20 seconds)
+    if (isPlayingHero.current && controlsRef.current) {
+      const elapsed = (performance.now() - heroStartTime.current) / 1000;
+      if (elapsed > 20) {
+        isPlayingHero.current = false; // Stop after 20 seconds
+      } else {
+        // Hero Sequence Logic:
+        // Start high up and far away, slowly spiral down and approach the target site
+        const t = elapsed / 20; // 0 to 1
+        
+        // Use smoothstep for easing
+        const ease = t * t * (3.0 - 2.0 * t);
+        
+        // Spiral parameters
+        const startRadius = 20000;
+        const endRadius = 1500;
+        const currentRadius = THREE.MathUtils.lerp(startRadius, endRadius, ease);
+        
+        const startHeight = 15000;
+        const endHeight = 200;
+        const currentHeight = THREE.MathUtils.lerp(startHeight, endHeight, ease);
+        
+        // Rotate around the Y axis
+        const angle = ease * Math.PI * 2.5; // 1.25 revolutions
+        
+        const camX = targetPos.x + Math.sin(angle) * currentRadius;
+        const camZ = targetPos.z + Math.cos(angle) * currentRadius;
+        const camY = targetPos.y + currentHeight;
+        
+        camera.position.set(camX, camY, camZ);
+        controlsRef.current.target.copy(targetPos);
+        controlsRef.current.update();
       }
     }
   });
@@ -47,13 +105,7 @@ function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" 
       />
       <ambientLight intensity={0.1} />
 
-      {/* Terrain (SIMULATED) */}
-      <group position={[0, 1737400, 0]}> {/* Shift simulated terrain up to Moon surface for preview if needed, but let's just keep it at origin relative to Moon center */}
-        
-      </group>
-      {/* We will just center our camera at the first site for now */}
-      
-      {/* Real Terrain mesh will go here */}
+      {/* Real Terrain mesh */}
       <group position={[0, 1737400, 0]}>
         <TerrainQuadtree tileSource={tileSource} sunDirection={sunDirection} inputs={inputs} />
       </group>
@@ -63,18 +115,12 @@ function SceneContent({ sites, tileSource, inputs }: Omit<MoonSceneProps, "ref" 
         <SitePin label={sites.find(s => s.id === inputs.current?.selected_site_id)?.name || "Target Site"} />
       </group>
 
-      <OrbitControls ref={controlsRef} makeDefault minDistance={100} maxDistance={50000} target={[0, 1737400, 0]} maxPolarAngle={Math.PI / 2} />
+      <OrbitControls ref={controlsRef} makeDefault minDistance={100} maxDistance={50000} maxPolarAngle={Math.PI / 2} />
     </>
   );
 }
 
 export function MoonScene({ sites, tileSource, inputs, ref, onReady, onPickLocation }: MoonSceneProps) {
-  useImperativeHandle(ref, () => ({
-    flyTo: (location) => {
-      // Stub
-    }
-  }), []);
-
   useEffect(() => {
     onReady?.();
   }, [onReady]);
@@ -82,7 +128,7 @@ export function MoonScene({ sites, tileSource, inputs, ref, onReady, onPickLocat
   return (
     <div style={{ width: "100%", height: "100%", display: "block" }}>
       <Canvas shadows camera={{ position: [0, 1737400 + 5000, 10000], fov: 45 }}>
-        <SceneContent sites={sites} tileSource={tileSource} inputs={inputs} />
+        <SceneContent sites={sites} tileSource={tileSource} inputs={inputs} cameraRef={ref} />
       </Canvas>
     </div>
   );

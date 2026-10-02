@@ -11,6 +11,7 @@ export interface SceneInputs {
 /** Imperative camera control (seam S3). */
 export interface CameraHandle {
   flyTo(location: Location): void;
+  playHeroSequence(): void;
 }
 
 export interface MoonSceneProps {
