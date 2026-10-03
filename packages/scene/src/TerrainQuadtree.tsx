@@ -3,6 +3,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import type { TileSource, TileManifest, TileData, TileCoord } from "@sightline/contracts";
 import type { SceneInputs } from "./types";
+import type { SkyState } from "./sky";
 import { Palette } from "./palette";
 import { getCachedTile, loadChildTiles } from "./tileCache";
 import { tileVertexHeightsM } from "./tileMesh";
@@ -105,7 +106,7 @@ function createTileMaterial(heightTexture: THREE.Texture, bounds: THREE.Vector4)
 
 interface TerrainQuadtreeProps {
   tileSource: TileSource;
-  sunDirection: THREE.Vector3 | null;
+  sky: React.MutableRefObject<SkyState>;
   inputs: React.MutableRefObject<SceneInputs>;
 }
 
@@ -114,18 +115,11 @@ interface TerrainNodeProps {
   manifest: TileManifest;
   coord: TileCoord;
   bounds: { x_min: number; y_min: number; x_max: number; y_max: number };
-  sunDirection: THREE.Vector3 | null;
+  sky: React.MutableRefObject<SkyState>;
   inputs: React.MutableRefObject<SceneInputs>;
 }
 
-function TerrainNode({
-  tileSource,
-  manifest,
-  coord,
-  bounds,
-  sunDirection,
-  inputs,
-}: TerrainNodeProps) {
+function TerrainNode({ tileSource, manifest, coord, bounds, sky, inputs }: TerrainNodeProps) {
   const { camera } = useThree();
   const [tileData, setTileData] = useState<TileData | null>(null);
 
@@ -200,8 +194,8 @@ function TerrainNode({
     if (material && material.userData.shader) {
       const layerMode = inputs.current?.layers?.slope ? 1 : 0;
       const u = material.userData.shader.uniforms;
-      u.uSunEnabled.value = sunDirection ? 1 : 0;
-      if (sunDirection) u.uSunDirection.value.copy(sunDirection);
+      u.uSunEnabled.value = sky.current.hasSunEarth ? 1 : 0;
+      u.uSunDirection.value.copy(sky.current.sunDirection);
       material.userData.shader.uniforms.uLayerMode.value = layerMode;
     }
 
@@ -256,7 +250,7 @@ function TerrainNode({
                 manifest={manifest}
                 coord={{ level: nextLevel, x: coord.x * 2, y: coord.y * 2 + 1 }}
                 bounds={{ x_min: bXMin, y_min: midY, x_max: midX, y_max: bYMax }}
-                sunDirection={sunDirection}
+                sky={sky}
                 inputs={inputs}
               />
               <TerrainNode
@@ -264,7 +258,7 @@ function TerrainNode({
                 manifest={manifest}
                 coord={{ level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 + 1 }}
                 bounds={{ x_min: midX, y_min: midY, x_max: bXMax, y_max: bYMax }}
-                sunDirection={sunDirection}
+                sky={sky}
                 inputs={inputs}
               />
               <TerrainNode
@@ -272,7 +266,7 @@ function TerrainNode({
                 manifest={manifest}
                 coord={{ level: nextLevel, x: coord.x * 2, y: coord.y * 2 }}
                 bounds={{ x_min: bXMin, y_min: bYMin, x_max: midX, y_max: midY }}
-                sunDirection={sunDirection}
+                sky={sky}
                 inputs={inputs}
               />
               <TerrainNode
@@ -280,7 +274,7 @@ function TerrainNode({
                 manifest={manifest}
                 coord={{ level: nextLevel, x: coord.x * 2 + 1, y: coord.y * 2 }}
                 bounds={{ x_min: midX, y_min: bYMin, x_max: bXMax, y_max: midY }}
-                sunDirection={sunDirection}
+                sky={sky}
                 inputs={inputs}
               />
             </>
@@ -290,7 +284,7 @@ function TerrainNode({
   );
 }
 
-export function TerrainQuadtree({ tileSource, sunDirection, inputs }: TerrainQuadtreeProps) {
+export function TerrainQuadtree({ tileSource, sky, inputs }: TerrainQuadtreeProps) {
   const [manifest, setManifest] = useState<TileManifest | null>(null);
 
   useEffect(() => {
@@ -317,7 +311,7 @@ export function TerrainQuadtree({ tileSource, sunDirection, inputs }: TerrainQua
           x_max: manifest.bounds_m.x_max_m,
           y_max: manifest.bounds_m.y_max_m,
         }}
-        sunDirection={sunDirection}
+        sky={sky}
         inputs={inputs}
       />
     </group>

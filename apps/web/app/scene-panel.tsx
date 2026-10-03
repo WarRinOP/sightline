@@ -120,6 +120,22 @@ export function ScenePanel({ sites, siteId, epoch_et, sunEarth, horizon }: Scene
         <button
           type="button"
           className={button}
+          disabled={!tileSource || !sunEarth}
+          onClick={() => camera.current?.viewToward("sun")}
+        >
+          Look toward the Sun
+        </button>
+        <button
+          type="button"
+          className={button}
+          disabled={!tileSource || !sunEarth}
+          onClick={() => camera.current?.viewToward("earth")}
+        >
+          Look toward Earth
+        </button>
+        <button
+          type="button"
+          className={button}
           disabled={!tileSource}
           onClick={() => camera.current?.playHeroSequence()}
         >

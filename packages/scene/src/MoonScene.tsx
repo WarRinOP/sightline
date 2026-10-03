@@ -2,13 +2,44 @@ import { useEffect, useImperativeHandle, useRef, useState, forwardRef } from "re
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Text } from "@react-three/drei";
 import * as THREE from "three";
+import type { Site, TileManifest } from "@sightline/contracts";
 import type { MoonSceneProps, CameraHandle } from "./types";
-import { locationToScenePosition, getLocalDirectionInScene } from "./math";
+import { locationToScenePosition } from "./math";
+import { createSkyState, updateSkyState, type SkyState } from "./sky";
+import {
+  clampAboveGround,
+  heroPose,
+  HERO_DURATION_S,
+  smoothstep01,
+  viewTowardPose,
+  type CameraPose,
+} from "./camera";
+import { terrainHeightAtM } from "./terrainHeight";
 import { TerrainQuadtree } from "./TerrainQuadtree";
 import { DeepSpaceSky } from "./DeepSpaceSky";
 import { SitePin } from "./SitePin";
 import { Palette } from "./palette";
 import { useSimulated } from "./simulated";
+
+function sitePosition(site: Site): THREE.Vector3 {
+  const [x, y, z] = locationToScenePosition(
+    (site.lat_deg * Math.PI) / 180,
+    (site.lon_deg * Math.PI) / 180,
+    site.elev_m,
+  );
+  return new THREE.Vector3(x, y, z);
+}
+
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+interface CameraTween {
+  from: CameraPose;
+  to: CameraPose;
+  start_ms: number;
+  duration_ms: number;
+}
 
 function SceneContent({
   sites,
@@ -20,163 +51,160 @@ function SceneContent({
   cameraRef?: React.Ref<CameraHandle>;
   horizon: import("@sightline/contracts").HorizonMask | null;
 }) {
-  const [sunDirection, setSunDirection] = useState<THREE.Vector3 | null>(null);
-  const [earthDirection, setEarthDirection] = useState<THREE.Vector3 | null>(null);
+  const sky = useRef<SkyState>(createSkyState());
   const [hasData, setHasData] = useState(true);
+  const [manifest, setManifest] = useState<TileManifest | null>(null);
   const pinGroupRef = useRef<THREE.Group>(null);
+  const sunLightRef = useRef<THREE.DirectionalLight>(null);
   const controlsRef = useRef<React.ElementRef<typeof OrbitControls>>(null);
-
-  // Hero sequence state
-  const isPlayingHero = useRef(false);
-  const heroStartTime = useRef(0);
+  const tween = useRef<CameraTween | null>(null);
+  const heroStart_ms = useRef<number | null>(null);
   const { camera } = useThree();
+
+  useEffect(() => {
+    let cancelled = false;
+    tileSource.getManifest().then(
+      (m) => {
+        if (!cancelled) setManifest(m);
+      },
+      () => undefined,
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [tileSource]);
+
+  const groundAt = (p: THREE.Vector3): number | null =>
+    manifest ? terrainHeightAtM(tileSource, manifest, p.x, -p.z) : null;
+
+  /** Eased move of camera and orbit target; a jump under prefers-reduced-motion. */
+  const moveCamera = (to: CameraPose, duration_s: number) => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    heroStart_ms.current = null;
+    clampAboveGround(to.position, groundAt(to.position));
+    if (duration_s <= 0 || prefersReducedMotion()) {
+      tween.current = null;
+      camera.position.copy(to.position);
+      controls.target.copy(to.target);
+      controls.update();
+      return;
+    }
+    tween.current = {
+      from: { position: camera.position.clone(), target: controls.target.clone() },
+      to,
+      start_ms: performance.now(),
+      duration_ms: duration_s * 1000,
+    };
+  };
+
+  const selectedSite = () => sites.find((s) => s.id === inputs.current?.selected_site_id);
+
+  /** Behind the pin looking toward the Sun or the Earth (map +y when the engine has not answered). */
+  const viewPose = (body: "sun" | "earth"): CameraPose | null => {
+    const site = selectedSite();
+    if (!site) return null;
+    const s = sky.current;
+    const direction = !s.hasSunEarth
+      ? new THREE.Vector3(0, 0, -1)
+      : body === "sun"
+        ? s.sunDirection
+        : s.earthDirection;
+    return viewTowardPose(sitePosition(site), direction);
+  };
 
   useImperativeHandle(
     cameraRef,
     () => ({
       flyTo: (location) => {
-        // Basic fly-to implementation
-        if (controlsRef.current) {
-          const [x, y, z] = locationToScenePosition(
-            location.lat_rad,
-            location.lon_rad,
-            location.elev_m || 0,
-          );
-
-          // Move camera to a safe distance
-          camera.position.set(x + 1000, y + 500, z + 1000);
-          controlsRef.current.target.set(x, y, z);
-          controlsRef.current.update();
-        }
+        const [x, y, z] = locationToScenePosition(
+          location.lat_rad,
+          location.lon_rad,
+          location.elev_m || 0,
+        );
+        const target = new THREE.Vector3(x, y, z);
+        moveCamera(
+          { position: target.clone().add(new THREE.Vector3(1000, 500, 1000)), target },
+          2.5,
+        );
+      },
+      viewToward: (body) => {
+        const pose = viewPose(body);
+        if (pose) moveCamera(pose, 3);
       },
       playHeroSequence: () => {
-        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (prefersReducedMotion) {
-          if (inputs.current) {
-            const selectedId = inputs.current.selected_site_id;
-            const site = sites.find((s) => s.id === selectedId);
-            if (site) {
-              const lat_rad = (site.lat_deg * Math.PI) / 180;
-              const lon_rad = (site.lon_deg * Math.PI) / 180;
-              const [x, y, z] = locationToScenePosition(lat_rad, lon_rad, site.elev_m);
-              camera.position.set(x + 1000, y + 500, z + 1000);
-              if (controlsRef.current) {
-                controlsRef.current.target.set(x, y, z);
-                controlsRef.current.update();
-              }
-            }
-          }
+        const pose = viewPose("sun");
+        if (!pose) return;
+        if (prefersReducedMotion()) {
+          moveCamera(pose, 0);
           return;
         }
-        isPlayingHero.current = true;
-        heroStartTime.current = performance.now();
+        tween.current = null;
+        heroStart_ms.current = performance.now();
       },
     }),
-    [camera, sites, inputs],
+    [camera, sites, inputs, manifest, tileSource],
   );
 
+  // Runs before every other frame callback (priority -1 still lets R3F render): the pin, the sky
+  // state and the light follow the engine's answer for the selected site, without React state.
   useFrame(() => {
-    // Position pin based on selected_site_id
-    const targetPos = new THREE.Vector3(0, 0, 0);
-    if (inputs.current) {
-      const selectedId = inputs.current.selected_site_id;
-      const site = sites.find((s) => s.id === selectedId);
-      if (site) {
-        const lat_rad = (site.lat_deg * Math.PI) / 180;
-        const lon_rad = (site.lon_deg * Math.PI) / 180;
-        const [x, y, z] = locationToScenePosition(lat_rad, lon_rad, site.elev_m);
-        targetPos.set(x, y, z);
-        if (pinGroupRef.current) {
-          pinGroupRef.current.position.copy(targetPos);
-        }
-
-        // Update Sun/Earth directions based on inputs
-        if (inputs.current.sun_earth) {
-          if (!hasData) setHasData(true);
-          const newSunDir = getLocalDirectionInScene(
-            lat_rad,
-            lon_rad,
-            inputs.current.sun_earth.sun_azimuth_rad,
-            inputs.current.sun_earth.sun_elevation_rad,
-          );
-          if (!sunDirection || newSunDir.distanceTo(sunDirection) > 0.001) {
-            setSunDirection(newSunDir);
-          }
-
-          const newEarthDir = getLocalDirectionInScene(
-            lat_rad,
-            lon_rad,
-            inputs.current.sun_earth.earth_azimuth_rad,
-            inputs.current.sun_earth.earth_elevation_rad,
-          );
-          if (!earthDirection || newEarthDir.distanceTo(earthDirection) > 0.001) {
-            setEarthDirection(newEarthDir);
-          }
-        } else {
-          if (hasData) setHasData(false);
-          if (sunDirection) setSunDirection(null);
-          if (earthDirection) setEarthDirection(null);
-        }
-      }
+    const site = selectedSite();
+    const sunEarth = inputs.current?.sun_earth;
+    if (site && pinGroupRef.current) pinGroupRef.current.position.copy(sitePosition(site));
+    updateSkyState(sky.current, sunEarth, site);
+    const light = sunLightRef.current;
+    if (light) {
+      light.visible = sky.current.hasSunEarth;
+      light.position.copy(sky.current.sunDirection).multiplyScalar(100);
     }
+    const nowHasData = site !== undefined && sunEarth != null;
+    if (nowHasData !== hasData) setHasData(nowHasData);
+  }, -1);
 
-    // Handle hero sequence camera animation (20 seconds)
-    if (isPlayingHero.current && controlsRef.current) {
-      const elapsed = (performance.now() - heroStartTime.current) / 1000;
-      if (elapsed > 20) {
-        isPlayingHero.current = false; // Stop after 20 seconds
+  // Camera: the Hero flight or an eased move, then the ground clamp, after the orbit controls.
+  useFrame(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    if (heroStart_ms.current !== null) {
+      const t_s = (performance.now() - heroStart_ms.current) / 1000;
+      const end = viewPose("sun");
+      if (!end || t_s >= HERO_DURATION_S) {
+        heroStart_ms.current = null;
+        if (end) {
+          camera.position.copy(end.position);
+          controls.target.copy(end.target);
+        }
       } else {
-        // Hero Sequence Logic:
-        // Start high up and far away, slowly spiral down and approach the target site
-        const t = elapsed / 20; // 0 to 1
-
-        // Use smoothstep for easing
-        const ease = t * t * (3.0 - 2.0 * t);
-
-        // Spiral parameters
-        const startRadius = 20000;
-        const endRadius = 1500;
-        const currentRadius = THREE.MathUtils.lerp(startRadius, endRadius, ease);
-
-        const startHeight = 15000;
-        const endHeight = 200;
-        const currentHeight = THREE.MathUtils.lerp(startHeight, endHeight, ease);
-
-        // Rotate around the Y axis
-        const angle = ease * Math.PI * 2.5; // 1.25 revolutions
-
-        const camX = targetPos.x + Math.sin(angle) * currentRadius;
-        const camZ = targetPos.z + Math.cos(angle) * currentRadius;
-        const camY = targetPos.y + currentHeight;
-
-        camera.position.set(camX, camY, camZ);
-        controlsRef.current.target.copy(targetPos);
-        controlsRef.current.update();
+        const pose = heroPose(t_s, end);
+        camera.position.copy(pose.position);
+        controls.target.copy(pose.target);
       }
+      controls.update();
+    } else if (tween.current) {
+      const { from, to, start_ms, duration_ms } = tween.current;
+      const e = smoothstep01((performance.now() - start_ms) / duration_ms);
+      camera.position.lerpVectors(from.position, to.position, e);
+      controls.target.lerpVectors(from.target, to.target, e);
+      if (e >= 1) tween.current = null;
+      controls.update();
     }
+    clampAboveGround(camera.position, groundAt(camera.position));
   });
 
   return (
     <>
       <color attach="background" args={[Palette.sceneBackground]} />
 
-      {/* Deep Space Sky */}
-      <DeepSpaceSky sunDirection={sunDirection} earthDirection={earthDirection} />
+      <DeepSpaceSky sky={sky} />
 
-      {/* Sun Light */}
-      {sunDirection && (
-        <directionalLight
-          position={sunDirection.clone().multiplyScalar(100)}
-          intensity={1.5}
-          castShadow
-          shadow-mapSize={[1024, 1024]}
-        />
-      )}
-      <ambientLight intensity={0.1} />
+      {/* Lights the pin only; the terrain shades itself from the same sky state. */}
+      <directionalLight ref={sunLightRef} intensity={1.5} visible={false} />
+      <ambientLight intensity={0.15} />
 
       {/* Real Terrain mesh */}
       <group>
-        <TerrainQuadtree tileSource={tileSource} sunDirection={sunDirection} inputs={inputs} />
+        <TerrainQuadtree tileSource={tileSource} sky={sky} inputs={inputs} />
       </group>
 
       {/* Site pin */}

@@ -12,6 +12,9 @@ export interface SceneInputs {
 /** Imperative camera control (seam S3). */
 export interface CameraHandle {
   flyTo(location: Location): void;
+  /** Stand behind the selected site and look past it toward the Sun or the Earth. */
+  viewToward(body: "sun" | "earth"): void;
+  /** 20 s descent that ends looking past the site toward the Sun; a jump under reduced motion. */
   playHeroSequence(): void;
 }
 

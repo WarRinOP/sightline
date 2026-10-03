@@ -23,9 +23,11 @@ export const Palette = {
   skyCenterPin: "#FF0000",
   simulatedBadge: "#C77DFF",
 
-  // DeepSpaceSky
+  // DeepSpaceSky (gold = sunlight, blue/cyan = Earth: the app's semantic colours)
   stars: "#FFFAFA",
-  sunInner: "#FFEA00",
+  sunCore: "#FFF8E7",
+  sunInner: "#FFD27A",
   sunOuter: "#FFB300",
-  earth: "#4A90E2",
+  earth: "#3D7DD8",
+  earthAtmosphere: "#8FD3FF",
 };
