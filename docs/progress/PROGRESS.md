@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); PR #12 (tile serving) awaiting review and merge; message to Dev 3 about the contract additions (not sent); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 and Dev 2 have not started |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); the graphics PR (S1-15 to S1-20) awaiting review and merge; tag `v0.1-stage1` (S1-13, on the team lead's word); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 has not started; Dev 2 to be told about D-033 (S1-24) |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -33,7 +33,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | M0 Kickoff & Contracts | In progress (scaffold, contracts, mocks, CI merged; JSON Schema export open) | 70% |
 | M1 Data Pipeline | In progress (`fetch`, `sites`, `ephem`, `golden`, `horizons`, `horizon`, `benchmark`, `tiles` built; kernels and 4 DEMs pinned; tile pyramid not yet served or published) | 50% |
 | M2 Engine | In progress (time, frames, ephemeris, `getSunEarth`, terrain horizons for 3 sites and `getTimeline` real in a browser worker; illumination method checked against Barker 2021 and AVGVISIB; windows not built; link not checked) | 50% |
-| M3 Visual Canvas | Not started | 0% |
+| M3 Visual Canvas | In progress (Stage 1 scene on real tiles: sky bodies, terrain shading, soft shadows, curvature, camera moves; D-031, D-033. Fisheye polish, probe check, perf on real GPUs open) | 40% |
 | M4 Command Center UI | Not started | 0% |
 | M5 Story & Analyst | Not started | 0% |
 | M6 Deploy & Deliverables | Not started | 0% |
@@ -77,6 +77,39 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 025 — 2026-10-03 — 3D view graphics: sky, terrain, shadows, curvature, camera (Claude Code)
+
+**Phase / tasks:** S1-15, S1-16, S1-17, S1-18 (in part), S1-20. Branch `dev1/S1-15-graphics` from `main` at `c861351` (PRs #18 and #19 were merged at session start).
+
+**Done:**
+
+- Sun and Earth drawn as background billboards at their angular sizes, shown only when the engine says they clear the terrain horizon; the Earth's phase from the engine's Sun direction; the Sun's limb-darkened disk and glare in its own shader (D-033 items 1–2).
+- Terrain: seamless normals from the samples, lunar-Lambert shading, sky fill and earthshine, tone mapping, level-of-detail normal blend (items 3–4).
+- Soft shadows marched over the tile's own heights and three clip textures centred on the site (levels 9, 6, 3), visible share of the Sun's disk (item 5). Curvature d²/2R from the site (item 6).
+- Camera: "Look toward the Sun / Earth" buttons in the Lab, eased moves, ground clamp, Hero flight ending 25° off the Sun line (item 7). Pin: 2 px horizon line with N/E/S/W, upright labels, grid removed; slope overlay grey to red (item 8).
+- Found and fixed my own bug with a temporary debug colouring: the new normals were in the wrong row order, which made whole tiles face away from a 1° Sun. A test now ties the normals to the mesh's faces.
+- 20 new scene tests (17 → 37), each rule mutation-checked.
+
+**Verified by:**
+
+- `pnpm verify`: exit 0 (contracts 41, engine 181, scene 37, web 25, parity 34, build).
+- `next build` + `next start` on port 3100, `playwright-cli` (own session, headless Chromium, SwiftShader): Shackleton days 0, 14, 22 (Earth +1.01° above the curved horizon, gibbous; day 14 no Earth at −7.15°); orbit frames; the Hero flight at 2, 6, 14 and 20 s; Connecting Ridge and de Gerlache Rim looking toward the Sun; the slope overlay. Console: only the favicon 404. Images in `docs/progress/images/graphics-after-*.png`.
+- **NOT VERIFIED:** frame rate on a real GPU (rAF reads 60 in headless SwiftShader, which says nothing about the shader cost; S1-22); Safari, Firefox, a phone; drawn shadows against `probeLit` (S1-18 open); the stripe band near Shackleton (S1-23); the deployed view (S1-21); keyboard use of the 3D view; CI on the branch (reported in the PR).
+
+**Decisions logged:** D-033
+
+**Blockers / risks:**
+
+- The deployed tile subset keeps the 3D view at about 1.2 km resolution away from the sites' own tiles (S1-21): record the video from a local run.
+- Dev 2 should merge `main` and read D-033 before more scene work (S1-24): the material, the sky and the camera changed.
+- Notes for the environment: Pillow is not installed in the pipeline venv (crops used `sips`); the venv's `.pth` files had the hidden flag again (cleared); another process on this machine uses `playwright-cli`'s default session, so checks used a named session.
+
+**Next 3 tasks:**
+
+1. The team lead reviews and merges the graphics PR; then tag `v0.1-stage1` on their word (S1-13).
+2. Video captures (S1-12) from a local run: the Hero flight, "Look toward Earth" on day 22, the barcode scrub, the Evidence page.
+3. S1-18 probe check against `probeLit`; S1-21 (tiles for the deployed view); S1-24 (tell Dev 2).
 
 ### Session 024 — 2026-10-03 — Web integration: 3D view, barcode, Evidence page (Claude Code)
 
