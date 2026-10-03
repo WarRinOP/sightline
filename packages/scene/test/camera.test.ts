@@ -57,3 +57,15 @@ describe("clampAboveGround", () => {
     expect(clampAboveGround(q, null)).toBe(false);
   });
 });
+
+describe("viewTowardPose with an offset", () => {
+  it("turns the camera about the pin by the offset, keeping distance and height", () => {
+    const body = new THREE.Vector3(1, 0.01, 0).normalize();
+    const straight = viewTowardPose(pin, body);
+    const turned = viewTowardPose(pin, body, Math.PI / 6);
+    const a = straight.position.clone().sub(pin).setY(0).normalize();
+    const b = turned.position.clone().sub(pin).setY(0).normalize();
+    expect(Math.acos(a.dot(b))).toBeCloseTo(Math.PI / 6, 9);
+    expect(turned.position.y).toBeCloseTo(straight.position.y, 9);
+  });
+});

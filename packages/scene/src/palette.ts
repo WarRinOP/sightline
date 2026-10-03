@@ -1,6 +1,9 @@
 export const Palette = {
-  // Terrain
+  // Terrain (albedo) and the faint tints of its light (terrainMaterial.ts)
   terrain: "#888888",
+  sunlightTint: "#FFF4E2",
+  fillTint: "#DCE8FF",
+  slopeSteep: "#E5484D",
 
   // Backgrounds
   sceneBackground: "#05070A",
@@ -14,6 +17,8 @@ export const Palette = {
   pinRing: "#FF3366",
   pinText: "#FFFFFF",
   pinTextOutline: "#000000",
+  labelBackground: "rgba(5, 7, 10, 0.72)",
+  labelBorder: "rgba(255, 255, 255, 0.18)",
 
   // FisheyeSky
   skyGrid: "#333333",

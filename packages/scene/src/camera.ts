@@ -12,6 +12,12 @@ export const GROUND_CLEARANCE_M = 20;
 export const VIEW_BACK_M = 700;
 export const VIEW_UP_M = 60;
 
+/**
+ * The Hero flight ends looking 25° to the side of the Sun: the Sun stays in frame (the horizontal
+ * field of view is about 60°) and the terrain is side-lit instead of seen against the light.
+ */
+export const HERO_SUN_OFFSET_RAD = (25 * Math.PI) / 180;
+
 /** Hero flight: 20 s from 15 km up and 20 km out, 1.25 turns, ending at the view-toward pose. */
 export const HERO_DURATION_S = 20;
 const HERO_START_RADIUS_M = 20_000;
@@ -28,10 +34,14 @@ export function smoothstep01(t: number): number {
  * pin at its real elevation over the terrain beyond. `direction` is the body's unit vector in the
  * scene; only its horizontal part is used.
  */
-export function viewTowardPose(pin: THREE.Vector3, direction: THREE.Vector3): CameraPose {
+export function viewTowardPose(
+  pin: THREE.Vector3,
+  direction: THREE.Vector3,
+  offset_rad: number = 0,
+): CameraPose {
   const horizontal = new THREE.Vector3(direction.x, 0, direction.z);
   if (horizontal.lengthSq() < 1e-12) horizontal.set(0, 0, -1);
-  horizontal.normalize();
+  horizontal.normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), offset_rad);
   const position = pin
     .clone()
     .addScaledVector(horizontal, -VIEW_BACK_M)

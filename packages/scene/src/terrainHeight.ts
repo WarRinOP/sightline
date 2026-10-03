@@ -58,18 +58,20 @@ export function sampleTileHeightM(
 }
 
 /**
- * Terrain height (m) at a point of the tile plane from the finest tile already loaded there, or null
- * when no tile covering it has arrived. Never fetches: for the camera and the drawn shadows only.
+ * Terrain height (m) at a point of the tile plane from the finest tile already loaded there (no finer
+ * than `max_level`), or null when no tile covering it has arrived. Never fetches: for the camera and
+ * the drawn shadows only.
  */
 export function terrainHeightAtM(
   source: TileSource,
   manifest: TileManifest,
   x_m: number,
   y_m: number,
+  max_level: number = manifest.level_count - 1,
 ): number | null {
   const b = manifest.bounds_m;
   if (x_m < b.x_min_m || x_m > b.x_max_m || y_m < b.y_min_m || y_m > b.y_max_m) return null;
-  for (let level = manifest.level_count - 1; level >= 0; level--) {
+  for (let level = Math.min(max_level, manifest.level_count - 1); level >= 0; level--) {
     const n = 2 ** level;
     const x = Math.min(Math.floor(((x_m - b.x_min_m) / (b.x_max_m - b.x_min_m)) * n), n - 1);
     const y = Math.min(Math.floor(((y_m - b.y_min_m) / (b.y_max_m - b.y_min_m)) * n), n - 1);
@@ -77,4 +79,15 @@ export function terrainHeightAtM(
     if (tile) return sampleTileHeightM(tile, tileBounds(manifest, level, x, y), x_m, y_m);
   }
   return null;
+}
+
+/** Sample spacing (m) of the tiles at `level`: the tile width over its interior cells. */
+export function levelCellM(manifest: TileManifest, level: number): number {
+  const interior = manifest.tile_size_px - 2 * manifest.border_px;
+  return (manifest.bounds_m.x_max_m - manifest.bounds_m.x_min_m) / 2 ** level / interior;
+}
+
+/** Curvature drop (m) below the tangent plane at `origin` at a horizontal distance d: d² / 2R. */
+export function curvatureDropM(dx_m: number, dy_m: number, radius_m: number): number {
+  return (dx_m * dx_m + dy_m * dy_m) / (2 * radius_m);
 }

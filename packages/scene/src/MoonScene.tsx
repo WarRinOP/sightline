@@ -1,8 +1,8 @@
 import { useEffect, useImperativeHandle, useRef, useState, forwardRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Text } from "@react-three/drei";
+import { Html, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
-import type { Site, TileManifest } from "@sightline/contracts";
+import { MOON_REFERENCE_RADIUS_M, type Site, type TileManifest } from "@sightline/contracts";
 import type { MoonSceneProps, CameraHandle } from "./types";
 import { locationToScenePosition } from "./math";
 import { createSkyState, updateSkyState, type SkyState } from "./sky";
@@ -10,11 +10,12 @@ import {
   clampAboveGround,
   heroPose,
   HERO_DURATION_S,
+  HERO_SUN_OFFSET_RAD,
   smoothstep01,
   viewTowardPose,
   type CameraPose,
 } from "./camera";
-import { terrainHeightAtM } from "./terrainHeight";
+import { curvatureDropM, terrainHeightAtM } from "./terrainHeight";
 import { TerrainQuadtree } from "./TerrainQuadtree";
 import { DeepSpaceSky } from "./DeepSpaceSky";
 import { SitePin } from "./SitePin";
@@ -74,8 +75,14 @@ function SceneContent({
     };
   }, [tileSource]);
 
-  const groundAt = (p: THREE.Vector3): number | null =>
-    manifest ? terrainHeightAtM(tileSource, manifest, p.x, -p.z) : null;
+  // The drawn ground: terrain height less the curvature drop from the selected site (terrainMaterial).
+  const groundAt = (p: THREE.Vector3): number | null => {
+    if (!manifest) return null;
+    const h = terrainHeightAtM(tileSource, manifest, p.x, -p.z);
+    if (h === null) return null;
+    const o = sky.current.siteMap;
+    return h - curvatureDropM(p.x - o.x, -p.z - o.y, MOON_REFERENCE_RADIUS_M);
+  };
 
   /** Eased move of camera and orbit target; a jump under prefers-reduced-motion. */
   const moveCamera = (to: CameraPose, duration_s: number) => {
@@ -101,7 +108,7 @@ function SceneContent({
   const selectedSite = () => sites.find((s) => s.id === inputs.current?.selected_site_id);
 
   /** Behind the pin looking toward the Sun or the Earth (map +y when the engine has not answered). */
-  const viewPose = (body: "sun" | "earth"): CameraPose | null => {
+  const viewPose = (body: "sun" | "earth", offset_rad = 0): CameraPose | null => {
     const site = selectedSite();
     if (!site) return null;
     const s = sky.current;
@@ -110,7 +117,7 @@ function SceneContent({
       : body === "sun"
         ? s.sunDirection
         : s.earthDirection;
-    return viewTowardPose(sitePosition(site), direction);
+    return viewTowardPose(sitePosition(site), direction, offset_rad);
   };
 
   useImperativeHandle(
@@ -133,7 +140,7 @@ function SceneContent({
         if (pose) moveCamera(pose, 3);
       },
       playHeroSequence: () => {
-        const pose = viewPose("sun");
+        const pose = viewPose("sun", HERO_SUN_OFFSET_RAD);
         if (!pose) return;
         if (prefersReducedMotion()) {
           moveCamera(pose, 0);
@@ -168,7 +175,7 @@ function SceneContent({
     if (!controls) return;
     if (heroStart_ms.current !== null) {
       const t_s = (performance.now() - heroStart_ms.current) / 1000;
-      const end = viewPose("sun");
+      const end = viewPose("sun", HERO_SUN_OFFSET_RAD);
       if (!end || t_s >= HERO_DURATION_S) {
         heroStart_ms.current = null;
         if (end) {
@@ -216,15 +223,21 @@ function SceneContent({
           horizonMask={horizon}
         />
         {!hasData && (
-          <Text
-            position={[0, 80, 0]}
-            fontSize={20}
-            color={Palette.pinText}
-            outlineWidth={2}
-            outlineColor={Palette.pinTextOutline}
-          >
-            No Sun/Earth data
-          </Text>
+          <Html position={[0, 70, 0]} center zIndexRange={[12, 0]}>
+            <div
+              style={{
+                color: Palette.pinText,
+                background: Palette.labelBackground,
+                padding: "2px 8px",
+                borderRadius: 4,
+                font: "12px/1.4 system-ui, sans-serif",
+                whiteSpace: "nowrap",
+                pointerEvents: "none",
+              }}
+            >
+              No Sun/Earth data
+            </div>
+          </Html>
         )}
       </group>
 
@@ -249,10 +262,8 @@ export const MoonScene = forwardRef<CameraHandle, Omit<MoonSceneProps, "ref">>(
     return (
       <div style={{ width: "100%", height: "100%", display: "block", position: "relative" }}>
         {/* near = 5 m: with near 0.1 and far 500 km the depth buffer would flicker at 10 km. */}
-        <Canvas
-          shadows="percentage"
-          camera={{ position: [0, 5000, 10000], fov: 45, near: 5, far: 500000 }}
-        >
+        {/* No shadow maps: the terrain shades and shadows itself in its shader (terrainMaterial.ts). */}
+        <Canvas camera={{ position: [0, 5000, 10000], fov: 45, near: 5, far: 500000 }}>
           <SceneContent
             sites={sites}
             tileSource={tileSource}

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import type { Site, SunEarthState } from "@sightline/contracts";
-import { getLocalDirectionInScene } from "./math";
+import { getLocalDirectionInScene, locationToScenePosition } from "./math";
 
 /** Sun's angular radius at 1 AU (CLAUDE.md §9); the real Earth–Sun distance changes it by under 2 %. */
 export const SUN_ANGULAR_RADIUS_RAD = 0.2666 * (Math.PI / 180);
@@ -23,6 +23,9 @@ export interface SkyState {
   earthVisible: boolean;
   /** Share of the Earth's disk lit by the Sun, as seen from the site (drives the drawn phase only). */
   earthLitFraction: number;
+  /** The selected site on the tile plane (m, x east, y map north): the curvature origin. */
+  siteMap: THREE.Vector2;
+  hasSite: boolean;
 }
 
 export function createSkyState(): SkyState {
@@ -33,6 +36,8 @@ export function createSkyState(): SkyState {
     sunVisible: false,
     earthVisible: false,
     earthLitFraction: 0,
+    siteMap: new THREE.Vector2(0, 0),
+    hasSite: false,
   };
 }
 
@@ -69,6 +74,15 @@ export function updateSkyState(
   sunEarth: SunEarthState | null | undefined,
   site: Site | undefined,
 ): void {
+  state.hasSite = site !== undefined;
+  if (site) {
+    const [x, , z] = locationToScenePosition(
+      (site.lat_deg * Math.PI) / 180,
+      (site.lon_deg * Math.PI) / 180,
+      site.elev_m,
+    );
+    state.siteMap.set(x, -z);
+  }
   if (!sunEarth || !site) {
     state.hasSunEarth = false;
     state.sunVisible = false;
