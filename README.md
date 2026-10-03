@@ -11,9 +11,10 @@ published LOLA illumination work.
 Our entry for **NASA Space Apps Challenge 2026**, Bangladesh local event, challenge **CLPS Lunar
 Mission Browser**.
 
-> **Stage 1 status, 2 October 2026.** The engine, the data pipeline and a working page are built and
-> verified. The 3D terrain scene, the Evidence and Story pages, the window finder and the AI analyst
-> are **not built yet**. Nothing below claims otherwise. What is real and what is not is listed in
+> **Stage 1 status, 3 October 2026.** The engine, the data pipeline and a working page are built and
+> verified: a 3D terrain view on real LOLA tiles, a sky chart, a timeline barcode and an Evidence
+> page. Story mode, the window finder and the AI analyst are **not built yet**. Nothing below claims
+> otherwise. What is real and what is not is listed in
 > [What works today](#what-works-today).
 
 ## Why it is hard
@@ -76,23 +77,26 @@ flowchart LR
     P1["fetch, sites, ephem"]
     P2["horizon: rays every 0.25 degrees,<br/>exact mast-height envelope"]
     P3["golden, horizons, benchmark"]
+    P4["tiles: 12-level sparse pyramid"]
   end
   subgraph Engine["TypeScript engine (packages/engine)"]
     E1["time, frames, ephemeris, sky"]
     E2["terrain horizon + timeline"]
     W["Web Worker (Comlink)"]
   end
-  UI["Next.js page: live readout,<br/>site picker, timeline statistics"]
-  FUT["3D terrain scene, Evidence page,<br/>window finder (not built yet)"]
+  UI["Next.js app: 3D terrain view, sky chart, readouts,<br/>timeline barcode, Evidence page"]
+  FUT["Story mode, window finder,<br/>AI analyst (not built yet)"]
   SPICE --> P1
   DEM --> P1
   DEM --> P2
+  DEM --> P4
   SPICE --> P3
   HZ --> P3
   PDS --> P3
   P1 -->|"ephemeris.bin, sites.json"| E1
   P2 -->|"horizon_site.json"| E2
   P3 -->|"fixtures/golden"| Engine
+  P4 -->|"/api/tiles"| UI
   E1 --> E2 --> W --> UI
   UI -.-> FUT
 ```
@@ -112,11 +116,16 @@ flowchart LR
 
 | Built and verified | Not built yet |
 |---|---|
-| Sun and Earth directions for any point, in a browser worker | 3D terrain scene (Dev 2's `packages/scene` is a stub) |
-| Terrain horizon, lit fraction and link fraction for the three sites | Time scrubber, Evidence page, Story mode, mission barcode |
-| Hourly timeline over 2026: statistics, longest day and night, nights longer than a 50 h battery | Window finder (best landing dates) |
-| Checks against JPL Horizons, NAIF SPICE, Barker et al. (2021) and AVGVISIB | Earth-link check against a published product; other sites; years beyond 2026 |
-| A repeatable data pipeline: `sightline fetch / sites / ephem / horizon / golden / horizons / benchmark` | The AI "Mission Analyst" |
+| Sun and Earth directions for any point, in a browser worker | Story mode, the Hero capture polish |
+| Terrain horizon, lit fraction and link fraction for the three sites | Window finder (best landing dates) |
+| Hourly timeline over 2026: statistics, longest day and night, nights longer than a 50 h battery; a barcode of the year with a time scrubber | The AI "Mission Analyst" |
+| A 3D terrain view on real LOLA tiles (80 m map; 5 m near the three sites) with the engine's Sun and Earth and the terrain horizon; a sky chart from the site | Earth-link check against a published product; other sites; years beyond 2026 |
+| An Evidence page that reads the validation files: Horizons, Barker et al. (2021), AVGVISIB, and what they do not show | Terrain tiles served from a CDN (a deployment has only a few of them) |
+| Checks against JPL Horizons, NAIF SPICE, Barker et al. (2021) and AVGVISIB | |
+| A repeatable data pipeline: `sightline fetch / sites / ephem / horizon / golden / horizons / benchmark / tiles` | |
+
+The light and shadows in the 3D view are **visual only**: the numbers come from the engine, not from
+the picture.
 
 **Simulated data.** A synthetic mock engine exists in the code for building the interface before real
 data. It always reports `simulated: true`, and any screen that shows it must carry a purple SIMULATED

@@ -32,6 +32,9 @@ importers:
       '@sightline/engine':
         specifier: workspace:*
         version: link:../../packages/engine
+      '@sightline/scene':
+        specifier: workspace:*
+        version: link:../../packages/scene
       comlink:
         specifier: 4.4.2
         version: 4.4.2

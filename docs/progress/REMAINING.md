@@ -43,16 +43,16 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [~] **S1-06** Terrain scene, sun light from `getSunEarth`, pin, orbit camera, 20 s Hero capture. *Dev 2, Oct 1–5.* *PR #13 (18 commits) reviewed 2026-10-02: **not merged**; changes requested (CI lint fails; wrong pin/camera frame; missing-tile holes; border-blind mesh; invented overlays and horizon ring; no real Sun/Earth path; hex colours; deps and lockfile edited against D-017). Seam decision D-030.*
   - [x] **S1-06a** *(2026-10-03, PR #15 and Dev 1's fixes, D-031)* Dev 2: the fix list sent by the team lead (lint and Prettier green, `pnpm verify`; pin/`flyTo`/Hero in tile-plane coordinates; pole-centred frame; sparse-tile fallback with cache and disposal; border-aware mesh and UV; remove proxy overlays and fake ring; `sun_earth` and `horizon` per D-030; camera near/far; `palette.ts`; reduced motion; tests; filled PR template; take `main`'s `package.json` and lockfile). *Dev 2.*
-  - [ ] **S1-06b** Write `sun_earth` into the scene `inputs` ref from `getSunEarth`, pass `horizon` from `getHorizon`, `tileSource` from `createLolaTileSource` (D-028, D-030) and the `sites` prop. *Reassigned from Dev 3 to Dev 1 on 2026-10-03 (D-031).*
+  - [x] **S1-06b** *(2026-10-03, D-032)* Write `sun_earth` into the scene `inputs` ref from `getSunEarth`, pass `horizon` from `getHorizon`, `tileSource` from `createLolaTileSource` (D-028, D-030) and the `sites` prop. *Reassigned from Dev 3 to Dev 1 on 2026-10-03 (D-031).*
   - [x] **S1-06c** *(2026-10-03)* Dev 1: re-review of PR #15 done (CI, `pnpm verify`, a real-browser run of the preview); fixes on `dev1/S1-06-scene-fixes`. (was: re-review PR #13 when pushed (lint, tests, a browser check of the pin, `flyTo` and tile fallback against `next start`). *Dev 1.*
 
 - [ ] **S1-07** Lander's Eye fisheye. *Dev 2, Oct 4–6 (stretch).*
 
-- [ ] **S1-08** App shell, tokens, landing page, Lab page: 3 sites, scrubber, readouts. *Dev 3, Oct 1–5.* *Reassigned to Dev 1 on 2026-10-03 (D-031): Dev 3 has not started.*
+- [~] **S1-08** App shell, tokens, landing page, Lab page: 3 sites, scrubber, readouts. *Dev 3, Oct 1–5.* *Reassigned to Dev 1 on 2026-10-03 (D-031): Dev 3 has not started.* *Done 2026-10-03 (D-032, Dev 1) in part: the Lab page with the 3D view, site picker, scrubber and readouts; the design-system components and fonts are not done.*
 
-- [ ] **S1-09** Mission barcode from the timeline. *Dev 3, Oct 3–6.* *Reassigned to Dev 1 on 2026-10-03 (D-031): Dev 3 has not started.*
+- [x] **S1-09** Mission barcode from the timeline. *Dev 3, Oct 3–6.* *Reassigned to Dev 1 on 2026-10-03 (D-031): Dev 3 has not started.* *Done 2026-10-03 (D-032, Dev 1): the barcode from `getTimeline` with the scrubber.*
 
-- [ ] **S1-10** Evidence page v0: validation table from Dev 1's JSON. *Dev 3, Oct 5–6.* *Source ready 2026-10-02: `fixtures/golden/horizons_residuals.json`; parse it with `HorizonsResidualsSchema` from `@sightline/contracts` (summary per body and site, 300 rows, tolerance 0.02°). Show it as Sun and Earth directions, not illumination.* *Reassigned to Dev 1 on 2026-10-03 (D-031): Dev 3 has not started.*
+- [x] **S1-10** Evidence page v0: validation table from Dev 1's JSON. *Dev 3, Oct 5–6.* *Source ready 2026-10-02: `fixtures/golden/horizons_residuals.json`; parse it with `HorizonsResidualsSchema` from `@sightline/contracts` (summary per body and site, 300 rows, tolerance 0.02°). Show it as Sun and Earth directions, not illumination.* *Reassigned to Dev 1 on 2026-10-03 (D-031): Dev 3 has not started.* *Done 2026-10-03 (D-032, Dev 1): `/evidence`.*
 
 - [x] **S1-11** README: problem, concept, architecture, verified data sources, roadmap, team, "Use of AI" statement, data credits. *Dev 1 draft done 2026-10-02 (PR #10; D-026).* Every figure comes from the repo's generated files; unbuilt parts are listed as not built. Open: non-dev teammates' review, and a look at how GitHub renders the Mermaid diagram.
 
