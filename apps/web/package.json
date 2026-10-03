@@ -14,6 +14,7 @@
   "dependencies": {
     "@sightline/contracts": "workspace:*",
     "@sightline/engine": "workspace:*",
+    "@sightline/scene": "workspace:*",
     "comlink": "4.4.2",
     "next": "16.3.8",
     "react": "19.3.0",

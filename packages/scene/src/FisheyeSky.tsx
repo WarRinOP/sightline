@@ -1,11 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrthographicCamera, Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { FisheyeSkyProps, SceneInputs } from "./types";
 import { Palette } from "./palette";
 import type { HorizonMask, TileManifest, TileSource } from "@sightline/contracts";
 import { isSimulated } from "./simulated";
+
+/** Zoom follows the canvas size, so the sky chart fits a 280 px panel as well as a half screen. */
+function FisheyeCamera() {
+  const size = useThree((state) => state.size);
+  const zoom = Math.min(size.width, size.height) / 120;
+  return <OrthographicCamera makeDefault position={[0, 0, 10]} zoom={zoom} />;
+}
 
 function FisheyeContent({
   inputs,
@@ -142,8 +149,8 @@ function FisheyeContent({
         </Text>
       </mesh>
 
-      {/* Camera: orthographic, looking down */}
-      <OrthographicCamera makeDefault position={[0, 0, 10]} zoom={6} />
+      {/* Camera: orthographic, looking down; the chart (radius about 50 units) fills the canvas */}
+      <FisheyeCamera />
     </>
   );
 }

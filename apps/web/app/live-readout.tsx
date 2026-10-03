@@ -1,10 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import type { Site, SunEarthState, TimelineStatistics } from "@sightline/contracts";
+import type {
+  HorizonMask,
+  Site,
+  StepState,
+  SunEarthState,
+  TimelineStatistics,
+} from "@sightline/contracts";
 import { DEFAULT_LANDER_PROFILE, siteLocation } from "@sightline/contracts";
 import { etToUtcIso, utcIsoToEt } from "@sightline/engine";
 import { connectEngine, type EngineConnection } from "../workers/engineBridge";
+import { Readout, Tag } from "./ui";
+import { TimelineBarcode } from "./timeline-barcode";
+
+// three.js and the scene run in the browser only.
+const ScenePanel = dynamic(() => import("./scene-panel").then((m) => m.ScenePanel), {
+  ssr: false,
+  loading: () => <p className="text-sm text-text-2">Loading the 3D view…</p>,
+});
 
 const TICK_MS = 200;
 // Two hours per tick: the engine's samples are hourly and interpolated, and a lunar day (29.5
@@ -22,6 +37,8 @@ const compass = (rad: number) => `${toDeg(rad).toFixed(1)}°`;
 
 interface YearStats {
   profile: TimelineStatistics;
+  /** The lander-profile steps behind `profile`, for the barcode. */
+  steps: StepState[];
   published: { anyPart: number; meanDisk: number };
 }
 
@@ -36,8 +53,8 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
   const [epoch_et, setEpochEt] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
   const [real, setReal] = useState<SunEarthState | null>(null);
-  // Per site: does the engine have a terrain horizon, and is it simulated? Asked, not assumed.
-  const [terrain, setTerrain] = useState<Record<string, { simulated: boolean } | null>>({});
+  // Per site: the engine's terrain horizon, or null where it has none. Asked, not assumed.
+  const [terrain, setTerrain] = useState<Record<string, HorizonMask | null>>({});
   // Per site: the engine's statistics over the whole ephemeris, or "error". `profile` follows the
   // default lander profile; `published` counts any part of the disk above the terrain and averages
   // the visible fraction of the disk, which is how published illumination studies define it.
@@ -95,6 +112,11 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
     return site ? siteLocation(site) : null;
   }, [sites, siteId]);
 
+  // The state of the previous site must not be drawn at the new one.
+  useEffect(() => {
+    setReal(null);
+  }, [siteId]);
+
   useEffect(() => {
     if (!engine || !location || epoch_et === null) return;
     let cancelled = false;
@@ -111,7 +133,7 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
     let cancelled = false;
     engine.client.getHorizon(location, PROFILE.mast_height_m).then(
       (mask) => {
-        if (!cancelled) setTerrain((t) => ({ ...t, [siteId]: { simulated: mask.simulated } }));
+        if (!cancelled) setTerrain((t) => ({ ...t, [siteId]: mask }));
       },
       () => {
         // NotAvailableError: no terrain horizon for this site yet.
@@ -149,6 +171,7 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
             ...y,
             [siteId]: {
               profile: lander.statistics,
+              steps: lander.steps,
               published: { anyPart: published.statistics.illuminated_ratio, meanDisk },
             },
           }));
@@ -181,168 +204,209 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
         </button>
       </div>
 
-      <fieldset className="space-y-2">
-        <legend className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
-          Site
-        </legend>
-        {sites.map((s) => (
-          <label
-            key={s.id}
-            className="flex cursor-pointer items-baseline gap-3 rounded-lg border border-hairline bg-surface-glass px-3 py-2 has-[:checked]:border-earth"
-          >
-            <input
-              type="radio"
-              name="site"
-              value={s.id}
-              checked={s.id === siteId}
-              onChange={() => setSiteId(s.id)}
-            />
-            <span className="font-medium">{s.name}</span>
-            <span className="font-mono text-xs tabular-nums text-text-2">
-              {s.lat_deg.toFixed(2)}° lat, {s.lon_deg.toFixed(2)}° lon
-            </span>
-          </label>
-        ))}
-      </fieldset>
-
-      <div className="space-y-3" role="group" aria-labelledby="real-title">
-        <div className="flex flex-wrap items-center gap-3">
-          <h3
-            id="real-title"
-            className="font-condensed text-sm font-semibold uppercase tracking-widest text-text-2"
-          >
-            Sun and Earth directions
-          </h3>
-          <Tag simulated={provenance?.simulated ?? false} text={realTag} hidden={!provenance} />
-        </div>
-
-        {connection.status === "error" ? (
-          <p role="alert" className="text-sm text-alert">
-            The engine could not start: {connection.message}
-          </p>
-        ) : (
-          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Readout
-              label="Sun elevation"
-              value={real ? signed(toDeg(real.sun_elevation_rad)) : "…"}
-            />
-            <Readout label="Sun azimuth" value={real ? compass(real.sun_azimuth_rad) : "…"} />
-            <Readout
-              label="Earth elevation"
-              value={real ? signed(toDeg(real.earth_elevation_rad)) : "…"}
-            />
-            <Readout label="Earth azimuth" value={real ? compass(real.earth_azimuth_rad) : "…"} />
-          </dl>
-        )}
-
-        <p className="font-mono text-xs tabular-nums text-text-3">
-          {epoch_et === null ? "…" : `${etToUtcIso(epoch_et).slice(0, 19).replace("T", " ")} UTC`}
-          {provenance
-            ? ` · ${provenance.spice_kernels.length} SPICE kernels · ${provenance.data_version}`
-            : ""}
-        </p>
-        <p className="text-xs text-text-3">
-          Elevation is measured from a flat horizon at the site&apos;s height; azimuth is clockwise
-          from local north (grid north at the pole). Terrain is not in these numbers.
-        </p>
-      </div>
-
-      <div className="space-y-3" role="group" aria-labelledby="terrain-title">
-        <div className="flex flex-wrap items-center gap-3">
-          <h3
-            id="terrain-title"
-            className="font-condensed text-sm font-semibold uppercase tracking-widest text-text-2"
-          >
-            Light and link at this site
-          </h3>
-          {siteTerrain === undefined ? null : siteTerrain ? (
-            <Tag
-              simulated={siteTerrain.simulated}
-              text={siteTerrain.simulated ? "Simulated" : "Real terrain · not yet validated"}
-            />
-          ) : (
-            <Tag simulated={false} text="Not computed yet" />
-          )}
-        </div>
-        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Readout
-            label="Sun disk visible"
-            value={
-              siteTerrain && real
-                ? `${(real.sun_disk_fraction * 100).toFixed(0)} %`
-                : siteTerrain === undefined
-                  ? "…"
-                  : "—"
-            }
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+        <div className="lg:sticky lg:top-4 lg:self-start">
+          <ScenePanel
+            sites={sites}
+            siteId={siteId}
+            epoch_et={epoch_et}
+            sunEarth={real}
+            horizon={terrain[siteId] ?? null}
           />
-          <Readout
-            label="Link to Earth"
-            value={
-              siteTerrain && real
-                ? real.dsn_visible
-                  ? "yes"
-                  : "no"
-                : siteTerrain === undefined
-                  ? "…"
-                  : "—"
-            }
-          />
-        </dl>
-        {siteTerrain ? (
-          <>
-            {siteYear === "error" ? (
+          {engine && siteYear && siteYear !== "error" ? (
+            <div className="mt-6 space-y-2">
+              <h3 className="font-condensed text-sm font-semibold uppercase tracking-widest text-text-2">
+                The year at this site, hour by hour
+              </h3>
+              <TimelineBarcode
+                steps={siteYear.steps}
+                start_et={engine.coverage.start_et}
+                end_et={engine.coverage.end_et}
+                step_s={HOUR_S}
+                epoch_et={epoch_et}
+                onSeek={(et) => {
+                  setPlaying(false);
+                  setEpochEt(et);
+                }}
+              />
+              <p className="text-xs text-text-3">
+                Default lander profile, {PROFILE.mast_height_m} m mast: a stripe is lit when the
+                Sun&apos;s centre is above the local horizontal and part of its disk clears the
+                terrain. Click or drag to set the time; the slider works with the keyboard.
+              </p>
+            </div>
+          ) : null}
+        </div>
+        <div className="space-y-6">
+          <fieldset className="space-y-2">
+            <legend className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
+              Site
+            </legend>
+            {sites.map((s) => (
+              <label
+                key={s.id}
+                className="flex cursor-pointer items-baseline gap-3 rounded-lg border border-hairline bg-surface-glass px-3 py-2 has-[:checked]:border-earth"
+              >
+                <input
+                  type="radio"
+                  name="site"
+                  value={s.id}
+                  checked={s.id === siteId}
+                  onChange={() => setSiteId(s.id)}
+                />
+                <span className="font-medium">{s.name}</span>
+                <span className="font-mono text-xs tabular-nums text-text-2">
+                  {s.lat_deg.toFixed(2)}° lat, {s.lon_deg.toFixed(2)}° lon
+                </span>
+              </label>
+            ))}
+          </fieldset>
+
+          <div className="space-y-3" role="group" aria-labelledby="real-title">
+            <div className="flex flex-wrap items-center gap-3">
+              <h3
+                id="real-title"
+                className="font-condensed text-sm font-semibold uppercase tracking-widest text-text-2"
+              >
+                Sun and Earth directions
+              </h3>
+              <Tag simulated={provenance?.simulated ?? false} text={realTag} hidden={!provenance} />
+            </div>
+
+            {connection.status === "error" ? (
               <p role="alert" className="text-sm text-alert">
-                The timeline could not be computed.
+                The engine could not start: {connection.message}
               </p>
             ) : (
-              <>
-                <h4 className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
-                  Illumination over the ephemeris, hourly, as published studies define it
-                </h4>
-                <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  <Readout
-                    label="Average disk visible"
-                    value={siteYear ? percent(siteYear.published.meanDisk) : "…"}
-                  />
-                  <Readout
-                    label="Any part of Sun visible"
-                    value={siteYear ? percent(siteYear.published.anyPart) : "…"}
-                  />
-                  <Readout
-                    label="Link to Earth"
-                    value={siteYear ? percent(siteYear.profile.comms_ratio) : "…"}
-                  />
-                </dl>
-                <h4 className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
-                  For a lander: default profile, Sun&apos;s centre above the horizontal
-                </h4>
-                <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <Readout
-                    label="Lit"
-                    value={siteYear ? percent(siteYear.profile.illuminated_ratio) : "…"}
-                  />
-                  <Readout
-                    label="Lit and link"
-                    value={siteYear ? percent(siteYear.profile.both_ratio) : "…"}
-                  />
-                  <Readout
-                    label="Longest night"
-                    value={siteYear ? days(siteYear.profile.longest_night_s) : "…"}
-                  />
-                  <Readout
-                    label="Longest day"
-                    value={siteYear ? days(siteYear.profile.longest_day_s) : "…"}
-                  />
-                </dl>
-              </>
+              <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <Readout
+                  label="Sun elevation"
+                  value={real ? signed(toDeg(real.sun_elevation_rad)) : "…"}
+                />
+                <Readout label="Sun azimuth" value={real ? compass(real.sun_azimuth_rad) : "…"} />
+                <Readout
+                  label="Earth elevation"
+                  value={real ? signed(toDeg(real.earth_elevation_rad)) : "…"}
+                />
+                <Readout
+                  label="Earth azimuth"
+                  value={real ? compass(real.earth_azimuth_rad) : "…"}
+                />
+              </dl>
             )}
-          </>
-        ) : null}
-        <p className="text-xs text-text-3">
-          {siteTerrain
-            ? `Judged against the terrain horizon built from NASA LOLA elevation data (5 m site tile, 80 m map to 300 km), for a ${PROFILE.mast_height_m} m mast. Average disk visible is the mean visible fraction of the Sun's disk, the quantity Barker et al. (2021) call average illumination; for the lander, Lit also needs the Sun's centre above the local horizontal, so it is lower. Link means Earth clears the terrain and at least one DSN complex sees it. The method gives results consistent with Barker et al.'s published ranges at their Site 1 regions and with the pattern of NASA's AVGVISIB map (docs/science/METHODS.md §7); the values at these three sites are not themselves published.`
-            : "These need a terrain horizon, which exists only for the three catalog sites, so no number is shown rather than one that ignores the terrain."}
-        </p>
+
+            <p className="font-mono text-xs tabular-nums text-text-3">
+              {epoch_et === null
+                ? "…"
+                : `${etToUtcIso(epoch_et).slice(0, 19).replace("T", " ")} UTC`}
+              {provenance
+                ? ` · ${provenance.spice_kernels.length} SPICE kernels · ${provenance.data_version}`
+                : ""}
+            </p>
+            <p className="text-xs text-text-3">
+              Elevation is measured from a flat horizon at the site&apos;s height; azimuth is
+              clockwise from local north (grid north at the pole). Terrain is not in these numbers.
+            </p>
+          </div>
+
+          <div className="space-y-3" role="group" aria-labelledby="terrain-title">
+            <div className="flex flex-wrap items-center gap-3">
+              <h3
+                id="terrain-title"
+                className="font-condensed text-sm font-semibold uppercase tracking-widest text-text-2"
+              >
+                Light and link at this site
+              </h3>
+              {siteTerrain === undefined ? null : siteTerrain ? (
+                <Tag
+                  simulated={siteTerrain.simulated}
+                  text={siteTerrain.simulated ? "Simulated" : "Real terrain · not yet validated"}
+                />
+              ) : (
+                <Tag simulated={false} text="Not computed yet" />
+              )}
+            </div>
+            <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <Readout
+                label="Sun disk visible"
+                value={
+                  siteTerrain && real
+                    ? `${(real.sun_disk_fraction * 100).toFixed(0)} %`
+                    : siteTerrain === undefined
+                      ? "…"
+                      : "—"
+                }
+              />
+              <Readout
+                label="Link to Earth"
+                value={
+                  siteTerrain && real
+                    ? real.dsn_visible
+                      ? "yes"
+                      : "no"
+                    : siteTerrain === undefined
+                      ? "…"
+                      : "—"
+                }
+              />
+            </dl>
+            {siteTerrain ? (
+              <>
+                {siteYear === "error" ? (
+                  <p role="alert" className="text-sm text-alert">
+                    The timeline could not be computed.
+                  </p>
+                ) : (
+                  <>
+                    <h4 className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
+                      Illumination over the ephemeris, hourly, as published studies define it
+                    </h4>
+                    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                      <Readout
+                        label="Average disk visible"
+                        value={siteYear ? percent(siteYear.published.meanDisk) : "…"}
+                      />
+                      <Readout
+                        label="Any part of Sun visible"
+                        value={siteYear ? percent(siteYear.published.anyPart) : "…"}
+                      />
+                      <Readout
+                        label="Link to Earth"
+                        value={siteYear ? percent(siteYear.profile.comms_ratio) : "…"}
+                      />
+                    </dl>
+                    <h4 className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
+                      For a lander: default profile, Sun&apos;s centre above the horizontal
+                    </h4>
+                    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                      <Readout
+                        label="Lit"
+                        value={siteYear ? percent(siteYear.profile.illuminated_ratio) : "…"}
+                      />
+                      <Readout
+                        label="Lit and link"
+                        value={siteYear ? percent(siteYear.profile.both_ratio) : "…"}
+                      />
+                      <Readout
+                        label="Longest night"
+                        value={siteYear ? days(siteYear.profile.longest_night_s) : "…"}
+                      />
+                      <Readout
+                        label="Longest day"
+                        value={siteYear ? days(siteYear.profile.longest_day_s) : "…"}
+                      />
+                    </dl>
+                  </>
+                )}
+              </>
+            ) : null}
+            <p className="text-xs text-text-3">
+              {siteTerrain
+                ? `Judged against the terrain horizon built from NASA LOLA elevation data (5 m site tile, 80 m map to 300 km), for a ${PROFILE.mast_height_m} m mast. Average disk visible is the mean visible fraction of the Sun's disk, the quantity Barker et al. (2021) call average illumination; for the lander, Lit also needs the Sun's centre above the local horizontal, so it is lower. Link means Earth clears the terrain and at least one DSN complex sees it. The method gives results consistent with Barker et al.'s published ranges at their Site 1 regions and with the pattern of NASA's AVGVISIB map (docs/science/METHODS.md §7); the values at these three sites are not themselves published.`
+                : "These need a terrain horizon, which exists only for the three catalog sites, so no number is shown rather than one that ignores the terrain."}
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -350,36 +414,3 @@ export function LiveReadout({ sites }: { sites: Site[] }) {
 
 const percent = (ratio: number) => `${(ratio * 100).toFixed(1)} %`;
 const days = (seconds: number) => `${(seconds / DAY_S).toFixed(1)} d`;
-
-function Tag({
-  simulated,
-  text,
-  hidden = false,
-}: {
-  simulated: boolean;
-  text: string;
-  hidden?: boolean;
-}) {
-  if (hidden) return null;
-  // The words carry the meaning; colour only reinforces it. Purple is reserved for SIMULATED.
-  const style = simulated ? "bg-sim text-void" : "border border-hairline text-text-1";
-  return (
-    <span
-      role="status"
-      className={`rounded-md px-2 py-0.5 font-condensed text-xs font-semibold uppercase tracking-widest ${style}`}
-    >
-      {text}
-    </span>
-  );
-}
-
-function Readout({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-hairline bg-surface-glass px-3 py-2">
-      <dt className="font-condensed text-xs font-semibold uppercase tracking-widest text-text-2">
-        {label}
-      </dt>
-      <dd className="font-mono text-lg tabular-nums">{value}</dd>
-    </div>
-  );
-}
