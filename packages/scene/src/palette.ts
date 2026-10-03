@@ -1,6 +1,9 @@
 export const Palette = {
-  // Terrain
+  // Terrain (albedo) and the faint tints of its light (terrainMaterial.ts)
   terrain: "#888888",
+  sunlightTint: "#FFF4E2",
+  fillTint: "#DCE8FF",
+  slopeSteep: "#E5484D",
 
   // Backgrounds
   sceneBackground: "#05070A",
@@ -14,6 +17,8 @@ export const Palette = {
   pinRing: "#FF3366",
   pinText: "#FFFFFF",
   pinTextOutline: "#000000",
+  labelBackground: "rgba(5, 7, 10, 0.72)",
+  labelBorder: "rgba(255, 255, 255, 0.18)",
 
   // FisheyeSky
   skyGrid: "#333333",
@@ -23,9 +28,11 @@ export const Palette = {
   skyCenterPin: "#FF0000",
   simulatedBadge: "#C77DFF",
 
-  // DeepSpaceSky
+  // DeepSpaceSky (gold = sunlight, blue/cyan = Earth: the app's semantic colours)
   stars: "#FFFAFA",
-  sunInner: "#FFEA00",
+  sunCore: "#FFF8E7",
+  sunInner: "#FFD27A",
   sunOuter: "#FFB300",
-  earth: "#4A90E2",
+  earth: "#3D7DD8",
+  earthAtmosphere: "#8FD3FF",
 };

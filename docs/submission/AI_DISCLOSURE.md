@@ -132,6 +132,17 @@ tiles do not fit 16 bits at 0.1 m; both are in D-027. It ran deliberate mutation
 tests. The elevation data are NASA's (LOLA, PGDA). The tiles are a derived format, not a new
 measurement.
 
+### 3D view graphics (S1-15 to S1-20, 2026-10-03)
+
+The AI (Claude Code) rewrote parts of the 3D scene in `packages/scene` at the team lead's request:
+the Sun and Earth drawing, the terrain shader (shading, soft shadows, curvature), the shadow height
+field, the camera moves and the pin labels, with their tests. It checked library behaviour in the
+three.js and React Three Fiber sources before relying on it, kept the scene to what the engine
+returns, and checked each change in a browser against the production build. It introduced a bug of
+its own (normals in the wrong row order), found it with a temporary debug view and added a test that
+catches it. The light and shadows are a visualisation and are labelled visual only; no number shown
+on the page comes from them. Details and limits: D-033.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list

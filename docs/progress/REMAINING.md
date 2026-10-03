@@ -62,12 +62,16 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **S1-14** Submit the link and video; screenshot the confirmation. *Team lead, Oct 6 night.*
 
-- [ ] **S1-15** 3D view, sky bodies as background and hidden below the horizon (the Earth sphere is cut by ridges; reproduced). See [UI_GRAPHICS_PLAN.md](UI_GRAPHICS_PLAN.md). *Dev 1, 1–2 h.*
-  - [ ] **S1-16** Terrain look: smooth normals, no flat shading, a faint fill light, tone mapping. *Dev 1, 3–4 h.*
-  - [ ] **S1-17** Sun glow (bloom; check `@react-three/postprocessing` first, D-entry), thinner ring, camera-facing labels. *Dev 1, 2–3 h.*
-  - [ ] **S1-18** Shadows: no tile-edge patches or speckle; agree with `probeLit` (M3-09); labelled "visual only" until then. *Dev 1, 0.5–1 day, only if time remains.*
-  - [ ] **S1-19** Earth texture (credit as text) and a real star catalogue. *Dev 1, low priority.*
-  - [ ] **S1-20** Curvature drop for the far terrain. *Dev 1, low priority.*
+- [x] **S1-15** *(2026-10-03, D-033)* 3D view: Sun and Earth as background billboards, hidden when the engine says they are below the terrain horizon; the Earth's phase from the engine's Sun direction. Also "Look toward the Sun / Earth", eased camera moves and a ground clamp. See [UI_GRAPHICS_PLAN.md](UI_GRAPHICS_PLAN.md). *Dev 1.*
+  - [x] **S1-16** *(2026-10-03, D-033)* Terrain look: seamless normals from the samples, lunar-Lambert shading, sky fill and earthshine, tone mapping, level-of-detail normal blend. *Dev 1.*
+  - [x] **S1-17** *(2026-10-03, D-033)* Sun glow in its own shader (no post-processing: its peer `postprocessing` is not on the allowed list), 2 px horizon line with N/E/S/W, upright DOM labels, grid removed. *Dev 1.*
+  - [~] **S1-18** Shadows. *Done 2026-10-03 (D-033):* soft shadows over the own tile plus three clip textures (levels 9, 6, 3); no tile-edge patches in the Hero and orbit views. *Open:* 20 random probes against `probeLit` (M3-09); until then the shadows stay labelled "visual only". *Dev 1.*
+  - [ ] **S1-19** Earth texture (credit as text) and a real star catalogue (the starfield is decorative). *Dev 1, low priority.*
+  - [x] **S1-20** *(2026-10-03, D-033)* Curvature d²/2R from the selected site, used by the mesh, the normals, the shadows and the camera clamp. *Dev 1.*
+  - [ ] **S1-21** The deployed tile subset (levels 0–3 plus the tiles under each site at 7–11) keeps the deployed 3D view at level 3 (about 1.2 km per sample; local runs serve the full pyramid): publish the pyramid (M1-04c) or commit levels 4–6 near the sites (size check first). Record the video locally until then. *Dev 1.*
+  - [ ] **S1-22** Frame rate of the 3D view on real GPUs (a laptop with integrated graphics, a phone); if slow, fewer march steps or a quality switch. *Dev 1 / team.*
+  - [ ] **S1-23** A band of fine stripes on a slope near Shackleton at a 1° Sun: find whether it is real relief or LOLA track artifacts in the 5 m DEM (compare with the 20 m product or a hillshade); do not hide data to remove it. *Dev 1, low priority.*
+  - [ ] **S1-24** Update `packages/scene/AGENTS.md` (Dev 2's public API notes) with `CameraHandle.viewToward`, and tell Dev 2 about D-033 before they continue in `packages/scene`. *Dev 1.*
 
 ---
 

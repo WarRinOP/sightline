@@ -1,7 +1,8 @@
 # 3D view: review and improvement plan
 
 Written 2026-10-03 from a browser review of the Lab page on real LOLA tiles. Tasks are
-S1-15 to S1-20 in [REMAINING.md](REMAINING.md). Nothing in this plan is built yet. Code: `packages/scene`
+S1-15 to S1-20 in [REMAINING.md](REMAINING.md). Status at the end of this file (built the same day,
+D-033). Code: `packages/scene`
 (Dev 2's, edited by Dev 1 under D-031) and `apps/web/app/scene-panel.tsx`.
 
 ## How it was reviewed
@@ -58,3 +59,21 @@ are visual only and the page says so. The Sun is never lit by a default directio
 outside `packages/scene/src/palette.ts` and `apps/web/app/globals.css`. Respect `prefers-reduced-motion`.
 Check every visual change in a real browser against `next start`, on days 0, 14 and 22, before claiming
 it works.
+
+## Status (2026-10-03, D-033)
+
+Built: S1-15, S1-16, S1-17, S1-20, and S1-18 except its probe check against `probeLit`. S1-19 (Earth
+texture, star catalogue) is not started. How each was done, and what was not verified, is in D-033.
+Differences from the plan: the Sun's glow is drawn in its own shader, not with
+`@react-three/postprocessing` (its peer `postprocessing` is not on the allowed list); the camera gained
+"Look toward the Sun / Earth" and a ground clamp; curvature was built together with the shadows,
+because on a flat plane the far shadows are wrong.
+
+After, from this branch in headless Chromium (software rendering; the 2 s frame predates the final Hero end-pose change, the shading is the same):
+[Earth on day 22](images/graphics-after-earth-day22.png) (at +1.01°, above the curved horizon, gibbous),
+[Hero flight at 2 s](images/graphics-after-hero-2s-day0.png) (Shackleton's lit rim and shadowed floor, no
+tile-shaped patches), [Hero end](images/graphics-after-hero-end-day0.png) (day 0: the Sun at right and
+a thin crescent Earth, lit on the side facing the Sun).
+
+Still seen: a fine dither at shadow edges (the jitter that removed the banding), and a band of fine
+stripes on one slope near Shackleton (S1-23). Frame rate on a real GPU is not measured (S1-22).

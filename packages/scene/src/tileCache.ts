@@ -4,6 +4,17 @@ const MAX_CACHED_TILES = 1000;
 
 // One cache per tile source, so tiles of a mock source never answer for the real one.
 const caches = new WeakMap<TileSource, Map<string, Promise<TileData>>>();
+// The tiles that have arrived, for synchronous lookups (terrain height under the camera, shadows).
+const loaded = new WeakMap<TileSource, Map<string, TileData>>();
+
+export function tileKey(coord: TileCoord): string {
+  return `${coord.level}_${coord.x}_${coord.y}`;
+}
+
+/** A tile that has already arrived, or undefined; never fetches. */
+export function getLoadedTile(source: TileSource, coord: TileCoord): TileData | undefined {
+  return loaded.get(source)?.get(tileKey(coord));
+}
 
 /**
  * A tile by coordinate, fetched once per source. A failed fetch leaves the cache, so a later request
@@ -15,19 +26,34 @@ export function getCachedTile(source: TileSource, coord: TileCoord): Promise<Til
     cache = new Map();
     caches.set(source, cache);
   }
-  const key = `${coord.level}_${coord.x}_${coord.y}`;
+  const key = tileKey(coord);
   const hit = cache.get(key);
   if (hit) return hit;
 
   const own = cache;
-  const promise = source.getTile(coord).catch((e: unknown) => {
-    own.delete(key);
-    throw e;
-  });
+  let arrived = loaded.get(source);
+  if (!arrived) {
+    arrived = new Map();
+    loaded.set(source, arrived);
+  }
+  const ownLoaded = arrived;
+  const promise = source.getTile(coord).then(
+    (tile) => {
+      if (own.get(key) === promise) ownLoaded.set(key, tile);
+      return tile;
+    },
+    (e: unknown) => {
+      own.delete(key);
+      throw e;
+    },
+  );
   cache.set(key, promise);
   if (cache.size > MAX_CACHED_TILES) {
     const oldest = cache.keys().next().value;
-    if (oldest !== undefined) cache.delete(oldest);
+    if (oldest !== undefined) {
+      cache.delete(oldest);
+      ownLoaded.delete(oldest);
+    }
   }
   return promise;
 }
