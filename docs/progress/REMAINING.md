@@ -62,6 +62,13 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
 
 - [ ] **S1-14** Submit the link and video; screenshot the confirmation. *Team lead, Oct 6 night.*
 
+- [ ] **S1-15** 3D view, sky bodies as background and hidden below the horizon (the Earth sphere is cut by ridges; reproduced). See [UI_GRAPHICS_PLAN.md](UI_GRAPHICS_PLAN.md). *Dev 1, 1–2 h.*
+  - [ ] **S1-16** Terrain look: smooth normals, no flat shading, a faint fill light, tone mapping. *Dev 1, 3–4 h.*
+  - [ ] **S1-17** Sun glow (bloom; check `@react-three/postprocessing` first, D-entry), thinner ring, camera-facing labels. *Dev 1, 2–3 h.*
+  - [ ] **S1-18** Shadows: no tile-edge patches or speckle; agree with `probeLit` (M3-09); labelled "visual only" until then. *Dev 1, 0.5–1 day, only if time remains.*
+  - [ ] **S1-19** Earth texture (credit as text) and a real star catalogue. *Dev 1, low priority.*
+  - [ ] **S1-20** Curvature drop for the far terrain. *Dev 1, low priority.*
+
 ---
 
 ## P0 — Setup (Oct 1 → Oct 7)
