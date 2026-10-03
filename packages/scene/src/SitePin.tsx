@@ -1,82 +1,91 @@
-import { useMemo } from "react";
-import * as THREE from "three";
-import { Text } from "@react-three/drei";
+import { useMemo, type CSSProperties } from "react";
+import { Html, Line } from "@react-three/drei";
 import { Palette } from "./palette";
-import { horizonRingPoints } from "./math";
+import { getLocalDirectionInScene, horizonRingPoints } from "./math";
 
 interface SitePinProps {
   label: string;
   horizonMask?: import("@sightline/contracts").HorizonMask | null;
 }
 
-export function SitePin({ label, horizonMask }: SitePinProps) {
-  const ringGeometry = useMemo(() => {
-    if (!horizonMask || horizonMask.mask_elevation_rad.length === 0) return null;
+/** Ring radius (m): the engine's horizon drawn around the site at its real elevation angles. */
+const RING_RADIUS_M = 400;
+const COMPASS: readonly [string, number][] = [
+  ["N", 0],
+  ["E", Math.PI / 2],
+  ["S", Math.PI],
+  ["W", (3 * Math.PI) / 2],
+];
 
-    const radius = 400; // Ring radius in meters
-    const curvePoints = horizonRingPoints(
+// DOM labels: always upright and facing the screen (a 3D text was mirrored from behind).
+const labelStyle: CSSProperties = {
+  color: Palette.pinText,
+  background: Palette.labelBackground,
+  border: `1px solid ${Palette.labelBorder}`,
+  borderRadius: 4,
+  padding: "2px 8px",
+  font: "600 12px/1.4 system-ui, sans-serif",
+  letterSpacing: "0.04em",
+  whiteSpace: "nowrap",
+  pointerEvents: "none",
+  userSelect: "none",
+};
+
+const compassStyle: CSSProperties = {
+  color: Palette.pinRing,
+  font: "700 11px/1 system-ui, sans-serif",
+  textShadow: `0 0 3px ${Palette.pinTextOutline}`,
+  pointerEvents: "none",
+  userSelect: "none",
+};
+
+export function SitePin({ label, horizonMask }: SitePinProps) {
+  const ring = useMemo(() => {
+    if (!horizonMask || horizonMask.mask_elevation_rad.length === 0) return null;
+    const { lat_rad, lon_rad } = horizonMask.location;
+    const points = horizonRingPoints(
       horizonMask.mask_elevation_rad,
       horizonMask.azimuth_step_rad,
-      horizonMask.location.lat_rad,
-      horizonMask.location.lon_rad,
-      radius,
+      lat_rad,
+      lon_rad,
+      RING_RADIUS_M,
     );
-
-    const curve = new THREE.CatmullRomCurve3(curvePoints, true);
-    return new THREE.TubeGeometry(curve, horizonMask.mask_elevation_rad.length, 5, 8, true);
+    const compass = COMPASS.map(([name, az]) => ({
+      name,
+      position: getLocalDirectionInScene(lat_rad, lon_rad, az, 0)
+        .multiplyScalar(RING_RADIUS_M * 1.12)
+        .toArray(),
+    }));
+    return { points, compass };
   }, [horizonMask]);
 
   return (
     <group>
-      {/* The Central Mast (Landers are typically tall, let's make it 20m) */}
-      <mesh castShadow position={[0, 10, 0]}>
+      {/* A mast and pad to mark the spot (not to scale: the profile's mast is 2 m). */}
+      <mesh position={[0, 10, 0]}>
         <cylinderGeometry args={[2, 2, 20]} />
-        <meshStandardMaterial color={Palette.pinMast} metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color={Palette.pinMast} metalness={0.6} roughness={0.35} />
       </mesh>
-
-      {/* The base / landing pad */}
-      <mesh receiveShadow position={[0, 0.5, 0]}>
+      <mesh position={[0, 0.5, 0]}>
         <cylinderGeometry args={[10, 10, 1]} />
         <meshStandardMaterial color={Palette.pinBase} />
       </mesh>
 
-      {/* Extruded Horizon Ring */}
-      {ringGeometry && (
-        <mesh geometry={ringGeometry} castShadow receiveShadow>
-          <meshStandardMaterial
-            color={Palette.pinRing}
-            emissive={Palette.pinRing}
-            emissiveIntensity={0.5}
-            wireframe={false}
-          />
-        </mesh>
+      {/* The engine's terrain horizon, 2 px wide at any distance. */}
+      {ring && (
+        <>
+          <Line points={ring.points} color={Palette.pinRing} lineWidth={2} />
+          {ring.compass.map((c) => (
+            <Html key={c.name} position={c.position} center zIndexRange={[10, 0]}>
+              <span style={compassStyle}>{c.name}</span>
+            </Html>
+          ))}
+        </>
       )}
 
-      {/* Floating lines dropping from the horizon ring to the ground */}
-      {ringGeometry && (
-        <gridHelper
-          args={[
-            800,
-            20,
-            parseInt(Palette.pinRing.slice(1), 16),
-            parseInt(Palette.pinRing.slice(1), 16),
-          ]}
-          position={[0, 0, 0]}
-          material-opacity={0.1}
-          material-transparent
-        />
-      )}
-
-      {/* Floating Label */}
-      <Text
-        position={[0, 40, 0]}
-        fontSize={30}
-        color={Palette.pinText}
-        outlineWidth={2}
-        outlineColor={Palette.pinTextOutline}
-      >
-        {label}
-      </Text>
+      <Html position={[0, 34, 0]} center zIndexRange={[11, 0]}>
+        <div style={labelStyle}>{label}</div>
+      </Html>
     </group>
   );
 }
