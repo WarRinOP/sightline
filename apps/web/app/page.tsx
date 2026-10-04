@@ -17,6 +17,9 @@ export default function HomePage() {
             Evidence →
           </Link>
         </div>
+        <p className="font-serif text-3xl text-text-1">
+          Where the Sun and Earth stand, seen from the Moon&apos;s south pole.
+        </p>
         <p className="text-text-2">
           Where the Sun and Earth are in the sky of a spot near the Moon&apos;s south pole. The
           directions below come from NASA NAIF SPICE ephemerides and are computed in your browser.
