@@ -513,6 +513,26 @@ Reported, not pass or fail: our longest continuous illumination and shadow perio
 
 ---
 
+### D-034 · 2026-10-04 · Accepted
+
+**Context:** The page named IBM Plex and Instrument Serif in `globals.css` but loaded none of them, so every screen fell back to system fonts, and the browser logged a 404 for the missing favicon. The team lead decided on 2026-10-04 to skip a live deployment for Stage 1 and record the 240-second video from a local production build, so the local page has to look right (S1-01d).
+
+**Decision:**
+
+1. **Fonts through `next/font/google`** (MASTER_PLAN §2.1) in `app/layout.tsx`: IBM Plex Sans 400/500/600, IBM Plex Sans Condensed 600, IBM Plex Mono 400/500, Instrument Serif 400, `display: "swap"`. Next downloads them at **build time** and serves them from our own origin; the page never contacts Google (checked in the browser, below). Each font sets a CSS variable (`--font-plex-sans`, `--font-plex-condensed`, `--font-plex-mono`, `--font-instrument-serif`) that `globals.css` puts first in each stack, with the old system stack as the fallback. `next/font/google` is part of `next`, already allowed; no new dependency.
+2. **Licences checked** against the upstream files (HTTP 200 on 2026-10-04): IBM Plex, SIL Open Font License 1.1 (github.com/IBM/plex, LICENSE.txt); Instrument Serif, SIL Open Font License 1.1 (github.com/Instrument/instrument-serif, OFL.txt). Both permit use and redistribution in a web page.
+3. **Consequence to know:** `pnpm build` needs network access to Google Fonts. The CI run and local builds have it; an offline build fails. If that ever bites, the fix is `next/font/local` with the files committed (a few hundred KB, under the 5 MB rule), and a `sources.yaml` entry with a SHA-256 for each.
+4. **Subsets:** the config says `latin`, but Next still emits every unicode-range face Google returns (Cyrillic, Greek, Vietnamese and so on); the browser fetches only the Latin files that the text needs. Measured on `/`: five font files, all from our origin.
+5. **Instrument Serif had no use on the page** (it is for Story headlines, and Story mode is cut). It is used once, for a one-line tagline under the title on the Lab page ("Where the Sun and Earth stand, seen from the Moon's south pole."), so the brand face is on screen and testable.
+6. **Favicon:** `app/icon.svg`, picked up by Next's file convention (it adds the `<link rel="icon">`): the Sun just over the Moon's limb, in the `--void`, `--sun`, `--sun-hot` and `--dark` colours. An SVG file cannot read the page's CSS variables, so the hex values are written in the file with a comment naming the tokens.
+
+**Verified:** `pnpm verify` exit 0 (contracts 41, engine 181, scene 37, web 25, parity 34, build). `next start` and `playwright-cli` (headless Chromium, 1920 x 1080): console on `/` and `/evidence` 0 errors (two three.js deprecation warnings on `/`); the five font files and the icon all answered 200 from `localhost`, none from Google; computed styles: body IBM Plex Sans 400, the `h1` and HUD labels IBM Plex Sans Condensed 600, readout numbers IBM Plex Mono 400 with `tabular-nums`, the tagline Instrument Serif 400; screenshots of the Lab and Evidence pages show no broken layout.
+
+**Not verified:** Safari and Firefox. Safari that does not read SVG icons asks for `/favicon.ico`, which returns 404 (a request made directly returns 404; Chromium does not make it). A build with no network. The page on a phone.
+
+
+---
+
 ### D-005 · _superseded by D-010_ · Local Lead compliance confirmations (P0-02)
 
 _Record the Local Lead's written answers on: (a) pre-event concept docs, (b) pre-downloading raw public data, (c) generic templates._

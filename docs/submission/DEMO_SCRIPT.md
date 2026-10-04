@@ -127,15 +127,52 @@ team lead decides, GitHub handles, roles; data credits: NASA LRO/LOLA, PGDA, NAI
 > check. We are entering through the Bangladesh local event. SIGHTLINE: open code, open data, honest
 > numbers.
 
-## Capture checklist (for whoever records the screen)
+## Capture sheet (for whoever records the screen)
 
-- `pnpm install && pnpm dev`, a browser at 1920 x 1080, zoom 100 %. Pause the readout before
-  recording. Do not record while the console shows an error other than the missing favicon.
-- Run `pnpm verify` and `uv run --project pipeline sightline horizon` once beforehand so the
-  terminal captures are clean (a few minutes; no downloads needed once `data/raw/` is filled).
+Checked 2026-10-04 against the production build (S1-01d). The five rows are the five blocks of the
+storyboard above, with their video times. `BASE` is the address of the local server.
+
+### Set-up (a clean run, not `pnpm dev`)
+
+`pnpm dev` shows Next's development badge in the corner, is slower, and rewrites `apps/web/AGENTS.md`.
+Record from a production build:
+
+```bash
+pnpm install
+pnpm --filter @sightline/web build
+cd apps/web && npx next start -p 3000      # then BASE=http://localhost:3000
+```
+
+If port 3000 is busy (`lsof -nP -iTCP:3000 -sTCP:LISTEN` lists the process), use `-p 3100` and
+`BASE=http://localhost:3100`. Use a browser at 1920 x 1080, zoom 100 %, a fresh profile with no
+extensions. The page opens **playing** (the readout then advances 10 hours a second): press **Pause**
+before every take. Expected console on load: 0 errors and 2 three.js deprecation warnings (the
+warnings come from the library, not from us). The favicon 404 is gone.
+
+### Shots
+
+| # | Video time | Shot | Address or command | Action | What the screen shows (checked 2026-10-04) |
+|---|---|---|---|---|---|
+| 1 | 0:00 to 0:40 | The readout area with a Sun elevation near 1 degree | `BASE/` | Pause. Site: Shackleton Rim crest. Frame the "Sun and Earth directions" cards. | A Sun elevation of about +1 degree (it stayed between +0.6 and +1.3 degrees over the first 30 days of the ephemeris, UI_GRAPHICS_PLAN). Do not read the live value aloud. |
+| 2 | 0:40 to 1:30 | Architecture diagram, two terminal captures, the "What works today" table | `https://github.com/WarRinOP/sightline` (README); in a terminal `uv run --project pipeline sightline horizon` and `pnpm verify` | Each terminal capture under 8 s. | **NOT checked:** how GitHub renders the Mermaid diagram (S1-13 is still open). Look before recording. |
+| 3 | 1:30 to 2:30 | The live page on the three sites | `BASE/` | Pause. Shackleton Rim crest, then Connecting Ridge, then de Gerlache Rim; scroll to "Illumination over the ephemeris" and the lander row. Then `docs/progress/DECISIONS.md` D-023; back to the page for the closing note. | Average disk visible **85.8 / 45.6 / 54.0 %**; any part of the Sun 90.7 / 51.0 / 59.5 %; longest day at Shackleton **115.8 d** (23.8 d and 25.6 d at the other two, not in the script); lander "Lit" 48.9 / 35.2 / 36.6 % (never call these illumination). All read from the page. |
+| 4 | 2:30 to 3:30 | Evidence | The cards named in the storyboard, **or** `BASE/evidence` (it exists now) | The page's sections: "1. Sun and Earth directions against JPL Horizons", "2. Terrain illumination method against Barker et al. (2021)", "3. The lit pattern against NASA's AVGVISIB map", "What this does not show". | Sun gap 3.26e-8 degrees, Earth 2.65e-5 degrees (95.3 milliarcsec), limit 0.02 degrees; the seven Barker regions; the closing text card. |
+| 5 | 3:30 to 4:00 | "What works today" table, credits card, repository address | README on GitHub; a text-only card | Text only. No NASA logo. Names as the team lead decides; nobody under 18 appears or is heard. | The "Not built yet" column visible. |
+
+Also available now and **not in the script** (the team lead decides whether they go in; see open item 7):
+the 3D view with "Hero flight (20 s)", "Look toward the Sun" and "Look toward Earth" buttons; for the
+Earth, set the time slider near 23 January 2026 (the Earth stands about 1 degree up there), press
+**Look toward Earth**; the mission barcode with its scrubber. The 3D light and shadows are visual
+only; say so if they appear.
+
+### Before every take
+
+- Run `pnpm verify` and `uv run --project pipeline sightline horizon` once so the terminal captures
+  are clean (a few minutes; no downloads needed once `data/raw/` is filled).
 - Record the architecture diagram from GitHub's rendering of `README.md`, not from an editor preview.
-- Check the three site statistics on screen against the table above before recording. If the page and
-  the table disagree, the table is right and the page has a bug: tell Dev 1.
+- Check the three site statistics on screen against the table above. If the page and the table
+  disagree, the table is right and the page has a bug: tell Dev 1.
+- Do not record while the console shows an error.
 
 ## Open items for the team lead
 
@@ -150,5 +187,12 @@ team lead decides, GitHub handles, roles; data credits: NASA LRO/LOLA, PGDA, NAI
 5. **The Link figures** (49.9, 39.8 and 53.8 %) are on the page but have no published reference
    compared (S1-05h). The script does not say them. If you want them in the video, say "not yet
    checked" next to them.
-6. **Not shown, on purpose:** any 3D terrain, scrubber, Evidence page, window finder or AI analyst:
-   none is built.
+6. ~~**Not shown, on purpose:** any 3D terrain, scrubber, Evidence page, window finder or AI analyst:
+   none is built.~~ **Out of date (2026-10-04):** the 3D terrain view, the barcode with its scrubber
+   and the Evidence page are built (D-032, D-033). The window finder, the AI analyst, Story mode and
+   any Earth-link figure are still not built and must not be shown.
+7. **The script predates the 3D view and `/evidence`.** The voice-over in the last block says "Next: a
+   three-dimensional terrain view, an evidence page, ..." although both exist now, and the evidence
+   block uses document cards although the page exists. Decide what the video should show and say;
+   I have not changed the voice-over. If the 3D view goes in, it replaces nothing in the numbers
+   table, and the voice-over must call its light and shadows visual only.
