@@ -23,11 +23,13 @@
   --ok: #3ddc97;
   --sim: #c77dff;
 
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  /* The --font-plex-* variables come from next/font in layout.tsx; the rest is the fallback stack. */
+  --font-sans: var(--font-plex-sans), "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --font-condensed:
-    "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+    var(--font-plex-condensed), "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif,
+    system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: var(--font-instrument-serif), "Instrument Serif", ui-serif, Georgia, serif;
 
   color-scheme: dark;
 }

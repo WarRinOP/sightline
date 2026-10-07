@@ -143,6 +143,14 @@ its own (normals in the wrong row order), found it with a temporary debug view a
 catches it. The light and shadows are a visualisation and are labelled visual only; no number shown
 on the page comes from them. Details and limits: D-033.
 
+### Fonts, favicon and capture sheet (S1-01d, S1-12, 2026-10-04)
+
+The AI (Claude Code) set up the font loading and the favicon, wrote one line of page copy (the Lab's
+tagline) and the screen-recording sheet in the demo script, at the team lead's request. It checked the
+font names and weights in the framework's own data, the licences in the fonts' upstream repositories,
+and every on-screen value in the sheet against the running page. It did not change the voice-over,
+and it listed the places where the script no longer matches the application. Details: D-034.
+
 ## AI inside the product
 
 None yet. The optional Mission Analyst (M5-04) is not built. When it is, this section will list

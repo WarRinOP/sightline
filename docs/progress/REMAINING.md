@@ -18,7 +18,7 @@ Stage 1 decides whether we attend on Nov 13–14 (D-014). Plan and day-by-day sc
   - [ ] **S1-01a** Contracts: JSON Schema export and the pydantic mirror (rest of M0-05). *Dev 1.*
   - [x] **S1-01b** *(2026-10-02)* `web` and `pipeline` are required status checks on `main` (not strict: branches need not be up to date). *Dev 1.*
   - [x] **S1-01c** *(2026-10-03, D-029)* `three@0.186.1`, `@react-three/fiber@9.8.1`, `@react-three/drei@10.7.9`, `@types/three@0.186.0` (and `react-dom`, `@types/react-dom`, `vitest`) installed in `packages/scene`, exact-pinned; licences of the closure checked. `vite` not added (own entry needed). *Dev 1.*
-  - [ ] **S1-01d** Favicon (the browser logs a 404 for it) and self-hosted IBM Plex / Instrument Serif subsets. *Dev 3 (S1-08).*
+  - [x] **S1-01d** *(2026-10-04, D-034; PR #21)* Favicon (`app/icon.svg`) and the four typefaces through `next/font/google`, served from our own origin. Not done: the design-system components. *Reassigned to Dev 1 with the rest of Dev 3's lane.*
 
 - [x] **S1-02** Start downloads: SPICE kernels first (62 MB), then one site DEM and the 80 m mid tier. Run overnight. *Dev 1, Oct 1–2.* *Done 2026-10-02 (D-018; PR #2 merged, PR #3 open): 8 SPICE kernels (65,010,769 B, PR #2) and `pgda78-site04-surf` plus `pgda90-ldem-80s-80m` (230,139,198 B, PR #3); `pgda78-site01-surf` and `pgda78-site11-surf` (81,961,616 B) added in S1-03, all size- and type-checked, SHA-256 pinned, strict re-run of all 10 datasets passes. Not downloaded: the other site DEMs, validation maps, the far tier.*
   - [x] **S1-02a** *(2026-10-02)* Option A chosen for D-019: the 3 presets are the centres of their PGDA #78 DEM tiles, heights sampled from the 5 m DEMs; `sightline sites` writes the catalog. *Dev 1.*

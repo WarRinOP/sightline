@@ -19,7 +19,7 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 | Days to Bangladesh program start (Nov 13) | 43 (as of 2026-10-01) |
 | Early-start waiver (D-010) | Stated by the team; **not on the BD site; written confirmation still pending (P0-02)** |
 | Team access | Aktaruzzaman (`rimonxyg`): active · Fuad Hasan (`fuadhasandipro`): **invitation pending** |
-| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); the graphics PR (S1-15 to S1-20) awaiting review and merge; tag `v0.1-stage1` (S1-13, on the team lead's word); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 has not started; Dev 2 to be told about D-033 (S1-24) |
+| Open before work joins up | GitHub Issues (P0-18); organizers' answers (S1-00); BD team registration (P0-14); developers' `Rules loaded:` test (P0-17); the camera-ready PR #21 (fonts, favicon, capture sheet) awaiting review and merge; tag `v0.1-stage1` (S1-13, on the team lead's word); video captures and voice-over (S1-12); Earth-visibility check (S1-05h); Dev 3 has not started; Dev 2 to be told about D-033 (S1-24) |
 | Live URL | — |
 | Repo | https://github.com/WarRinOP/sightline (**public**; `main` protected; D-011, D-015) |
 
@@ -77,6 +77,36 @@ Update at the end of **every** session (see `CLAUDE.md` §3). Newest session at 
 ---
 
 ## Session Log
+
+### Session 026 — 2026-10-04 — Camera-ready: favicon, fonts, capture sheet (Claude Code)
+
+**Phase / tasks:** S1-01d (reassigned from Dev 3), S1-12 (capture sheet). Branch `dev1/S1-01d-camera-ready` from `main` at `0dfc935` (PR #20 had merged).
+
+**Done:**
+
+- Team lead's decision recorded: no live deployment for Stage 1; the video is recorded from a local production build.
+- Favicon `app/icon.svg` (the Sun over the Moon's limb); IBM Plex Sans, Sans Condensed, Mono and Instrument Serif through `next/font/google`, served from our own origin (D-034). One Instrument Serif tagline added under the Lab title so the brand face is actually on screen.
+- `docs/submission/DEMO_SCRIPT.md`: the capture checklist is now a sheet with the five storyboard blocks, their video times, addresses and the values to expect, checked against the running page; the set-up uses `next start`, not `pnpm dev`. Two stale open items fixed (the 3D view, barcode and Evidence page are built).
+
+**Verified by:**
+
+- `pnpm verify`: exit 0 (contracts 41, engine 181, scene 37, web 25, parity 34, build).
+- `next start` + `playwright-cli` (headless Chromium, 1920 x 1080): 0 console errors on `/` and `/evidence` (two three.js deprecation warnings on `/`); five font files and the icon all 200 from localhost, none from Google; computed fonts as intended for body, headings, HUD labels, numbers (tabular-nums) and the tagline; the three sites' statistics on the page equal the script's table (85.8 / 45.6 / 54.0 %, 115.8 d).
+- Font licences (SIL OFL 1.1) read from the upstream repositories.
+- **NOT VERIFIED:** Safari and Firefox; a build with no network (it needs Google Fonts); the page on a phone; how GitHub renders the README's Mermaid diagram; the real port: 3000 on this machine is used by another project, so the checks ran on 3100.
+
+**Decisions logged:** D-034
+
+**Blockers / risks:**
+
+- The demo script predates the 3D view and `/evidence`: its last block says they are "next". The team lead must decide what the video shows (DEMO_SCRIPT open item 7); the voice-over is unchanged.
+- The default Lab camera puts the pin at the bottom-left corner of the 3D view, and its label is cut off. It is the first 3D frame in any capture. Not fixed in this PR.
+
+**Next 3 tasks:**
+
+1. The team lead reviews and merges PR #21; decides the video's content (open item 7); tags `v0.1-stage1` on their word (S1-13).
+2. The default 3D framing (pin centred, label inside the frame), then the phone layout and keyboard use of the 3D view.
+3. S1-21 (tiles for a deployed view, now optional), S1-24 (tell Dev 2 about D-033), S1-18 probe check.
 
 ### Session 025 — 2026-10-03 — 3D view graphics: sky, terrain, shadows, curvature, camera (Claude Code)
 
