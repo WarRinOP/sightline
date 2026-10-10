@@ -26,7 +26,7 @@ is also close to the horizon (within about 10°), so a crater wall can hide it. 
 sunlight and a line to Earth depends on the terrain in every direction, out to the horizon, and on
 how high the antenna and solar panels stand. SIGHTLINE puts numbers on that.
 
-## What it shows
+## What it shows 
 
 Three candidate sites, from NASA's 5 m south-pole terrain models, for **2026, hourly, a 2 m mast**.
 *Average disk visible* is the mean fraction of the Sun's disk above the terrain, the quantity Barker
